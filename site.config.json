@@ -1,0 +1,25 @@
+{
+  "siteUrl": "https://english90.imrtech.xyz",
+  "proposedDomain": "english90.imrtech.xyz",
+  "businessName": "IMR TECH SpA",
+  "contactEmail": "",
+  "legalReviewed": false,
+  "checkoutUrl": "",
+  "checkoutConfirmed": false,
+  "ads": {
+    "publisherId": "",
+    "verificationEnabled": false,
+    "approved": false,
+    "enabled": false,
+    "slots": {
+      "home": "",
+      "article": ""
+    },
+    "cmpScriptUrl": "",
+    "cmpId": 0,
+    "cmpCertifiedConfirmed": false,
+    "consentConfigured": false,
+    "manualPlacementsConfirmed": false
+  },
+  "contactUrl": "https://wa.me/message/JDI5GLAII5DCG1"
+}

@@ -1,0 +1,3802 @@
+{
+  "schemaVersion": 1,
+  "audience": "free-public",
+  "categories": [
+    {
+      "id": 1,
+      "title": "Presentaciones",
+      "tip": "Usa am con I, is con he/she/it y are con you/we/they.",
+      "vocabulary": [
+        {
+          "en": "hello",
+          "es": "hola"
+        },
+        {
+          "en": "good morning",
+          "es": "buenos días"
+        },
+        {
+          "en": "name",
+          "es": "nombre"
+        },
+        {
+          "en": "from",
+          "es": "de (origen)"
+        },
+        {
+          "en": "live",
+          "es": "vivir"
+        },
+        {
+          "en": "city",
+          "es": "ciudad"
+        },
+        {
+          "en": "country",
+          "es": "país"
+        },
+        {
+          "en": "job",
+          "es": "empleo"
+        },
+        {
+          "en": "student",
+          "es": "estudiante"
+        },
+        {
+          "en": "teacher",
+          "es": "profesor"
+        },
+        {
+          "en": "engineer",
+          "es": "ingeniero"
+        },
+        {
+          "en": "friend",
+          "es": "amigo"
+        },
+        {
+          "en": "happy",
+          "es": "feliz"
+        },
+        {
+          "en": "busy",
+          "es": "ocupado"
+        },
+        {
+          "en": "new",
+          "es": "nuevo"
+        },
+        {
+          "en": "here",
+          "es": "aquí"
+        },
+        {
+          "en": "today",
+          "es": "hoy"
+        },
+        {
+          "en": "nice",
+          "es": "agradable"
+        },
+        {
+          "en": "meet",
+          "es": "conocer"
+        },
+        {
+          "en": "thanks",
+          "es": "gracias"
+        },
+        {
+          "en": "good afternoon",
+          "es": "buenas tardes"
+        },
+        {
+          "en": "good evening",
+          "es": "buenas noches (saludo)"
+        },
+        {
+          "en": "good night",
+          "es": "buenas noches (despedida)"
+        },
+        {
+          "en": "goodbye",
+          "es": "adiós"
+        },
+        {
+          "en": "see you later",
+          "es": "hasta luego"
+        },
+        {
+          "en": "please",
+          "es": "por favor"
+        },
+        {
+          "en": "thank you",
+          "es": "gracias"
+        },
+        {
+          "en": "you're welcome",
+          "es": "de nada"
+        },
+        {
+          "en": "excuse me",
+          "es": "disculpa"
+        },
+        {
+          "en": "I'm sorry",
+          "es": "lo siento"
+        },
+        {
+          "en": "first name",
+          "es": "nombre de pila"
+        },
+        {
+          "en": "last name",
+          "es": "apellido"
+        },
+        {
+          "en": "address",
+          "es": "dirección"
+        },
+        {
+          "en": "phone number",
+          "es": "número de teléfono"
+        },
+        {
+          "en": "email address",
+          "es": "correo electrónico"
+        },
+        {
+          "en": "age",
+          "es": "edad"
+        },
+        {
+          "en": "years old",
+          "es": "años de edad"
+        },
+        {
+          "en": "married",
+          "es": "casado"
+        },
+        {
+          "en": "single",
+          "es": "soltero"
+        },
+        {
+          "en": "colleague",
+          "es": "colega"
+        },
+        {
+          "en": "neighbor",
+          "es": "vecino"
+        },
+        {
+          "en": "parents",
+          "es": "padres"
+        },
+        {
+          "en": "child",
+          "es": "niño"
+        },
+        {
+          "en": "people",
+          "es": "personas"
+        },
+        {
+          "en": "person",
+          "es": "persona"
+        },
+        {
+          "en": "where",
+          "es": "dónde"
+        },
+        {
+          "en": "what",
+          "es": "qué"
+        },
+        {
+          "en": "who",
+          "es": "quién"
+        },
+        {
+          "en": "how",
+          "es": "cómo"
+        },
+        {
+          "en": "why",
+          "es": "por qué"
+        },
+        {
+          "en": "which",
+          "es": "cuál"
+        },
+        {
+          "en": "can",
+          "es": "poder"
+        },
+        {
+          "en": "yes",
+          "es": "sí"
+        },
+        {
+          "en": "no",
+          "es": "no"
+        },
+        {
+          "en": "also",
+          "es": "también"
+        },
+        {
+          "en": "too",
+          "es": "también"
+        },
+        {
+          "en": "very",
+          "es": "muy"
+        },
+        {
+          "en": "not",
+          "es": "no (negación)"
+        },
+        {
+          "en": "and",
+          "es": "y"
+        },
+        {
+          "en": "but",
+          "es": "pero"
+        },
+        {
+          "en": "this",
+          "es": "esto"
+        },
+        {
+          "en": "that",
+          "es": "eso"
+        },
+        {
+          "en": "these",
+          "es": "estos"
+        },
+        {
+          "en": "those",
+          "es": "esos"
+        },
+        {
+          "en": "my",
+          "es": "mi"
+        },
+        {
+          "en": "your",
+          "es": "tu"
+        },
+        {
+          "en": "his",
+          "es": "su (de él)"
+        },
+        {
+          "en": "her",
+          "es": "su (de ella)"
+        },
+        {
+          "en": "our",
+          "es": "nuestro"
+        },
+        {
+          "en": "their",
+          "es": "su (de ellos)"
+        },
+        {
+          "en": "here you are",
+          "es": "aquí tienes"
+        },
+        {
+          "en": "I'm fine",
+          "es": "estoy bien"
+        },
+        {
+          "en": "not bad",
+          "es": "nada mal"
+        },
+        {
+          "en": "great",
+          "es": "genial"
+        },
+        {
+          "en": "welcome",
+          "es": "bienvenido"
+        },
+        {
+          "en": "how old",
+          "es": "qué edad"
+        },
+        {
+          "en": "all right",
+          "es": "está bien"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Rutinas cotidianas",
+      "tip": "En presente simple, he/she/it suele añadir -s. Para preguntas usa do o does.",
+      "vocabulary": [
+        {
+          "en": "wake up",
+          "es": "despertarse"
+        },
+        {
+          "en": "get up",
+          "es": "levantarse"
+        },
+        {
+          "en": "breakfast",
+          "es": "desayuno"
+        },
+        {
+          "en": "work",
+          "es": "trabajar"
+        },
+        {
+          "en": "study",
+          "es": "estudiar"
+        },
+        {
+          "en": "start",
+          "es": "empezar"
+        },
+        {
+          "en": "finish",
+          "es": "terminar"
+        },
+        {
+          "en": "early",
+          "es": "temprano"
+        },
+        {
+          "en": "late",
+          "es": "tarde"
+        },
+        {
+          "en": "usually",
+          "es": "normalmente"
+        },
+        {
+          "en": "always",
+          "es": "siempre"
+        },
+        {
+          "en": "sometimes",
+          "es": "a veces"
+        },
+        {
+          "en": "never",
+          "es": "nunca"
+        },
+        {
+          "en": "every day",
+          "es": "cada día"
+        },
+        {
+          "en": "morning",
+          "es": "mañana"
+        },
+        {
+          "en": "afternoon",
+          "es": "tarde"
+        },
+        {
+          "en": "evening",
+          "es": "tarde-noche"
+        },
+        {
+          "en": "home",
+          "es": "casa"
+        },
+        {
+          "en": "office",
+          "es": "oficina"
+        },
+        {
+          "en": "week",
+          "es": "semana"
+        },
+        {
+          "en": "lunch",
+          "es": "almuerzo"
+        },
+        {
+          "en": "dinner",
+          "es": "cena"
+        },
+        {
+          "en": "brush my teeth",
+          "es": "cepillarme los dientes"
+        },
+        {
+          "en": "take a shower",
+          "es": "ducharme"
+        },
+        {
+          "en": "commute",
+          "es": "trasladarse al trabajo"
+        },
+        {
+          "en": "drive",
+          "es": "conducir"
+        },
+        {
+          "en": "walk",
+          "es": "caminar"
+        },
+        {
+          "en": "leave",
+          "es": "salir"
+        },
+        {
+          "en": "arrive",
+          "es": "llegar"
+        },
+        {
+          "en": "prepare",
+          "es": "preparar"
+        },
+        {
+          "en": "clean",
+          "es": "limpiar"
+        },
+        {
+          "en": "cook",
+          "es": "cocinar"
+        },
+        {
+          "en": "rest",
+          "es": "descansar"
+        },
+        {
+          "en": "sleep",
+          "es": "dormir"
+        },
+        {
+          "en": "go to bed",
+          "es": "acostarse"
+        },
+        {
+          "en": "exercise",
+          "es": "hacer ejercicio"
+        },
+        {
+          "en": "gym",
+          "es": "gimnasio"
+        },
+        {
+          "en": "daily",
+          "es": "diario"
+        },
+        {
+          "en": "weekly",
+          "es": "semanal"
+        },
+        {
+          "en": "Monday",
+          "es": "lunes"
+        },
+        {
+          "en": "Tuesday",
+          "es": "martes"
+        },
+        {
+          "en": "Wednesday",
+          "es": "miércoles"
+        },
+        {
+          "en": "Thursday",
+          "es": "jueves"
+        },
+        {
+          "en": "Friday",
+          "es": "viernes"
+        },
+        {
+          "en": "Saturday",
+          "es": "sábado"
+        },
+        {
+          "en": "Sunday",
+          "es": "domingo"
+        },
+        {
+          "en": "before",
+          "es": "antes"
+        },
+        {
+          "en": "after",
+          "es": "después"
+        },
+        {
+          "en": "during",
+          "es": "durante"
+        },
+        {
+          "en": "at noon",
+          "es": "al mediodía"
+        },
+        {
+          "en": "at night",
+          "es": "por la noche"
+        },
+        {
+          "en": "on time",
+          "es": "puntual"
+        },
+        {
+          "en": "often",
+          "es": "a menudo"
+        },
+        {
+          "en": "rarely",
+          "es": "rara vez"
+        },
+        {
+          "en": "once",
+          "es": "una vez"
+        },
+        {
+          "en": "twice",
+          "es": "dos veces"
+        },
+        {
+          "en": "again",
+          "es": "de nuevo"
+        },
+        {
+          "en": "appointment",
+          "es": "cita"
+        },
+        {
+          "en": "calendar",
+          "es": "calendario"
+        },
+        {
+          "en": "free time",
+          "es": "tiempo libre"
+        },
+        {
+          "en": "workday",
+          "es": "jornada laboral"
+        },
+        {
+          "en": "weekday",
+          "es": "día hábil"
+        },
+        {
+          "en": "weekend",
+          "es": "fin de semana"
+        },
+        {
+          "en": "habit",
+          "es": "hábito"
+        },
+        {
+          "en": "routine",
+          "es": "rutina"
+        },
+        {
+          "en": "break",
+          "es": "descanso"
+        },
+        {
+          "en": "meal",
+          "es": "comida"
+        },
+        {
+          "en": "shower",
+          "es": "ducha"
+        },
+        {
+          "en": "alarm",
+          "es": "alarma"
+        },
+        {
+          "en": "meeting",
+          "es": "reunión"
+        },
+        {
+          "en": "train",
+          "es": "tren"
+        },
+        {
+          "en": "subway",
+          "es": "metro"
+        },
+        {
+          "en": "online",
+          "es": "en línea"
+        },
+        {
+          "en": "offline",
+          "es": "sin conexión"
+        },
+        {
+          "en": "homework",
+          "es": "tarea para casa"
+        },
+        {
+          "en": "half past",
+          "es": "y media"
+        },
+        {
+          "en": "quarter to",
+          "es": "un cuarto para"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Tiempo libre",
+      "tip": "Para una acción en curso, combina am/is/are con el verbo terminado en -ing.",
+      "vocabulary": [
+        {
+          "en": "now",
+          "es": "ahora"
+        },
+        {
+          "en": "right now",
+          "es": "justo ahora"
+        },
+        {
+          "en": "listen",
+          "es": "escuchar"
+        },
+        {
+          "en": "watch",
+          "es": "ver"
+        },
+        {
+          "en": "read",
+          "es": "leer"
+        },
+        {
+          "en": "run",
+          "es": "correr"
+        },
+        {
+          "en": "play",
+          "es": "jugar"
+        },
+        {
+          "en": "together",
+          "es": "juntos"
+        },
+        {
+          "en": "music",
+          "es": "música"
+        },
+        {
+          "en": "movie",
+          "es": "película"
+        },
+        {
+          "en": "weekend",
+          "es": "fin de semana"
+        },
+        {
+          "en": "hobby",
+          "es": "pasatiempo"
+        },
+        {
+          "en": "enjoy",
+          "es": "disfrutar"
+        },
+        {
+          "en": "prefer",
+          "es": "preferir"
+        },
+        {
+          "en": "outside",
+          "es": "afuera"
+        },
+        {
+          "en": "inside",
+          "es": "adentro"
+        },
+        {
+          "en": "tonight",
+          "es": "esta noche"
+        },
+        {
+          "en": "weather",
+          "es": "clima"
+        },
+        {
+          "en": "rain",
+          "es": "lluvia"
+        },
+        {
+          "en": "sunny",
+          "es": "soleado"
+        },
+        {
+          "en": "sing",
+          "es": "cantar"
+        },
+        {
+          "en": "dance",
+          "es": "bailar"
+        },
+        {
+          "en": "swim",
+          "es": "nadar"
+        },
+        {
+          "en": "draw",
+          "es": "dibujar"
+        },
+        {
+          "en": "travel",
+          "es": "viajar"
+        },
+        {
+          "en": "take photos",
+          "es": "sacar fotos"
+        },
+        {
+          "en": "go hiking",
+          "es": "hacer senderismo"
+        },
+        {
+          "en": "video game",
+          "es": "videojuego"
+        },
+        {
+          "en": "book",
+          "es": "libro"
+        },
+        {
+          "en": "novel",
+          "es": "novela"
+        },
+        {
+          "en": "series",
+          "es": "serie"
+        },
+        {
+          "en": "concert",
+          "es": "concierto"
+        },
+        {
+          "en": "ticket",
+          "es": "entrada"
+        },
+        {
+          "en": "park",
+          "es": "parque"
+        },
+        {
+          "en": "beach",
+          "es": "playa"
+        },
+        {
+          "en": "mountain",
+          "es": "montaña"
+        },
+        {
+          "en": "forest",
+          "es": "bosque"
+        },
+        {
+          "en": "cloudy",
+          "es": "nublado"
+        },
+        {
+          "en": "windy",
+          "es": "ventoso"
+        },
+        {
+          "en": "hot",
+          "es": "caluroso"
+        },
+        {
+          "en": "cold",
+          "es": "frío"
+        },
+        {
+          "en": "warm",
+          "es": "templado"
+        },
+        {
+          "en": "storm",
+          "es": "tormenta"
+        },
+        {
+          "en": "umbrella",
+          "es": "paraguas"
+        },
+        {
+          "en": "plan",
+          "es": "plan"
+        },
+        {
+          "en": "join",
+          "es": "unirse"
+        },
+        {
+          "en": "invite",
+          "es": "invitar"
+        },
+        {
+          "en": "available",
+          "es": "disponible"
+        },
+        {
+          "en": "busy tonight",
+          "es": "ocupado esta noche"
+        },
+        {
+          "en": "what about",
+          "es": "qué tal"
+        },
+        {
+          "en": "let's",
+          "es": "vamos a"
+        },
+        {
+          "en": "would you like",
+          "es": "te gustaría"
+        },
+        {
+          "en": "sounds good",
+          "es": "suena bien"
+        },
+        {
+          "en": "sorry, I can't",
+          "es": "lo siento, no puedo"
+        },
+        {
+          "en": "maybe",
+          "es": "quizás"
+        },
+        {
+          "en": "actually",
+          "es": "en realidad"
+        },
+        {
+          "en": "especially",
+          "es": "especialmente"
+        },
+        {
+          "en": "instead",
+          "es": "en vez de"
+        },
+        {
+          "en": "at the moment",
+          "es": "en este momento"
+        },
+        {
+          "en": "cycling",
+          "es": "ciclismo"
+        },
+        {
+          "en": "photography",
+          "es": "fotografía"
+        },
+        {
+          "en": "reading",
+          "es": "lectura"
+        },
+        {
+          "en": "running",
+          "es": "carrera"
+        },
+        {
+          "en": "tennis",
+          "es": "tenis"
+        },
+        {
+          "en": "basketball",
+          "es": "baloncesto"
+        },
+        {
+          "en": "soccer",
+          "es": "fútbol"
+        },
+        {
+          "en": "interesting",
+          "es": "interesante"
+        },
+        {
+          "en": "boring",
+          "es": "aburrido"
+        },
+        {
+          "en": "exciting",
+          "es": "emocionante"
+        },
+        {
+          "en": "fun",
+          "es": "divertido"
+        },
+        {
+          "en": "relaxing",
+          "es": "relajante"
+        },
+        {
+          "en": "difficult",
+          "es": "difícil"
+        },
+        {
+          "en": "easy",
+          "es": "fácil"
+        },
+        {
+          "en": "alone",
+          "es": "solo"
+        },
+        {
+          "en": "with friends",
+          "es": "con amigos"
+        },
+        {
+          "en": "prefer to",
+          "es": "preferir"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Comida y compras",
+      "tip": "Much acompaña nombres incontables; many acompaña plurales contables.",
+      "vocabulary": [
+        {
+          "en": "water",
+          "es": "agua"
+        },
+        {
+          "en": "bread",
+          "es": "pan"
+        },
+        {
+          "en": "rice",
+          "es": "arroz"
+        },
+        {
+          "en": "milk",
+          "es": "leche"
+        },
+        {
+          "en": "apple",
+          "es": "manzana"
+        },
+        {
+          "en": "coffee",
+          "es": "café"
+        },
+        {
+          "en": "tea",
+          "es": "té"
+        },
+        {
+          "en": "vegetables",
+          "es": "verduras"
+        },
+        {
+          "en": "fruit",
+          "es": "fruta"
+        },
+        {
+          "en": "menu",
+          "es": "menú"
+        },
+        {
+          "en": "bill",
+          "es": "cuenta"
+        },
+        {
+          "en": "price",
+          "es": "precio"
+        },
+        {
+          "en": "cheap",
+          "es": "barato"
+        },
+        {
+          "en": "expensive",
+          "es": "caro"
+        },
+        {
+          "en": "cash",
+          "es": "efectivo"
+        },
+        {
+          "en": "card",
+          "es": "tarjeta"
+        },
+        {
+          "en": "order",
+          "es": "pedir"
+        },
+        {
+          "en": "some",
+          "es": "algo de / algunos"
+        },
+        {
+          "en": "any",
+          "es": "algo de / ninguno"
+        },
+        {
+          "en": "how much",
+          "es": "cuánto (cantidad o precio)"
+        },
+        {
+          "en": "juice",
+          "es": "jugo"
+        },
+        {
+          "en": "sugar",
+          "es": "azúcar"
+        },
+        {
+          "en": "salt",
+          "es": "sal"
+        },
+        {
+          "en": "chicken",
+          "es": "pollo"
+        },
+        {
+          "en": "fish",
+          "es": "pescado"
+        },
+        {
+          "en": "beef",
+          "es": "carne de res"
+        },
+        {
+          "en": "banana",
+          "es": "plátano"
+        },
+        {
+          "en": "orange",
+          "es": "naranja"
+        },
+        {
+          "en": "egg",
+          "es": "huevo"
+        },
+        {
+          "en": "cheese",
+          "es": "queso"
+        },
+        {
+          "en": "butter",
+          "es": "mantequilla"
+        },
+        {
+          "en": "soup",
+          "es": "sopa"
+        },
+        {
+          "en": "salad",
+          "es": "ensalada"
+        },
+        {
+          "en": "sandwich",
+          "es": "sándwich"
+        },
+        {
+          "en": "waiter",
+          "es": "mesero"
+        },
+        {
+          "en": "table",
+          "es": "mesa"
+        },
+        {
+          "en": "chair",
+          "es": "silla"
+        },
+        {
+          "en": "knife",
+          "es": "cuchillo"
+        },
+        {
+          "en": "fork",
+          "es": "tenedor"
+        },
+        {
+          "en": "spoon",
+          "es": "cuchara"
+        },
+        {
+          "en": "glass",
+          "es": "vaso"
+        },
+        {
+          "en": "plate",
+          "es": "plato"
+        },
+        {
+          "en": "receipt",
+          "es": "recibo"
+        },
+        {
+          "en": "credit card",
+          "es": "tarjeta de crédito"
+        },
+        {
+          "en": "change",
+          "es": "vuelto"
+        },
+        {
+          "en": "delicious",
+          "es": "delicioso"
+        },
+        {
+          "en": "spicy",
+          "es": "picante"
+        },
+        {
+          "en": "vegetarian",
+          "es": "vegetariano"
+        },
+        {
+          "en": "allergy",
+          "es": "alergia"
+        },
+        {
+          "en": "without",
+          "es": "sin"
+        },
+        {
+          "en": "with",
+          "es": "con"
+        },
+        {
+          "en": "another",
+          "es": "otro"
+        },
+        {
+          "en": "bottle",
+          "es": "botella"
+        },
+        {
+          "en": "bag",
+          "es": "bolsa"
+        },
+        {
+          "en": "loaf",
+          "es": "hogaza"
+        },
+        {
+          "en": "cup",
+          "es": "taza"
+        },
+        {
+          "en": "portion",
+          "es": "porción"
+        },
+        {
+          "en": "piece",
+          "es": "trozo"
+        },
+        {
+          "en": "kilogram",
+          "es": "kilogramo"
+        },
+        {
+          "en": "liter",
+          "es": "litro"
+        },
+        {
+          "en": "half",
+          "es": "mitad"
+        },
+        {
+          "en": "whole",
+          "es": "entero"
+        },
+        {
+          "en": "discount",
+          "es": "descuento"
+        },
+        {
+          "en": "special offer",
+          "es": "oferta especial"
+        },
+        {
+          "en": "total",
+          "es": "total"
+        },
+        {
+          "en": "service",
+          "es": "servicio"
+        },
+        {
+          "en": "takeaway",
+          "es": "para llevar"
+        },
+        {
+          "en": "dessert",
+          "es": "postre"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Experiencias pasadas",
+      "tip": "En pasado, algunos verbos cambian de forma. Después de did utiliza el verbo base.",
+      "vocabulary": [
+        {
+          "en": "yesterday",
+          "es": "ayer"
+        },
+        {
+          "en": "last week",
+          "es": "la semana pasada"
+        },
+        {
+          "en": "ago",
+          "es": "hace (tiempo)"
+        },
+        {
+          "en": "went",
+          "es": "fui/fue (go)"
+        },
+        {
+          "en": "saw",
+          "es": "vi/vio (see)"
+        },
+        {
+          "en": "ate",
+          "es": "comí/comió (eat)"
+        },
+        {
+          "en": "had",
+          "es": "tuve/tuvo (have)"
+        },
+        {
+          "en": "made",
+          "es": "hice/hizo (make)"
+        },
+        {
+          "en": "bought",
+          "es": "compré/compró (buy)"
+        },
+        {
+          "en": "met",
+          "es": "conocí/encontré (meet)"
+        },
+        {
+          "en": "visited",
+          "es": "visité (visit)"
+        },
+        {
+          "en": "called",
+          "es": "llamé (call)"
+        },
+        {
+          "en": "arrived",
+          "es": "llegué (arrive)"
+        },
+        {
+          "en": "left",
+          "es": "salí (leave)"
+        },
+        {
+          "en": "fun",
+          "es": "diversión"
+        },
+        {
+          "en": "trip",
+          "es": "viaje"
+        },
+        {
+          "en": "family",
+          "es": "familia"
+        },
+        {
+          "en": "story",
+          "es": "historia"
+        },
+        {
+          "en": "before",
+          "es": "antes"
+        },
+        {
+          "en": "after",
+          "es": "después"
+        },
+        {
+          "en": "last night",
+          "es": "anoche"
+        },
+        {
+          "en": "last year",
+          "es": "año pasado"
+        },
+        {
+          "en": "yesterday morning",
+          "es": "ayer por la mañana"
+        },
+        {
+          "en": "two days ago",
+          "es": "hace dos días"
+        },
+        {
+          "en": "visit",
+          "es": "visitar"
+        },
+        {
+          "en": "buy",
+          "es": "comprar"
+        },
+        {
+          "en": "make",
+          "es": "hacer"
+        },
+        {
+          "en": "get",
+          "es": "obtener"
+        },
+        {
+          "en": "laugh",
+          "es": "reír"
+        },
+        {
+          "en": "cry",
+          "es": "llorar"
+        },
+        {
+          "en": "meet",
+          "es": "conocer"
+        },
+        {
+          "en": "think",
+          "es": "pensar"
+        },
+        {
+          "en": "thought",
+          "es": "pensó"
+        },
+        {
+          "en": "take",
+          "es": "tomar"
+        },
+        {
+          "en": "took",
+          "es": "tomó"
+        },
+        {
+          "en": "give",
+          "es": "dar"
+        },
+        {
+          "en": "gave",
+          "es": "dio"
+        },
+        {
+          "en": "come",
+          "es": "venir"
+        },
+        {
+          "en": "came",
+          "es": "vino"
+        },
+        {
+          "en": "see",
+          "es": "ver"
+        },
+        {
+          "en": "say",
+          "es": "decir"
+        },
+        {
+          "en": "said",
+          "es": "dijo"
+        },
+        {
+          "en": "do",
+          "es": "hacer"
+        },
+        {
+          "en": "did",
+          "es": "hizo"
+        },
+        {
+          "en": "have",
+          "es": "tener"
+        },
+        {
+          "en": "go",
+          "es": "ir"
+        },
+        {
+          "en": "begin",
+          "es": "comenzar"
+        },
+        {
+          "en": "began",
+          "es": "comenzó"
+        },
+        {
+          "en": "return",
+          "es": "regresar"
+        },
+        {
+          "en": "remember",
+          "es": "recordar"
+        },
+        {
+          "en": "forget",
+          "es": "olvidar"
+        },
+        {
+          "en": "happen",
+          "es": "suceder"
+        },
+        {
+          "en": "surprise",
+          "es": "sorpresa"
+        },
+        {
+          "en": "event",
+          "es": "evento"
+        },
+        {
+          "en": "last weekend",
+          "es": "fin de semana pasado"
+        },
+        {
+          "en": "the day before",
+          "es": "el día anterior"
+        },
+        {
+          "en": "this morning",
+          "es": "esta mañana"
+        },
+        {
+          "en": "message",
+          "es": "mensaje"
+        },
+        {
+          "en": "phone call",
+          "es": "llamada telefónica"
+        },
+        {
+          "en": "party",
+          "es": "fiesta"
+        },
+        {
+          "en": "museum",
+          "es": "museo"
+        },
+        {
+          "en": "photo",
+          "es": "foto"
+        },
+        {
+          "en": "holiday",
+          "es": "vacaciones"
+        },
+        {
+          "en": "delayed",
+          "es": "retrasado"
+        },
+        {
+          "en": "unexpected",
+          "es": "inesperado"
+        },
+        {
+          "en": "amazing",
+          "es": "increíble"
+        },
+        {
+          "en": "terrible",
+          "es": "terrible"
+        },
+        {
+          "en": "fortunately",
+          "es": "afortunadamente"
+        },
+        {
+          "en": "unfortunately",
+          "es": "desafortunadamente"
+        },
+        {
+          "en": "at first",
+          "es": "al principio"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Ciudad y viajes",
+      "tip": "Para dar una indicación puedes empezar con el verbo: Turn left.",
+      "vocabulary": [
+        {
+          "en": "station",
+          "es": "estación"
+        },
+        {
+          "en": "airport",
+          "es": "aeropuerto"
+        },
+        {
+          "en": "ticket",
+          "es": "boleto/billete"
+        },
+        {
+          "en": "bus",
+          "es": "autobús"
+        },
+        {
+          "en": "train",
+          "es": "tren"
+        },
+        {
+          "en": "street",
+          "es": "calle"
+        },
+        {
+          "en": "corner",
+          "es": "esquina"
+        },
+        {
+          "en": "left",
+          "es": "izquierda"
+        },
+        {
+          "en": "right",
+          "es": "derecha"
+        },
+        {
+          "en": "straight",
+          "es": "recto"
+        },
+        {
+          "en": "near",
+          "es": "cerca"
+        },
+        {
+          "en": "far",
+          "es": "lejos"
+        },
+        {
+          "en": "between",
+          "es": "entre"
+        },
+        {
+          "en": "next to",
+          "es": "al lado de"
+        },
+        {
+          "en": "opposite",
+          "es": "frente a"
+        },
+        {
+          "en": "behind",
+          "es": "detrás de"
+        },
+        {
+          "en": "map",
+          "es": "mapa"
+        },
+        {
+          "en": "departure",
+          "es": "salida"
+        },
+        {
+          "en": "arrival",
+          "es": "llegada"
+        },
+        {
+          "en": "delay",
+          "es": "retraso"
+        },
+        {
+          "en": "airline",
+          "es": "aerolínea"
+        },
+        {
+          "en": "boarding pass",
+          "es": "tarjeta de embarque"
+        },
+        {
+          "en": "passport",
+          "es": "pasaporte"
+        },
+        {
+          "en": "gate",
+          "es": "puerta de embarque"
+        },
+        {
+          "en": "security",
+          "es": "seguridad"
+        },
+        {
+          "en": "baggage",
+          "es": "equipaje"
+        },
+        {
+          "en": "carry-on",
+          "es": "equipaje de mano"
+        },
+        {
+          "en": "customs",
+          "es": "aduana"
+        },
+        {
+          "en": "cancelled",
+          "es": "cancelado"
+        },
+        {
+          "en": "platform",
+          "es": "andén"
+        },
+        {
+          "en": "subway",
+          "es": "metro"
+        },
+        {
+          "en": "bus stop",
+          "es": "parada de autobús"
+        },
+        {
+          "en": "taxi",
+          "es": "taxi"
+        },
+        {
+          "en": "driver",
+          "es": "conductor"
+        },
+        {
+          "en": "ride",
+          "es": "trayecto"
+        },
+        {
+          "en": "one-way",
+          "es": "solo ida"
+        },
+        {
+          "en": "round trip",
+          "es": "ida y vuelta"
+        },
+        {
+          "en": "fare",
+          "es": "tarifa"
+        },
+        {
+          "en": "seat",
+          "es": "asiento"
+        },
+        {
+          "en": "window",
+          "es": "ventana"
+        },
+        {
+          "en": "aisle",
+          "es": "pasillo"
+        },
+        {
+          "en": "intersection",
+          "es": "intersección"
+        },
+        {
+          "en": "traffic light",
+          "es": "semáforo"
+        },
+        {
+          "en": "straight ahead",
+          "es": "todo recto"
+        },
+        {
+          "en": "entrance",
+          "es": "entrada"
+        },
+        {
+          "en": "exit",
+          "es": "salida"
+        },
+        {
+          "en": "check-in",
+          "es": "registro"
+        },
+        {
+          "en": "check-out",
+          "es": "salida del hotel"
+        },
+        {
+          "en": "room key",
+          "es": "llave de habitación"
+        },
+        {
+          "en": "reservation number",
+          "es": "número de reserva"
+        },
+        {
+          "en": "lost",
+          "es": "perdido"
+        },
+        {
+          "en": "hotel",
+          "es": "hotel"
+        },
+        {
+          "en": "hostel",
+          "es": "hostal"
+        },
+        {
+          "en": "reception",
+          "es": "recepción"
+        },
+        {
+          "en": "receptionist",
+          "es": "recepcionista"
+        },
+        {
+          "en": "luggage",
+          "es": "equipaje"
+        },
+        {
+          "en": "reservation",
+          "es": "reserva"
+        },
+        {
+          "en": "information desk",
+          "es": "mostrador de información"
+        },
+        {
+          "en": "schedule",
+          "es": "horario"
+        },
+        {
+          "en": "route",
+          "es": "ruta"
+        },
+        {
+          "en": "destination",
+          "es": "destino"
+        },
+        {
+          "en": "connection",
+          "es": "conexión"
+        },
+        {
+          "en": "transfer",
+          "es": "transbordo"
+        },
+        {
+          "en": "terminal",
+          "es": "terminal"
+        },
+        {
+          "en": "crosswalk",
+          "es": "paso de peatones"
+        },
+        {
+          "en": "bridge",
+          "es": "puente"
+        },
+        {
+          "en": "roundabout",
+          "es": "rotonda"
+        },
+        {
+          "en": "nearby",
+          "es": "cerca"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Planes y decisiones",
+      "tip": "Going to expresa planes. Will también se usa para decisiones tomadas al hablar.",
+      "vocabulary": [
+        {
+          "en": "tomorrow",
+          "es": "mañana"
+        },
+        {
+          "en": "next",
+          "es": "próximo"
+        },
+        {
+          "en": "later",
+          "es": "más tarde"
+        },
+        {
+          "en": "soon",
+          "es": "pronto"
+        },
+        {
+          "en": "plan",
+          "es": "plan"
+        },
+        {
+          "en": "goal",
+          "es": "meta"
+        },
+        {
+          "en": "decide",
+          "es": "decidir"
+        },
+        {
+          "en": "hope",
+          "es": "esperar"
+        },
+        {
+          "en": "perhaps",
+          "es": "quizás"
+        },
+        {
+          "en": "probably",
+          "es": "probablemente"
+        },
+        {
+          "en": "definitely",
+          "es": "definitivamente"
+        },
+        {
+          "en": "travel",
+          "es": "viajar"
+        },
+        {
+          "en": "visit",
+          "es": "visitar"
+        },
+        {
+          "en": "meeting",
+          "es": "reunión"
+        },
+        {
+          "en": "appointment",
+          "es": "cita"
+        },
+        {
+          "en": "schedule",
+          "es": "horario"
+        },
+        {
+          "en": "available",
+          "es": "disponible"
+        },
+        {
+          "en": "free",
+          "es": "libre"
+        },
+        {
+          "en": "future",
+          "es": "futuro"
+        },
+        {
+          "en": "prepare",
+          "es": "preparar"
+        },
+        {
+          "en": "next week",
+          "es": "próxima semana"
+        },
+        {
+          "en": "next month",
+          "es": "próximo mes"
+        },
+        {
+          "en": "in an hour",
+          "es": "en una hora"
+        },
+        {
+          "en": "this evening",
+          "es": "esta tarde-noche"
+        },
+        {
+          "en": "next year",
+          "es": "próximo año"
+        },
+        {
+          "en": "promise",
+          "es": "prometer"
+        },
+        {
+          "en": "decision",
+          "es": "decisión"
+        },
+        {
+          "en": "possibly",
+          "es": "posiblemente"
+        },
+        {
+          "en": "certainly",
+          "es": "ciertamente"
+        },
+        {
+          "en": "expect",
+          "es": "esperar (previsión)"
+        },
+        {
+          "en": "intend",
+          "es": "tener intención"
+        },
+        {
+          "en": "arrange",
+          "es": "organizar"
+        },
+        {
+          "en": "book",
+          "es": "reservar"
+        },
+        {
+          "en": "cancel",
+          "es": "cancelar"
+        },
+        {
+          "en": "postpone",
+          "es": "posponer"
+        },
+        {
+          "en": "confirm",
+          "es": "confirmar"
+        },
+        {
+          "en": "milestone",
+          "es": "hito"
+        },
+        {
+          "en": "deadline",
+          "es": "fecha límite"
+        },
+        {
+          "en": "priority",
+          "es": "prioridad"
+        },
+        {
+          "en": "improve",
+          "es": "mejorar"
+        },
+        {
+          "en": "continue",
+          "es": "continuar"
+        },
+        {
+          "en": "begin",
+          "es": "comenzar"
+        },
+        {
+          "en": "choose",
+          "es": "elegir"
+        },
+        {
+          "en": "option",
+          "es": "opción"
+        },
+        {
+          "en": "opportunity",
+          "es": "oportunidad"
+        },
+        {
+          "en": "plan ahead",
+          "es": "planificar con antelación"
+        },
+        {
+          "en": "be ready",
+          "es": "estar listo"
+        },
+        {
+          "en": "look forward to",
+          "es": "esperar con ilusión"
+        },
+        {
+          "en": "next time",
+          "es": "la próxima vez"
+        },
+        {
+          "en": "in the future",
+          "es": "en el futuro"
+        },
+        {
+          "en": "as soon as",
+          "es": "tan pronto como"
+        },
+        {
+          "en": "later today",
+          "es": "más tarde hoy"
+        },
+        {
+          "en": "by Friday",
+          "es": "para el viernes"
+        },
+        {
+          "en": "in two weeks",
+          "es": "en dos semanas"
+        },
+        {
+          "en": "the following day",
+          "es": "el día siguiente"
+        },
+        {
+          "en": "in advance",
+          "es": "por adelantado"
+        },
+        {
+          "en": "backup plan",
+          "es": "plan alternativo"
+        },
+        {
+          "en": "invitation",
+          "es": "invitación"
+        },
+        {
+          "en": "trip",
+          "es": "viaje"
+        },
+        {
+          "en": "holiday",
+          "es": "vacaciones"
+        },
+        {
+          "en": "relocation",
+          "es": "mudanza"
+        },
+        {
+          "en": "training",
+          "es": "capacitación"
+        },
+        {
+          "en": "practice session",
+          "es": "sesión de práctica"
+        },
+        {
+          "en": "expected",
+          "es": "esperado"
+        },
+        {
+          "en": "unlikely",
+          "es": "poco probable"
+        },
+        {
+          "en": "maybe later",
+          "es": "quizá después"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Pedir ayuda",
+      "tip": "Should introduce un consejo; must expresa una obligación; must not, una prohibición.",
+      "vocabulary": [
+        {
+          "en": "help",
+          "es": "ayudar"
+        },
+        {
+          "en": "problem",
+          "es": "problema"
+        },
+        {
+          "en": "solution",
+          "es": "solución"
+        },
+        {
+          "en": "slowly",
+          "es": "despacio"
+        },
+        {
+          "en": "repeat",
+          "es": "repetir"
+        },
+        {
+          "en": "understand",
+          "es": "entender"
+        },
+        {
+          "en": "explain",
+          "es": "explicar"
+        },
+        {
+          "en": "should",
+          "es": "debería"
+        },
+        {
+          "en": "must",
+          "es": "deber"
+        },
+        {
+          "en": "have to",
+          "es": "tener que"
+        },
+        {
+          "en": "need",
+          "es": "necesitar"
+        },
+        {
+          "en": "rest",
+          "es": "descansar"
+        },
+        {
+          "en": "feel",
+          "es": "sentirse"
+        },
+        {
+          "en": "better",
+          "es": "mejor"
+        },
+        {
+          "en": "worse",
+          "es": "peor"
+        },
+        {
+          "en": "important",
+          "es": "importante"
+        },
+        {
+          "en": "urgent",
+          "es": "urgente"
+        },
+        {
+          "en": "careful",
+          "es": "cuidadoso"
+        },
+        {
+          "en": "advice",
+          "es": "consejo"
+        },
+        {
+          "en": "possible",
+          "es": "posible"
+        },
+        {
+          "en": "helpful",
+          "es": "útil"
+        },
+        {
+          "en": "impossible",
+          "es": "imposible"
+        },
+        {
+          "en": "necessary",
+          "es": "necesario"
+        },
+        {
+          "en": "safe",
+          "es": "seguro"
+        },
+        {
+          "en": "dangerous",
+          "es": "peligroso"
+        },
+        {
+          "en": "rule",
+          "es": "regla"
+        },
+        {
+          "en": "permission",
+          "es": "permiso"
+        },
+        {
+          "en": "allowed",
+          "es": "permitido"
+        },
+        {
+          "en": "required",
+          "es": "obligatorio"
+        },
+        {
+          "en": "recommend",
+          "es": "recomendar"
+        },
+        {
+          "en": "suggest",
+          "es": "sugerir"
+        },
+        {
+          "en": "clearly",
+          "es": "claramente"
+        },
+        {
+          "en": "speak up",
+          "es": "hablar más fuerte"
+        },
+        {
+          "en": "spell",
+          "es": "deletrear"
+        },
+        {
+          "en": "meaning",
+          "es": "significado"
+        },
+        {
+          "en": "confused",
+          "es": "confundido"
+        },
+        {
+          "en": "worried",
+          "es": "preocupado"
+        },
+        {
+          "en": "tired",
+          "es": "cansado"
+        },
+        {
+          "en": "thirsty",
+          "es": "sediento"
+        },
+        {
+          "en": "sick",
+          "es": "enfermo"
+        },
+        {
+          "en": "headache",
+          "es": "dolor de cabeza"
+        },
+        {
+          "en": "medicine",
+          "es": "medicina"
+        },
+        {
+          "en": "pharmacy",
+          "es": "farmacia"
+        },
+        {
+          "en": "doctor",
+          "es": "médico"
+        },
+        {
+          "en": "hospital",
+          "es": "hospital"
+        },
+        {
+          "en": "accident",
+          "es": "accidente"
+        },
+        {
+          "en": "emergency",
+          "es": "emergencia"
+        },
+        {
+          "en": "mistake",
+          "es": "error"
+        },
+        {
+          "en": "try again",
+          "es": "intentar de nuevo"
+        },
+        {
+          "en": "don't worry",
+          "es": "no te preocupes"
+        },
+        {
+          "en": "take a break",
+          "es": "tomar un descanso"
+        },
+        {
+          "en": "be careful",
+          "es": "tener cuidado"
+        },
+        {
+          "en": "of course",
+          "es": "por supuesto"
+        },
+        {
+          "en": "instruction",
+          "es": "instrucción"
+        },
+        {
+          "en": "warning",
+          "es": "advertencia"
+        },
+        {
+          "en": "sign",
+          "es": "señal"
+        },
+        {
+          "en": "policy",
+          "es": "política"
+        },
+        {
+          "en": "document",
+          "es": "documento"
+        },
+        {
+          "en": "identity card",
+          "es": "cédula de identidad"
+        },
+        {
+          "en": "passport",
+          "es": "pasaporte"
+        },
+        {
+          "en": "form",
+          "es": "formulario"
+        },
+        {
+          "en": "request",
+          "es": "solicitud"
+        },
+        {
+          "en": "recommendation",
+          "es": "recomendación"
+        },
+        {
+          "en": "condition",
+          "es": "condición"
+        },
+        {
+          "en": "allergic",
+          "es": "alérgico"
+        },
+        {
+          "en": "fever",
+          "es": "fiebre"
+        },
+        {
+          "en": "hurt",
+          "es": "doler"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Trabajo y comparaciones",
+      "tip": "Para comparar, usa una forma como cheaper o more expensive; añade than al mencionar la otra opción.",
+      "vocabulary": [
+        {
+          "en": "project",
+          "es": "proyecto"
+        },
+        {
+          "en": "client",
+          "es": "cliente"
+        },
+        {
+          "en": "task",
+          "es": "tarea"
+        },
+        {
+          "en": "deadline",
+          "es": "fecha límite"
+        },
+        {
+          "en": "update",
+          "es": "actualización"
+        },
+        {
+          "en": "report",
+          "es": "informe"
+        },
+        {
+          "en": "team",
+          "es": "equipo"
+        },
+        {
+          "en": "meeting",
+          "es": "reunión"
+        },
+        {
+          "en": "feedback",
+          "es": "comentarios"
+        },
+        {
+          "en": "improve",
+          "es": "mejorar"
+        },
+        {
+          "en": "result",
+          "es": "resultado"
+        },
+        {
+          "en": "issue",
+          "es": "incidencia"
+        },
+        {
+          "en": "priority",
+          "es": "prioridad"
+        },
+        {
+          "en": "easy",
+          "es": "fácil"
+        },
+        {
+          "en": "difficult",
+          "es": "difícil"
+        },
+        {
+          "en": "useful",
+          "es": "útil"
+        },
+        {
+          "en": "faster",
+          "es": "más rápido"
+        },
+        {
+          "en": "better",
+          "es": "mejor"
+        },
+        {
+          "en": "best",
+          "es": "el mejor"
+        },
+        {
+          "en": "compare",
+          "es": "comparar"
+        },
+        {
+          "en": "company",
+          "es": "empresa"
+        },
+        {
+          "en": "manager",
+          "es": "gerente"
+        },
+        {
+          "en": "employee",
+          "es": "empleado"
+        },
+        {
+          "en": "customer",
+          "es": "cliente"
+        },
+        {
+          "en": "supplier",
+          "es": "proveedor"
+        },
+        {
+          "en": "agenda",
+          "es": "agenda"
+        },
+        {
+          "en": "minutes",
+          "es": "acta de reunión"
+        },
+        {
+          "en": "budget",
+          "es": "presupuesto"
+        },
+        {
+          "en": "cost",
+          "es": "costo"
+        },
+        {
+          "en": "price",
+          "es": "precio"
+        },
+        {
+          "en": "profit",
+          "es": "ganancia"
+        },
+        {
+          "en": "loss",
+          "es": "pérdida"
+        },
+        {
+          "en": "revenue",
+          "es": "ingresos"
+        },
+        {
+          "en": "invoice",
+          "es": "factura"
+        },
+        {
+          "en": "payment",
+          "es": "pago"
+        },
+        {
+          "en": "contract",
+          "es": "contrato"
+        },
+        {
+          "en": "proposal",
+          "es": "propuesta"
+        },
+        {
+          "en": "presentation",
+          "es": "presentación"
+        },
+        {
+          "en": "data",
+          "es": "datos"
+        },
+        {
+          "en": "analysis",
+          "es": "análisis"
+        },
+        {
+          "en": "improvement",
+          "es": "mejora"
+        },
+        {
+          "en": "challenge",
+          "es": "desafío"
+        },
+        {
+          "en": "deliver",
+          "es": "entregar"
+        },
+        {
+          "en": "discuss",
+          "es": "discutir"
+        },
+        {
+          "en": "agree",
+          "es": "estar de acuerdo"
+        },
+        {
+          "en": "disagree",
+          "es": "no estar de acuerdo"
+        },
+        {
+          "en": "follow up",
+          "es": "hacer seguimiento"
+        },
+        {
+          "en": "attach",
+          "es": "adjuntar"
+        },
+        {
+          "en": "file",
+          "es": "archivo"
+        },
+        {
+          "en": "deadline extension",
+          "es": "prórroga"
+        },
+        {
+          "en": "responsibility",
+          "es": "responsabilidad"
+        },
+        {
+          "en": "next step",
+          "es": "siguiente paso"
+        },
+        {
+          "en": "on behalf of",
+          "es": "en representación de"
+        },
+        {
+          "en": "quarter",
+          "es": "trimestre"
+        },
+        {
+          "en": "monthly",
+          "es": "mensual"
+        },
+        {
+          "en": "weekly report",
+          "es": "informe semanal"
+        },
+        {
+          "en": "spreadsheet",
+          "es": "hoja de cálculo"
+        },
+        {
+          "en": "dashboard",
+          "es": "panel de indicadores"
+        },
+        {
+          "en": "presentation slide",
+          "es": "diapositiva"
+        },
+        {
+          "en": "client request",
+          "es": "solicitud del cliente"
+        },
+        {
+          "en": "deliverable",
+          "es": "entregable"
+        },
+        {
+          "en": "estimate",
+          "es": "estimación"
+        },
+        {
+          "en": "timeline",
+          "es": "cronograma"
+        },
+        {
+          "en": "stakeholder",
+          "es": "parte interesada"
+        },
+        {
+          "en": "decision maker",
+          "es": "responsable de decisión"
+        },
+        {
+          "en": "approval",
+          "es": "aprobación"
+        },
+        {
+          "en": "revision",
+          "es": "revisión"
+        },
+        {
+          "en": "priority list",
+          "es": "lista de prioridades"
+        },
+        {
+          "en": "outstanding issue",
+          "es": "asunto pendiente"
+        },
+        {
+          "en": "action item",
+          "es": "acción pendiente"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Experiencias y logros",
+      "tip": "Have o has más participio conecta una experiencia con el presente. Un momento pasado concreto suele usar pasado simple.",
+      "vocabulary": [
+        {
+          "en": "ever",
+          "es": "alguna vez"
+        },
+        {
+          "en": "never",
+          "es": "nunca"
+        },
+        {
+          "en": "already",
+          "es": "ya"
+        },
+        {
+          "en": "yet",
+          "es": "ya/todavía"
+        },
+        {
+          "en": "experience",
+          "es": "experiencia"
+        },
+        {
+          "en": "abroad",
+          "es": "en el extranjero"
+        },
+        {
+          "en": "achieve",
+          "es": "lograr"
+        },
+        {
+          "en": "learn",
+          "es": "aprender"
+        },
+        {
+          "en": "try",
+          "es": "probar"
+        },
+        {
+          "en": "finish",
+          "es": "terminar"
+        },
+        {
+          "en": "start",
+          "es": "comenzar"
+        },
+        {
+          "en": "change",
+          "es": "cambiar"
+        },
+        {
+          "en": "since",
+          "es": "desde (punto temporal)"
+        },
+        {
+          "en": "for",
+          "es": "durante (periodo)"
+        },
+        {
+          "en": "recently",
+          "es": "recientemente"
+        },
+        {
+          "en": "opportunity",
+          "es": "oportunidad"
+        },
+        {
+          "en": "challenge",
+          "es": "desafío"
+        },
+        {
+          "en": "success",
+          "es": "éxito"
+        },
+        {
+          "en": "mistake",
+          "es": "error"
+        },
+        {
+          "en": "skill",
+          "es": "habilidad"
+        },
+        {
+          "en": "just",
+          "es": "acabar de"
+        },
+        {
+          "en": "for two years",
+          "es": "durante dos años"
+        },
+        {
+          "en": "so far",
+          "es": "hasta ahora"
+        },
+        {
+          "en": "before",
+          "es": "antes"
+        },
+        {
+          "en": "once",
+          "es": "una vez"
+        },
+        {
+          "en": "several times",
+          "es": "varias veces"
+        },
+        {
+          "en": "achievement",
+          "es": "logro"
+        },
+        {
+          "en": "achievement unlocked",
+          "es": "logro desbloqueado"
+        },
+        {
+          "en": "failure",
+          "es": "fracaso"
+        },
+        {
+          "en": "knowledge",
+          "es": "conocimiento"
+        },
+        {
+          "en": "learned",
+          "es": "aprendido"
+        },
+        {
+          "en": "improved",
+          "es": "mejorado"
+        },
+        {
+          "en": "changed",
+          "es": "cambiado"
+        },
+        {
+          "en": "started",
+          "es": "empezado"
+        },
+        {
+          "en": "finished",
+          "es": "terminado"
+        },
+        {
+          "en": "known",
+          "es": "conocido"
+        },
+        {
+          "en": "been",
+          "es": "estado / sido"
+        },
+        {
+          "en": "done",
+          "es": "hecho"
+        },
+        {
+          "en": "seen",
+          "es": "visto"
+        },
+        {
+          "en": "written",
+          "es": "escrito"
+        },
+        {
+          "en": "spoken",
+          "es": "hablado"
+        },
+        {
+          "en": "tried",
+          "es": "intentado"
+        },
+        {
+          "en": "decided",
+          "es": "decidido"
+        },
+        {
+          "en": "applied",
+          "es": "postulado"
+        },
+        {
+          "en": "worked",
+          "es": "trabajado"
+        },
+        {
+          "en": "studied",
+          "es": "estudiado"
+        },
+        {
+          "en": "live abroad",
+          "es": "vivir en el extranjero"
+        },
+        {
+          "en": "take a course",
+          "es": "hacer un curso"
+        },
+        {
+          "en": "gain confidence",
+          "es": "ganar confianza"
+        },
+        {
+          "en": "make progress",
+          "es": "progresar"
+        },
+        {
+          "en": "in my life",
+          "es": "en mi vida"
+        },
+        {
+          "en": "for a long time",
+          "es": "durante mucho tiempo"
+        },
+        {
+          "en": "up to now",
+          "es": "hasta ahora"
+        },
+        {
+          "en": "ever since",
+          "es": "desde entonces"
+        },
+        {
+          "en": "this week",
+          "es": "esta semana"
+        },
+        {
+          "en": "this month",
+          "es": "este mes"
+        },
+        {
+          "en": "over the years",
+          "es": "a lo largo de los años"
+        },
+        {
+          "en": "previously",
+          "es": "anteriormente"
+        },
+        {
+          "en": "recent experience",
+          "es": "experiencia reciente"
+        },
+        {
+          "en": "professional growth",
+          "es": "crecimiento profesional"
+        },
+        {
+          "en": "work experience",
+          "es": "experiencia laboral"
+        },
+        {
+          "en": "volunteer",
+          "es": "hacer voluntariado"
+        },
+        {
+          "en": "course",
+          "es": "curso"
+        },
+        {
+          "en": "certificate",
+          "es": "certificado"
+        },
+        {
+          "en": "contribution",
+          "es": "contribución"
+        },
+        {
+          "en": "project completed",
+          "es": "proyecto terminado"
+        },
+        {
+          "en": "valuable",
+          "es": "valioso"
+        },
+        {
+          "en": "meaningful",
+          "es": "significativo"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Opiniones e ideas",
+      "tip": "Because presenta una razón; so introduce una consecuencia; although expresa contraste.",
+      "vocabulary": [
+        {
+          "en": "because",
+          "es": "porque"
+        },
+        {
+          "en": "so",
+          "es": "por eso/así que"
+        },
+        {
+          "en": "although",
+          "es": "aunque"
+        },
+        {
+          "en": "however",
+          "es": "sin embargo"
+        },
+        {
+          "en": "agree",
+          "es": "estar de acuerdo"
+        },
+        {
+          "en": "disagree",
+          "es": "estar en desacuerdo"
+        },
+        {
+          "en": "opinion",
+          "es": "opinión"
+        },
+        {
+          "en": "reason",
+          "es": "razón"
+        },
+        {
+          "en": "choice",
+          "es": "elección"
+        },
+        {
+          "en": "advantage",
+          "es": "ventaja"
+        },
+        {
+          "en": "disadvantage",
+          "es": "desventaja"
+        },
+        {
+          "en": "important",
+          "es": "importante"
+        },
+        {
+          "en": "simple",
+          "es": "sencillo"
+        },
+        {
+          "en": "clear",
+          "es": "claro"
+        },
+        {
+          "en": "different",
+          "es": "diferente"
+        },
+        {
+          "en": "similar",
+          "es": "similar"
+        },
+        {
+          "en": "if",
+          "es": "si (condición)"
+        },
+        {
+          "en": "then",
+          "es": "entonces"
+        },
+        {
+          "en": "perhaps",
+          "es": "quizás"
+        },
+        {
+          "en": "prefer",
+          "es": "preferir"
+        },
+        {
+          "en": "point of view",
+          "es": "punto de vista"
+        },
+        {
+          "en": "example",
+          "es": "ejemplo"
+        },
+        {
+          "en": "evidence",
+          "es": "evidencia"
+        },
+        {
+          "en": "fact",
+          "es": "hecho"
+        },
+        {
+          "en": "idea",
+          "es": "idea"
+        },
+        {
+          "en": "argument",
+          "es": "argumento"
+        },
+        {
+          "en": "benefit",
+          "es": "beneficio"
+        },
+        {
+          "en": "risk",
+          "es": "riesgo"
+        },
+        {
+          "en": "opinionated",
+          "es": "con opiniones firmes"
+        },
+        {
+          "en": "because of",
+          "es": "debido a"
+        },
+        {
+          "en": "therefore",
+          "es": "por lo tanto"
+        },
+        {
+          "en": "even though",
+          "es": "aunque"
+        },
+        {
+          "en": "on the other hand",
+          "es": "por otra parte"
+        },
+        {
+          "en": "in addition",
+          "es": "además"
+        },
+        {
+          "en": "in contrast",
+          "es": "en contraste"
+        },
+        {
+          "en": "in general",
+          "es": "en general"
+        },
+        {
+          "en": "for example",
+          "es": "por ejemplo"
+        },
+        {
+          "en": "firstly",
+          "es": "primero"
+        },
+        {
+          "en": "secondly",
+          "es": "segundo"
+        },
+        {
+          "en": "finally",
+          "es": "finalmente"
+        },
+        {
+          "en": "unless",
+          "es": "a menos que"
+        },
+        {
+          "en": "when",
+          "es": "cuando"
+        },
+        {
+          "en": "while",
+          "es": "mientras"
+        },
+        {
+          "en": "despite",
+          "es": "a pesar de"
+        },
+        {
+          "en": "instead of",
+          "es": "en lugar de"
+        },
+        {
+          "en": "probably",
+          "es": "probablemente"
+        },
+        {
+          "en": "in my experience",
+          "es": "en mi experiencia"
+        },
+        {
+          "en": "I believe",
+          "es": "creo que"
+        },
+        {
+          "en": "to be honest",
+          "es": "para ser sincero"
+        },
+        {
+          "en": "I see your point",
+          "es": "entiendo tu punto"
+        },
+        {
+          "en": "what do you think",
+          "es": "qué opinas"
+        },
+        {
+          "en": "it depends",
+          "es": "depende"
+        },
+        {
+          "en": "a little",
+          "es": "un poco"
+        },
+        {
+          "en": "quite",
+          "es": "bastante"
+        },
+        {
+          "en": "too much",
+          "es": "demasiado"
+        },
+        {
+          "en": "not enough",
+          "es": "insuficiente"
+        },
+        {
+          "en": "on balance",
+          "es": "en conjunto"
+        },
+        {
+          "en": "overall",
+          "es": "en general"
+        },
+        {
+          "en": "partly",
+          "es": "parcialmente"
+        },
+        {
+          "en": "completely",
+          "es": "completamente"
+        },
+        {
+          "en": "likely",
+          "es": "probable"
+        },
+        {
+          "en": "unlikely",
+          "es": "improbable"
+        },
+        {
+          "en": "usually",
+          "es": "normalmente"
+        },
+        {
+          "en": "sometimes",
+          "es": "a veces"
+        },
+        {
+          "en": "always",
+          "es": "siempre"
+        },
+        {
+          "en": "never",
+          "es": "nunca"
+        },
+        {
+          "en": "positive",
+          "es": "positivo"
+        },
+        {
+          "en": "negative",
+          "es": "negativo"
+        },
+        {
+          "en": "neutral",
+          "es": "neutral"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Conversaciones",
+      "tip": "Para aclarar, pregunta What do you mean? Para añadir información, pide Tell me more.",
+      "vocabulary": [
+        {
+          "en": "background",
+          "es": "trayectoria"
+        },
+        {
+          "en": "strength",
+          "es": "fortaleza"
+        },
+        {
+          "en": "weakness",
+          "es": "debilidad"
+        },
+        {
+          "en": "decision",
+          "es": "decisión"
+        },
+        {
+          "en": "opportunity",
+          "es": "oportunidad"
+        },
+        {
+          "en": "improve",
+          "es": "mejorar"
+        },
+        {
+          "en": "explain",
+          "es": "explicar"
+        },
+        {
+          "en": "clarify",
+          "es": "aclarar"
+        },
+        {
+          "en": "example",
+          "es": "ejemplo"
+        },
+        {
+          "en": "solution",
+          "es": "solución"
+        },
+        {
+          "en": "experience",
+          "es": "experiencia"
+        },
+        {
+          "en": "prepare",
+          "es": "preparar"
+        },
+        {
+          "en": "achieve",
+          "es": "lograr"
+        },
+        {
+          "en": "review",
+          "es": "revisar"
+        },
+        {
+          "en": "goal",
+          "es": "meta"
+        },
+        {
+          "en": "progress",
+          "es": "progreso"
+        },
+        {
+          "en": "confident",
+          "es": "seguro de sí mismo"
+        },
+        {
+          "en": "comfortable",
+          "es": "cómodo"
+        },
+        {
+          "en": "question",
+          "es": "pregunta"
+        },
+        {
+          "en": "answer",
+          "es": "respuesta"
+        },
+        {
+          "en": "introduction",
+          "es": "presentación"
+        },
+        {
+          "en": "summary",
+          "es": "resumen"
+        },
+        {
+          "en": "motivation",
+          "es": "motivación"
+        },
+        {
+          "en": "career",
+          "es": "carrera profesional"
+        },
+        {
+          "en": "position",
+          "es": "cargo"
+        },
+        {
+          "en": "role",
+          "es": "función"
+        },
+        {
+          "en": "responsibility",
+          "es": "responsabilidad"
+        },
+        {
+          "en": "interview",
+          "es": "entrevista"
+        },
+        {
+          "en": "hire",
+          "es": "contratar"
+        },
+        {
+          "en": "apply for",
+          "es": "postular a"
+        },
+        {
+          "en": "impression",
+          "es": "impresión"
+        },
+        {
+          "en": "prepared",
+          "es": "preparado"
+        },
+        {
+          "en": "nervous",
+          "es": "nervioso"
+        },
+        {
+          "en": "successful",
+          "es": "exitoso"
+        },
+        {
+          "en": "mistake",
+          "es": "error"
+        },
+        {
+          "en": "correct",
+          "es": "corregir"
+        },
+        {
+          "en": "reflect",
+          "es": "reflexionar"
+        },
+        {
+          "en": "feedback",
+          "es": "retroalimentación"
+        },
+        {
+          "en": "fluency",
+          "es": "fluidez"
+        },
+        {
+          "en": "accuracy",
+          "es": "precisión"
+        },
+        {
+          "en": "pronunciation",
+          "es": "pronunciación"
+        },
+        {
+          "en": "conversation",
+          "es": "conversación"
+        },
+        {
+          "en": "follow-up question",
+          "es": "pregunta de seguimiento"
+        },
+        {
+          "en": "rephrase",
+          "es": "reformular"
+        },
+        {
+          "en": "explain further",
+          "es": "explicar mejor"
+        },
+        {
+          "en": "keep going",
+          "es": "seguir adelante"
+        },
+        {
+          "en": "take your time",
+          "es": "tómate tu tiempo"
+        },
+        {
+          "en": "let me think",
+          "es": "déjame pensar"
+        },
+        {
+          "en": "in other words",
+          "es": "en otras palabras"
+        },
+        {
+          "en": "I mean",
+          "es": "quiero decir"
+        },
+        {
+          "en": "what I meant was",
+          "es": "lo que quise decir fue"
+        },
+        {
+          "en": "could you repeat that",
+          "es": "podrías repetir eso"
+        },
+        {
+          "en": "the main point",
+          "es": "el punto principal"
+        },
+        {
+          "en": "next steps",
+          "es": "próximos pasos"
+        },
+        {
+          "en": "achievement",
+          "es": "logro"
+        },
+        {
+          "en": "career path",
+          "es": "trayectoria profesional"
+        },
+        {
+          "en": "portfolio",
+          "es": "portafolio"
+        },
+        {
+          "en": "resume",
+          "es": "currículum"
+        },
+        {
+          "en": "cover letter",
+          "es": "carta de presentación"
+        },
+        {
+          "en": "salary",
+          "es": "salario"
+        },
+        {
+          "en": "work environment",
+          "es": "ambiente laboral"
+        },
+        {
+          "en": "reliable",
+          "es": "fiable"
+        },
+        {
+          "en": "organized",
+          "es": "organizado"
+        },
+        {
+          "en": "adaptable",
+          "es": "adaptable"
+        },
+        {
+          "en": "curious",
+          "es": "curioso"
+        },
+        {
+          "en": "leadership",
+          "es": "liderazgo"
+        },
+        {
+          "en": "initiative",
+          "es": "iniciativa"
+        },
+        {
+          "en": "teamwork",
+          "es": "trabajo en equipo"
+        },
+        {
+          "en": "problem solving",
+          "es": "resolución de problemas"
+        },
+        {
+          "en": "growth",
+          "es": "crecimiento"
+        },
+        {
+          "en": "challenge accepted",
+          "es": "reto aceptado"
+        }
+      ]
+    }
+  ],
+  "sentences": [
+    {
+      "id": "practice-1-1",
+      "category": 1,
+      "en": "Hello, my name is Alex.",
+      "es": "Hola, me llamo Alex.",
+      "prompt": "My name ___ Alex.",
+      "answer": "is",
+      "explanation": "Con my name usamos is: My name is Alex (Me llamo Alex)."
+    },
+    {
+      "id": "practice-1-2",
+      "category": 1,
+      "en": "Are you new here?",
+      "es": "¿Eres nuevo aquí?",
+      "prompt": "___ you new here?",
+      "answer": "Are",
+      "explanation": "En una pregunta con you, are va antes del sujeto: Are you new here?"
+    },
+    {
+      "id": "practice-2-1",
+      "category": 2,
+      "en": "I wake up early and eat breakfast.",
+      "es": "Me despierto temprano y desayuno.",
+      "prompt": "I ___ up early. (wake)",
+      "answer": "wake",
+      "explanation": "Wake up significa despertarse. Con I usamos wake en presente simple."
+    },
+    {
+      "id": "practice-2-2",
+      "category": 2,
+      "en": "Do you study English every day?",
+      "es": "¿Estudias inglés todos los días?",
+      "prompt": "___ you study English?",
+      "answer": "Do",
+      "explanation": "Para preguntar por una rutina con you usamos Do + you + verbo: Do you study English?"
+    },
+    {
+      "id": "practice-3-1",
+      "category": 3,
+      "en": "I am reading an English article now.",
+      "es": "Estoy leyendo un artículo en inglés ahora.",
+      "prompt": "I am ___ an article. (read)",
+      "answer": "reading",
+      "explanation": "Una acción en curso se expresa con am/is/are + verbo en -ing: I am reading."
+    },
+    {
+      "id": "practice-3-2",
+      "category": 3,
+      "en": "I enjoy listening to music.",
+      "es": "Disfruto escuchar música.",
+      "prompt": "I enjoy ___ to music. (listen)",
+      "answer": "listening",
+      "explanation": "Después de enjoy, el verbo va en -ing: enjoy listening (disfrutar escuchando)."
+    },
+    {
+      "id": "practice-4-1",
+      "category": 4,
+      "en": "I would like a coffee and some water, please.",
+      "es": "Quisiera un café y un poco de agua, por favor.",
+      "prompt": "I would ___ a coffee.",
+      "answer": "like",
+      "explanation": "I would like es una forma amable de pedir algo: I would like a coffee (Quisiera un café)."
+    },
+    {
+      "id": "practice-4-2",
+      "category": 4,
+      "en": "How many apples do we need?",
+      "es": "¿Cuántas manzanas necesitamos?",
+      "prompt": "How ___ apples do we need?",
+      "answer": "many",
+      "explanation": "Apples es un sustantivo contable en plural. Para preguntar la cantidad usamos how many."
+    },
+    {
+      "id": "practice-5-1",
+      "category": 5,
+      "en": "Yesterday I worked and called my family.",
+      "es": "Ayer trabajé y llamé a mi familia.",
+      "prompt": "Yesterday I ___ my family. (call)",
+      "answer": "called",
+      "explanation": "Call es un verbo regular. Para hablar del pasado añadimos -ed: called."
+    },
+    {
+      "id": "practice-5-2",
+      "category": 5,
+      "en": "Did you enjoy your weekend?",
+      "es": "¿Disfrutaste tu fin de semana?",
+      "prompt": "___ you enjoy the trip?",
+      "answer": "Did",
+      "explanation": "En una pregunta en pasado usamos Did + sujeto + verbo base: Did you enjoy the trip?"
+    },
+    {
+      "id": "practice-6-1",
+      "category": 6,
+      "en": "Excuse me, how do I get to the airport?",
+      "es": "Disculpe, ¿cómo llego al aeropuerto?",
+      "prompt": "How do I ___ to the station?",
+      "answer": "get",
+      "explanation": "How do I get to…? significa ¿Cómo llego a…? Get to expresa llegar a un lugar."
+    },
+    {
+      "id": "practice-6-2",
+      "category": 6,
+      "en": "I need a train ticket for tomorrow.",
+      "es": "Necesito un billete de tren para mañana.",
+      "prompt": "I ___ a ticket for tomorrow.",
+      "answer": "need",
+      "explanation": "Need significa necesitar: I need a ticket (Necesito un boleto)."
+    },
+    {
+      "id": "practice-7-1",
+      "category": 7,
+      "en": "I am going to study tonight.",
+      "es": "Voy a estudiar esta noche.",
+      "prompt": "I am going ___ study tonight.",
+      "answer": "to",
+      "explanation": "Para expresar un plan usamos am/is/are + going to + verbo: I am going to study."
+    },
+    {
+      "id": "practice-7-2",
+      "category": 7,
+      "en": "I think it will rain tomorrow.",
+      "es": "Creo que lloverá mañana.",
+      "prompt": "I think it ___ rain.",
+      "answer": "will",
+      "explanation": "Will + verbo base permite hacer una predicción: I think it will rain (Creo que lloverá)."
+    },
+    {
+      "id": "practice-8-1",
+      "category": 8,
+      "en": "Could you say that again, please?",
+      "es": "¿Podrías decir eso otra vez, por favor?",
+      "prompt": "Could you ___ that again? (say)",
+      "answer": "say",
+      "explanation": "Could you say that again? es una forma amable de pedir que repitan algo."
+    },
+    {
+      "id": "practice-8-2",
+      "category": 8,
+      "en": "I have to finish this report today.",
+      "es": "Tengo que terminar este informe hoy.",
+      "prompt": "I have ___ finish it today.",
+      "answer": "to",
+      "explanation": "Have to + verbo expresa una obligación: I have to finish (Tengo que terminar)."
+    },
+    {
+      "id": "practice-9-1",
+      "category": 9,
+      "en": "I work with clients and manage projects.",
+      "es": "Trabajo con clientes y gestiono proyectos.",
+      "prompt": "I work ___ clients.",
+      "answer": "with",
+      "explanation": "Work with significa trabajar con alguien: I work with clients."
+    },
+    {
+      "id": "practice-9-2",
+      "category": 9,
+      "en": "This option is cheaper but slower.",
+      "es": "Esta opción es más barata, pero más lenta.",
+      "prompt": "This option is ___ . (cheap)",
+      "answer": "cheaper",
+      "explanation": "Para comparar con cheap añadimos -er: cheaper significa más barato."
+    },
+    {
+      "id": "practice-10-1",
+      "category": 10,
+      "en": "I have learned many useful phrases.",
+      "es": "He aprendido muchas frases útiles.",
+      "prompt": "I have ___ many phrases. (learn)",
+      "answer": "learned",
+      "explanation": "El presente perfecto se forma con have/has + participio. Learned y learnt son formas válidas de learn."
+    },
+    {
+      "id": "practice-10-2",
+      "category": 10,
+      "en": "I have already sent the email.",
+      "es": "Ya envié el correo.",
+      "prompt": "I have ___ sent the email. (ya)",
+      "answer": "already",
+      "explanation": "Already significa ya. Suele ir entre have/has y el participio: I have already sent the email."
+    },
+    {
+      "id": "practice-11-1",
+      "category": 11,
+      "en": "I think this idea is useful.",
+      "es": "Creo que esta idea es útil.",
+      "prompt": "I ___ this idea is useful. (think)",
+      "answer": "think",
+      "explanation": "I think significa creo que y sirve para presentar una opinión."
+    },
+    {
+      "id": "practice-11-2",
+      "category": 11,
+      "en": "Although it was difficult, I finished it.",
+      "es": "Aunque era difícil, lo terminé.",
+      "prompt": "___ it was hard, I finished it. (aunque)",
+      "answer": "Although",
+      "explanation": "Although significa aunque e introduce un contraste: Although it was hard, I finished it."
+    },
+    {
+      "id": "practice-12-1",
+      "category": 12,
+      "en": "I am organized, and I enjoy solving problems.",
+      "es": "Soy organizado y disfruto resolver problemas.",
+      "prompt": "I enjoy ___ problems. (solve)",
+      "answer": "solving",
+      "explanation": "Después de enjoy, el verbo va en -ing: enjoy solving problems (disfrutar resolviendo problemas)."
+    },
+    {
+      "id": "practice-12-2",
+      "category": 12,
+      "en": "We could meet on Thursday if that works for you.",
+      "es": "Podríamos reunirnos el jueves si te acomoda.",
+      "prompt": "We ___ meet on Thursday. (posibilidad)",
+      "answer": "could",
+      "explanation": "Could + verbo base sirve para proponer una posibilidad: We could meet (Podríamos reunirnos)."
+    }
+  ],
+  "tests": [
+    {
+      "category": 1,
+      "title": "Presentaciones",
+      "items": [
+        {
+          "prompt": "My colleague ___ new to the office.",
+          "answer": "is",
+          "explanation": "My colleague se refiere a una persona. Con un sujeto singular usamos is."
+        },
+        {
+          "prompt": "___ they from Colombia?",
+          "answer": "Are",
+          "explanation": "Con they usamos are. En una pregunta, are va antes del sujeto."
+        },
+        {
+          "prompt": "I am ___ analyst.",
+          "answer": "an",
+          "explanation": "Usamos an antes de un sonido vocálico, como al comienzo de analyst."
+        },
+        {
+          "prompt": "She is ___ teacher.",
+          "answer": "a",
+          "explanation": "Usamos a antes de un sonido consonántico: a teacher."
+        }
+      ]
+    },
+    {
+      "category": 4,
+      "title": "Comida y compras",
+      "items": [
+        {
+          "prompt": "How ___ oranges would you like?",
+          "answer": "many",
+          "explanation": "Oranges es contable y está en plural: usamos how many para preguntar cuántas."
+        },
+        {
+          "prompt": "How ___ milk is there?",
+          "answer": "much",
+          "explanation": "Milk es incontable: usamos how much para preguntar cuánto."
+        },
+        {
+          "prompt": "There ___ some cheese in the fridge.",
+          "answer": "is",
+          "explanation": "Cheese es incontable. Para decir que hay queso usamos there is."
+        },
+        {
+          "prompt": "Could I ___ a glass of water?",
+          "answer": "have",
+          "explanation": "Could I have…? es una forma amable de pedir algo: Could I have a glass of water?"
+        }
+      ]
+    },
+    {
+      "category": 8,
+      "title": "Pedir ayuda",
+      "items": [
+        {
+          "prompt": "You ___ bring your passport. (obligación)",
+          "answer": "must",
+          "explanation": "Must + verbo base expresa una obligación: You must bring your passport."
+        },
+        {
+          "prompt": "You ___ smoke here. (prohibición)",
+          "answer": "mustn't",
+          "explanation": "Must not, o su forma corta mustn’t, expresa una prohibición. Ambas formas son válidas."
+        },
+        {
+          "prompt": "You ___ take a break. (consejo)",
+          "answer": "should",
+          "explanation": "Should + verbo base sirve para dar un consejo: You should take a break."
+        },
+        {
+          "prompt": "Could you ___ that more slowly?",
+          "answer": "say",
+          "explanation": "Could you say that more slowly? pide amablemente que repitan algo más despacio."
+        }
+      ]
+    },
+    {
+      "category": 12,
+      "title": "Conversaciones",
+      "items": [
+        {
+          "prompt": "Could you tell me ___ about that project?",
+          "answer": "more",
+          "explanation": "Tell me more significa cuéntame más. More permite pedir información adicional."
+        },
+        {
+          "prompt": "What do you ___ by “urgent”?",
+          "answer": "mean",
+          "explanation": "What do you mean by…? significa ¿Qué quieres decir con…?"
+        },
+        {
+          "prompt": "We ___ meet earlier if you prefer.",
+          "answer": "could",
+          "explanation": "Could + verbo base permite hacer una sugerencia: We could meet earlier."
+        },
+        {
+          "prompt": "I agree ___ some of your ideas.",
+          "answer": "with",
+          "explanation": "Usamos agree with para expresar acuerdo con alguien o con sus ideas."
+        }
+      ]
+    }
+  ]
+}

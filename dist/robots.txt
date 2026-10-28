@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://english90.imrtech.xyz/sitemap.xml
