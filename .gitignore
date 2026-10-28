@@ -16,3 +16,5 @@ archive/commercial-v3.1/*
 English_90_V2_Ficha_Comercial.md
 LEEME_PRIMERO.txt
 tests/test_pdf.py
+__pycache__/
+*.py[cod]
