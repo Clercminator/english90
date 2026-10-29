@@ -68,6 +68,7 @@ test('completion and ordering use real source answers, allow replay and resume',
   await page.getByLabel('Palabra o expresión que falta').fill(q.questions[0].answer.toUpperCase());
   await page.getByRole('button', { name: 'Comprobar respuesta' }).click();
   await expect(page.locator('.feedback')).toContainText('¡Correcto!');
+  await page.locator('#gameSettings summary').click();
   await page.getByRole('combobox', { name: 'Actividad', exact: true }).selectOption('ordering');
   await page.getByRole('button', { name: 'Comenzar actividad' }).click();
   await page.getByRole('button', { name: 'Descartar intento y comenzar' }).click();
@@ -209,6 +210,7 @@ test('all categories and game modes render; difficulty preference persists', asy
   await page.getByRole('button', {name:'Comenzar actividad'}).click();
   expect((await saved(page)).quiz!.questions).toHaveLength(5);
   await page.reload();
+  await page.locator('#gameSettings summary').click();
   await expect(page.getByRole('combobox', {name:'Ritmo', exact:true})).toHaveValue('gentle');
 });
 

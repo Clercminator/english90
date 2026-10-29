@@ -24,13 +24,21 @@ test('daily practice reveals, grades, resumes, recaps and completes without dupl
     await page.getByRole('button', {name: 'Mostrar respuesta'}).click();
     await page.getByRole('button', {name: 'La conozco · 3 días'}).click();
   }
+  for (let i=0; i<3; i++) {
+    const answer = await page.evaluate(key => { const p = JSON.parse(localStorage.getItem(key)!).daily.practice; return p.questions[p.index].answer; }, STORAGE_KEY);
+    await page.locator('#dailyAnswer').fill(answer);
+    await page.locator('#dailyAnswerForm button').click();
+    await expect(page.locator('#nextDailyAnswer')).toBeVisible();
+    if (i===1) await page.reload();
+    await page.locator('#nextDailyAnswer').click();
+  }
   await expect(page.getByRole('heading', {name: 'Un último repaso.'})).toBeVisible();
   await page.getByRole('button', {name: 'Terminar sesión'}).click();
   await expect(page.getByRole('heading', {name: 'Hoy practicaste tu inglés.'})).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', {name: 'Hoy practicaste tu inglés.'})).toBeVisible();
   const state = await page.evaluate(key => JSON.parse(localStorage.getItem(key)!), STORAGE_KEY);
-  expect(state.history.filter((r: {id: string}) => r.id.startsWith('daily-'))).toHaveLength(1);
+  expect(state.history.filter((r: {id: string}) => r.id.startsWith('daily-') && !r.id.endsWith('-written'))).toHaveLength(1);
   expect(Object.values(state.cards).every(c => (c as {reviews: number}).reviews === 1)).toBe(true);
   expect(state.cards[Object.keys(first)[0]]).toEqual(Object.values(first)[0]);
   await page.getByRole('link', {name: 'Practicar conversación con IA'}).click();

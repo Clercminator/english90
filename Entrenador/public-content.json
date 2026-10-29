@@ -3495,6 +3495,42 @@
       "explanation": "En una pregunta con you, are va antes del sujeto: Are you new here?"
     },
     {
+      "id": "practice-1-3",
+      "category": 1,
+      "en": "My sister is a nurse, but I am a teacher.",
+      "es": "Mi hermana es enfermera, pero yo soy profesor.",
+      "prompt": "My sister is a nurse, but I ___ a teacher.",
+      "answer": "am",
+      "explanation": "El verbo cambia con el sujeto: my sister is, pero I am. No copies is en las dos partes."
+    },
+    {
+      "id": "practice-1-4",
+      "category": 1,
+      "en": "Where are your new colleagues from?",
+      "es": "¿De dónde son tus nuevos colegas?",
+      "prompt": "Where ___ your new colleagues from?",
+      "answer": "are",
+      "explanation": "Your new colleagues es plural: Where + are + sujeto + from?"
+    },
+    {
+      "id": "practice-1-5",
+      "category": 1,
+      "en": "There is an umbrella next to the door.",
+      "es": "Hay un paraguas al lado de la puerta.",
+      "prompt": "There is ___ umbrella next to the door. (a / an)",
+      "answer": "an",
+      "explanation": "Umbrella empieza con sonido vocálico, por eso usamos an. La elección depende del sonido."
+    },
+    {
+      "id": "practice-1-6",
+      "category": 1,
+      "en": "These are our friends from Brazil.",
+      "es": "Estos son nuestros amigos de Brasil.",
+      "prompt": "___ are our friends from Brazil. (This / These)",
+      "answer": "These",
+      "explanation": "Friends es plural: these are. Para una sola persona sería this is."
+    },
+    {
       "id": "practice-2-1",
       "category": 2,
       "en": "I wake up early and eat breakfast.",
@@ -3511,6 +3547,42 @@
       "prompt": "___ you study English?",
       "answer": "Do",
       "explanation": "Para preguntar por una rutina con you usamos Do + you + verbo: Do you study English?"
+    },
+    {
+      "id": "practice-2-3",
+      "category": 2,
+      "en": "She usually takes the bus to work.",
+      "es": "Ella suele ir al trabajo en autobús.",
+      "prompt": "She usually ___ the bus to work. (take)",
+      "answer": "takes",
+      "explanation": "En presente simple, con she añadimos -s al verbo: she takes. Usually va antes del verbo principal."
+    },
+    {
+      "id": "practice-2-4",
+      "category": 2,
+      "en": "My brother does not work on Sundays.",
+      "es": "Mi hermano no trabaja los domingos.",
+      "prompt": "My brother ___ work on Sundays. (does not / do not)",
+      "answer": "does not",
+      "explanation": "Con my brother usamos does not + verbo base. Work no lleva -s después de does."
+    },
+    {
+      "id": "practice-2-5",
+      "category": 2,
+      "en": "How often does your sister exercise?",
+      "es": "¿Con qué frecuencia hace ejercicio tu hermana?",
+      "prompt": "How often ___ your sister exercise?",
+      "answer": "does",
+      "explanation": "Your sister equivale a she. La pregunta lleva does y el verbo principal queda en forma base."
+    },
+    {
+      "id": "practice-2-6",
+      "category": 2,
+      "en": "We have lunch at half past twelve.",
+      "es": "Almorzamos a las doce y media.",
+      "prompt": "We have lunch ___ half past twelve. (at / on / in)",
+      "answer": "at",
+      "explanation": "Para una hora concreta usamos at. On se usa con días e in con meses o partes del día."
     },
     {
       "id": "practice-3-1",
@@ -3531,6 +3603,42 @@
       "explanation": "Después de enjoy, el verbo va en -ing: enjoy listening (disfrutar escuchando)."
     },
     {
+      "id": "practice-3-3",
+      "category": 3,
+      "en": "They are not watching television right now.",
+      "es": "No están viendo televisión en este momento.",
+      "prompt": "They ___ watching television right now. (are not / is not)",
+      "answer": "are not",
+      "explanation": "El presente continuo negativo usa am/is/are + not + verbo en -ing. Con they corresponde are not."
+    },
+    {
+      "id": "practice-3-4",
+      "category": 3,
+      "en": "What are you looking for in the kitchen?",
+      "es": "¿Qué estás buscando en la cocina?",
+      "prompt": "What are you looking ___ in the kitchen? (buscar)",
+      "answer": "for",
+      "explanation": "Look for significa buscar. Look at significa mirar; la preposición cambia el sentido."
+    },
+    {
+      "id": "practice-3-5",
+      "category": 3,
+      "en": "She is making dinner while I set the table.",
+      "es": "Ella está preparando la cena mientras yo pongo la mesa.",
+      "prompt": "She is ___ dinner while I set the table. (make)",
+      "answer": "making",
+      "explanation": "Make pierde la e final antes de añadir -ing: making, no makeing."
+    },
+    {
+      "id": "practice-3-6",
+      "category": 3,
+      "en": "I prefer swimming to running.",
+      "es": "Prefiero nadar a correr.",
+      "prompt": "I prefer swimming ___ running. (to / than)",
+      "answer": "to",
+      "explanation": "Para comparar preferencias usamos prefer A to B. Aquí las dos actividades se expresan con -ing."
+    },
+    {
       "id": "practice-4-1",
       "category": 4,
       "en": "I would like a coffee and some water, please.",
@@ -3547,6 +3655,42 @@
       "prompt": "How ___ apples do we need?",
       "answer": "many",
       "explanation": "Apples es un sustantivo contable en plural. Para preguntar la cantidad usamos how many."
+    },
+    {
+      "id": "practice-4-3",
+      "category": 4,
+      "en": "There is not much milk left in the fridge.",
+      "es": "No queda mucha leche en el refrigerador.",
+      "prompt": "There is not ___ milk left in the fridge. (much / many)",
+      "answer": "much",
+      "explanation": "Milk es incontable: usamos much. Many acompaña sustantivos contables en plural."
+    },
+    {
+      "id": "practice-4-4",
+      "category": 4,
+      "en": "Could I have the bill, please?",
+      "es": "¿Me podría traer la cuenta, por favor?",
+      "prompt": "Could I ___ the bill, please? (have)",
+      "answer": "have",
+      "explanation": "Después de could usamos el verbo base. Could I have…? es una forma cortés de pedir algo."
+    },
+    {
+      "id": "practice-4-5",
+      "category": 4,
+      "en": "This jacket is too small for me.",
+      "es": "Esta chaqueta me queda demasiado pequeña.",
+      "prompt": "This jacket is ___ small for me. (demasiado)",
+      "answer": "too",
+      "explanation": "Too + adjetivo indica un exceso que causa un problema: too small significa demasiado pequeña."
+    },
+    {
+      "id": "practice-4-6",
+      "category": 4,
+      "en": "We need a few more tomatoes for the salad.",
+      "es": "Necesitamos unos cuantos tomates más para la ensalada.",
+      "prompt": "We need ___ more tomatoes for the salad. (a few / a little)",
+      "answer": "a few",
+      "explanation": "Tomatoes es contable y plural. A few indica una cantidad pequeña; a little se usa con incontables."
     },
     {
       "id": "practice-5-1",
@@ -3567,6 +3711,42 @@
       "explanation": "En una pregunta en pasado usamos Did + sujeto + verbo base: Did you enjoy the trip?"
     },
     {
+      "id": "practice-5-3",
+      "category": 5,
+      "en": "I went to the market before I cooked dinner.",
+      "es": "Fui al mercado antes de preparar la cena.",
+      "prompt": "I ___ to the market before I cooked dinner. (go)",
+      "answer": "went",
+      "explanation": "Go tiene pasado irregular: went. No se forma añadiendo -ed."
+    },
+    {
+      "id": "practice-5-4",
+      "category": 5,
+      "en": "She did not buy anything at the store.",
+      "es": "Ella no compró nada en la tienda.",
+      "prompt": "She did not ___ anything at the store. (buy)",
+      "answer": "buy",
+      "explanation": "Did not ya marca el pasado. El verbo que sigue va en forma base: buy, no bought."
+    },
+    {
+      "id": "practice-5-5",
+      "category": 5,
+      "en": "What were you doing when I called?",
+      "es": "¿Qué estabas haciendo cuando llamé?",
+      "prompt": "What ___ you doing when I called? (was / were)",
+      "answer": "were",
+      "explanation": "Con you usamos were + verbo en -ing para una acción que estaba en curso en el pasado."
+    },
+    {
+      "id": "practice-5-6",
+      "category": 5,
+      "en": "We have not seen each other since last Friday.",
+      "es": "No nos hemos visto desde el viernes pasado.",
+      "prompt": "We have not seen each other ___ last Friday. (since / for)",
+      "answer": "since",
+      "explanation": "Since señala el punto de inicio: last Friday. For expresa duración, por ejemplo for three days."
+    },
+    {
       "id": "practice-6-1",
       "category": 6,
       "en": "Excuse me, how do I get to the airport?",
@@ -3585,6 +3765,42 @@
       "explanation": "Need significa necesitar: I need a ticket (Necesito un boleto)."
     },
     {
+      "id": "practice-6-3",
+      "category": 6,
+      "en": "The pharmacy is between the bank and the hotel.",
+      "es": "La farmacia está entre el banco y el hotel.",
+      "prompt": "The pharmacy is ___ the bank and the hotel. (entre)",
+      "answer": "between",
+      "explanation": "Between A and B sitúa algo entre dos referencias. Conserva and al nombrar la segunda."
+    },
+    {
+      "id": "practice-6-4",
+      "category": 6,
+      "en": "You should get off at the next stop.",
+      "es": "Deberías bajar en la próxima parada.",
+      "prompt": "You should get ___ at the next stop. (bajar del autobús)",
+      "answer": "off",
+      "explanation": "Get off se usa para bajar del autobús o tren. Get on expresa subir."
+    },
+    {
+      "id": "practice-6-5",
+      "category": 6,
+      "en": "Is there a bus that goes to the city centre?",
+      "es": "¿Hay un autobús que vaya al centro de la ciudad?",
+      "prompt": "___ there a bus that goes to the city centre? (Is / Are)",
+      "answer": "Is",
+      "explanation": "A bus es singular. La pregunta usa Is there…?; con varios autobuses sería Are there…?"
+    },
+    {
+      "id": "practice-6-6",
+      "category": 6,
+      "en": "If you turn left, you will see the station.",
+      "es": "Si giras a la izquierda, verás la estación.",
+      "prompt": "If you ___ left, you will see the station. (turn)",
+      "answer": "turn",
+      "explanation": "En esta condición posible, la parte con if usa presente simple; will aparece en el resultado."
+    },
+    {
       "id": "practice-7-1",
       "category": 7,
       "en": "I am going to study tonight.",
@@ -3598,9 +3814,45 @@
       "category": 7,
       "en": "I think it will rain tomorrow.",
       "es": "Creo que lloverá mañana.",
-      "prompt": "I think it ___ rain.",
+      "prompt": "I think it ___ rain tomorrow. (will / is)",
       "answer": "will",
       "explanation": "Will + verbo base permite hacer una predicción: I think it will rain (Creo que lloverá)."
+    },
+    {
+      "id": "practice-7-3",
+      "category": 7,
+      "en": "She is going to visit her grandparents next week.",
+      "es": "Ella va a visitar a sus abuelos la próxima semana.",
+      "prompt": "She ___ going to visit her grandparents next week. (am / is / are)",
+      "answer": "is",
+      "explanation": "Going to necesita una forma de be que concuerde con el sujeto: she is going to."
+    },
+    {
+      "id": "practice-7-4",
+      "category": 7,
+      "en": "I will call you as soon as I arrive.",
+      "es": "Te llamaré en cuanto llegue.",
+      "prompt": "I will call you as soon as I ___. (arrive)",
+      "answer": "arrive",
+      "explanation": "Después de as soon as usamos presente para referirnos al futuro: as soon as I arrive, sin will."
+    },
+    {
+      "id": "practice-7-5",
+      "category": 7,
+      "en": "We are meeting the client at three tomorrow.",
+      "es": "Nos reuniremos con el cliente mañana a las tres.",
+      "prompt": "We are ___ the client at three tomorrow. (meet)",
+      "answer": "meeting",
+      "explanation": "El presente continuo puede expresar un acuerdo futuro con hora fijada: are meeting."
+    },
+    {
+      "id": "practice-7-6",
+      "category": 7,
+      "en": "By this time tomorrow, I will be travelling home.",
+      "es": "Mañana a esta hora estaré viajando a casa.",
+      "prompt": "By this time tomorrow, I will ___ travelling home. (be)",
+      "answer": "be",
+      "explanation": "El futuro continuo usa will + be + verbo en -ing para una acción en curso en un momento futuro."
     },
     {
       "id": "practice-8-1",
@@ -3621,6 +3873,42 @@
       "explanation": "Have to + verbo expresa una obligación: I have to finish (Tengo que terminar)."
     },
     {
+      "id": "practice-8-3",
+      "category": 8,
+      "en": "You must not park in front of this entrance.",
+      "es": "No debes estacionar frente a esta entrada.",
+      "prompt": "You ___ park in front of this entrance. (must not / do not have to: está prohibido)",
+      "answer": "must not",
+      "explanation": "Must not expresa prohibición. Do not have to significa que no es obligatorio, pero sí está permitido."
+    },
+    {
+      "id": "practice-8-4",
+      "category": 8,
+      "en": "You should ask for help if you are unsure.",
+      "es": "Deberías pedir ayuda si tienes dudas.",
+      "prompt": "You should ___ for help if you are unsure. (ask)",
+      "answer": "ask",
+      "explanation": "Después de should usamos el verbo base, sin to ni -s: should ask."
+    },
+    {
+      "id": "practice-8-5",
+      "category": 8,
+      "en": "Would you mind opening the window?",
+      "es": "¿Te importaría abrir la ventana?",
+      "prompt": "Would you mind ___ the window? (open)",
+      "answer": "opening",
+      "explanation": "Después de would you mind usamos -ing. Es una petición cortés, no would you mind to open."
+    },
+    {
+      "id": "practice-8-6",
+      "category": 8,
+      "en": "Could you tell me where the nearest bank is?",
+      "es": "¿Podrías decirme dónde está el banco más cercano?",
+      "prompt": "Could you tell me where the nearest bank ___? (is / does)",
+      "answer": "is",
+      "explanation": "En una pregunta indirecta, el sujeto va antes del verbo: where the nearest bank is."
+    },
+    {
       "id": "practice-9-1",
       "category": 9,
       "en": "I work with clients and manage projects.",
@@ -3634,9 +3922,45 @@
       "category": 9,
       "en": "This option is cheaper but slower.",
       "es": "Esta opción es más barata, pero más lenta.",
-      "prompt": "This option is ___ . (cheap)",
+      "prompt": "This option is ___ than the other one. (cheap)",
       "answer": "cheaper",
       "explanation": "Para comparar con cheap añadimos -er: cheaper significa más barato."
+    },
+    {
+      "id": "practice-9-3",
+      "category": 9,
+      "en": "This proposal is more expensive than the other one.",
+      "es": "Esta propuesta es más cara que la otra.",
+      "prompt": "This proposal is ___ than the other one. (expensive)",
+      "answer": "more expensive",
+      "explanation": "Con un adjetivo largo como expensive usamos more + adjetivo + than, no expensiver."
+    },
+    {
+      "id": "practice-9-4",
+      "category": 9,
+      "en": "We need to finish the report by Friday.",
+      "es": "Tenemos que terminar el informe a más tardar el viernes.",
+      "prompt": "We need to finish the report ___ Friday. (by / until: fecha límite)",
+      "answer": "by",
+      "explanation": "By marca una fecha límite. Until indica hasta cuándo continúa una actividad."
+    },
+    {
+      "id": "practice-9-5",
+      "category": 9,
+      "en": "The new system works better than the old one.",
+      "es": "El sistema nuevo funciona mejor que el anterior.",
+      "prompt": "The new system works ___ than the old one. (well)",
+      "answer": "better",
+      "explanation": "El comparativo de well es better. No usamos more well para describir cómo funciona algo."
+    },
+    {
+      "id": "practice-9-6",
+      "category": 9,
+      "en": "If I had more time, I would review the figures.",
+      "es": "Si tuviera más tiempo, revisaría las cifras.",
+      "prompt": "If I ___ more time, I would review the figures. (have)",
+      "answer": "had",
+      "explanation": "Para una situación hipotética usamos if + pasado simple, seguido de would + verbo base."
     },
     {
       "id": "practice-10-1",
@@ -3657,6 +3981,42 @@
       "explanation": "Already significa ya. Suele ir entre have/has y el participio: I have already sent the email."
     },
     {
+      "id": "practice-10-3",
+      "category": 10,
+      "en": "Have you ever spoken to a client in English?",
+      "es": "¿Alguna vez has hablado con un cliente en inglés?",
+      "prompt": "Have you ever ___ to a client in English? (speak)",
+      "answer": "spoken",
+      "explanation": "Después de have usamos el participio: spoken. Spoke es el pasado simple."
+    },
+    {
+      "id": "practice-10-4",
+      "category": 10,
+      "en": "She has worked here for five years.",
+      "es": "Ella trabaja aquí desde hace cinco años.",
+      "prompt": "She has worked here ___ five years. (for / since)",
+      "answer": "for",
+      "explanation": "Five years expresa duración, por eso usamos for. Since necesita un punto de inicio."
+    },
+    {
+      "id": "practice-10-5",
+      "category": 10,
+      "en": "I finished the project yesterday afternoon.",
+      "es": "Terminé el proyecto ayer por la tarde.",
+      "prompt": "I ___ the project yesterday afternoon. (finish)",
+      "answer": "finished",
+      "explanation": "Yesterday sitúa la acción en un momento pasado terminado: usamos pasado simple, finished."
+    },
+    {
+      "id": "practice-10-6",
+      "category": 10,
+      "en": "They had already left when we arrived.",
+      "es": "Ellos ya se habían ido cuando llegamos.",
+      "prompt": "They ___ already left when we arrived. (had / have)",
+      "answer": "had",
+      "explanation": "Had + participio marca una acción anterior a otra acción pasada: se fueron antes de que llegáramos."
+    },
+    {
       "id": "practice-11-1",
       "category": 11,
       "en": "I think this idea is useful.",
@@ -3675,6 +4035,42 @@
       "explanation": "Although significa aunque e introduce un contraste: Although it was hard, I finished it."
     },
     {
+      "id": "practice-11-3",
+      "category": 11,
+      "en": "Although the plan is risky, it could work.",
+      "es": "Aunque el plan es arriesgado, podría funcionar.",
+      "prompt": "___ the plan is risky, it could work. (Aunque)",
+      "answer": "Although",
+      "explanation": "Although introduce una oración con sujeto y verbo. Despite normalmente va seguido de un sustantivo o de -ing."
+    },
+    {
+      "id": "practice-11-4",
+      "category": 11,
+      "en": "We stayed inside because of the heavy rain.",
+      "es": "Nos quedamos adentro debido a la lluvia intensa.",
+      "prompt": "We stayed inside ___ the heavy rain. (because / because of)",
+      "answer": "because of",
+      "explanation": "Because of va antes de un sustantivo: the heavy rain. Because necesita una oración, como it was raining."
+    },
+    {
+      "id": "practice-11-5",
+      "category": 11,
+      "en": "Unless we leave now, we will miss the train.",
+      "es": "A menos que salgamos ahora, perderemos el tren.",
+      "prompt": "___ we leave now, we will miss the train. (A menos que)",
+      "answer": "Unless",
+      "explanation": "Unless equivale a if not. Aquí no añadimos otra negación: unless we leave, no unless we do not leave."
+    },
+    {
+      "id": "practice-11-6",
+      "category": 11,
+      "en": "I agree with you, but we need more evidence.",
+      "es": "Estoy de acuerdo contigo, pero necesitamos más evidencia.",
+      "prompt": "I agree ___ you, but we need more evidence. (with / to)",
+      "answer": "with",
+      "explanation": "Agree with someone significa estar de acuerdo con alguien. Agree to suele introducir una propuesta aceptada."
+    },
+    {
       "id": "practice-12-1",
       "category": 12,
       "en": "I am organized, and I enjoy solving problems.",
@@ -3688,9 +4084,45 @@
       "category": 12,
       "en": "We could meet on Thursday if that works for you.",
       "es": "Podríamos reunirnos el jueves si te acomoda.",
-      "prompt": "We ___ meet on Thursday. (posibilidad)",
+      "prompt": "We ___ meet on Thursday. (podríamos)",
       "answer": "could",
       "explanation": "Could + verbo base sirve para proponer una posibilidad: We could meet (Podríamos reunirnos)."
+    },
+    {
+      "id": "practice-12-3",
+      "category": 12,
+      "en": "Could you explain what you mean by that?",
+      "es": "¿Podrías explicar qué quieres decir con eso?",
+      "prompt": "Could you explain what you ___ by that? (mean)",
+      "answer": "mean",
+      "explanation": "What you mean by that pide aclarar el significado. Dentro de esta pregunta indirecta usamos sujeto + verbo."
+    },
+    {
+      "id": "practice-12-4",
+      "category": 12,
+      "en": "I look forward to hearing from you.",
+      "es": "Quedo a la espera de tu respuesta.",
+      "prompt": "I look forward to ___ from you. (hear)",
+      "answer": "hearing",
+      "explanation": "En look forward to, to es una preposición: le sigue un sustantivo o un verbo en -ing, no hear."
+    },
+    {
+      "id": "practice-12-5",
+      "category": 12,
+      "en": "If I understood correctly, the deadline has changed.",
+      "es": "Si entendí bien, la fecha límite ha cambiado.",
+      "prompt": "If I understood ___, the deadline has changed. (correct)",
+      "answer": "correctly",
+      "explanation": "Correctly es el adverbio que describe cómo entendiste algo. Correct es un adjetivo."
+    },
+    {
+      "id": "practice-12-6",
+      "category": 12,
+      "en": "What would you do differently next time?",
+      "es": "¿Qué harías de otra manera la próxima vez?",
+      "prompt": "What would you ___ differently next time? (do)",
+      "answer": "do",
+      "explanation": "Después de would usamos el verbo base. Esta pregunta invita a reflexionar sobre una alternativa."
     }
   ],
   "tests": [
@@ -3753,7 +4185,11 @@
         {
           "prompt": "You ___ bring your passport. (obligación)",
           "answer": "must",
-          "explanation": "Must + verbo base expresa una obligación: You must bring your passport."
+          "explanation": "Must + verbo base expresa una obligación: You must bring your passport.",
+          "acceptedAnswers": [
+            "have to",
+            "need to"
+          ]
         },
         {
           "prompt": "You ___ smoke here. (prohibición)",
@@ -3768,7 +4204,10 @@
         {
           "prompt": "Could you ___ that more slowly?",
           "answer": "say",
-          "explanation": "Could you say that more slowly? pide amablemente que repitan algo más despacio."
+          "explanation": "Could you say that more slowly? pide amablemente que repitan algo más despacio.",
+          "acceptedAnswers": [
+            "repeat"
+          ]
         }
       ]
     },
@@ -3789,7 +4228,11 @@
         {
           "prompt": "We ___ meet earlier if you prefer.",
           "answer": "could",
-          "explanation": "Could + verbo base permite hacer una sugerencia: We could meet earlier."
+          "explanation": "Could + verbo base permite hacer una sugerencia: We could meet earlier.",
+          "acceptedAnswers": [
+            "can",
+            "might"
+          ]
         },
         {
           "prompt": "I agree ___ some of your ideas.",

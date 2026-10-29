@@ -23,7 +23,7 @@ export async function auditPublicBuild(directory = 'dist') {
       if (!allowed.has(name) && !/^assets\/[a-zA-Z0-9_-]+\.(js|css)$/.test(name)) throw new Error(`Unapproved public file: ${name}`);
       if (['.pdf','.json','.map','.zip','.py','.ts'].includes(extname(name))) throw new Error(`Private/source/archive output forbidden: ${name}`);
       const content = await readFile(full); const text = content.toString('utf8');
-      if (content.subarray(0,5).toString() === '%PDF-' || /English_90_V2_|practice_prompt|day_goal_evidence|"new_assessment"|sourceMappingURL|credentials\.dpapi/.test(text)) throw new Error(`Private material or source map found in ${name}`);
+      if (content.subarray(0,5).toString() === '%PDF-' || /English_90_V2_|practice_prompt|day_goal_evidence|reading_questions|grammar_rules|anchor_en|anchor_es|"new_assessment"|sourceMappingURL|credentials\.dpapi|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|sk-proj-[a-zA-Z0-9_-]{20,}/.test(text)) throw new Error(`Private material or source map found in ${name}`);
       if (!config.ads.enabled) {
         if (name.endsWith('.html') && /id=["'](?:adRegion|privacyChoices)["']|<ins\b[^>]*adsbygoogle/.test(text)) throw new Error(`Disabled advertising UI found in ${name}`);
         if (name.endsWith('.js') && /pagead2\.googlesyndication\.com|requestNonPersonalizedAds|__tcfapi|showRevocationMessage/.test(text)) throw new Error(`Disabled advertising runtime found in ${name}`);

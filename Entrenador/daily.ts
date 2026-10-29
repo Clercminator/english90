@@ -1,5 +1,7 @@
-import { cardKey, dueWords, localDate, normalize, schedule, touch } from './core.ts';
-import type { Direction, Rating, State, Vocabulary } from './core.ts';
+import { cardKey, dueWords, localDate, normalize, schedule, touch, recallQuestions, questionCorrect } from './core.ts';
+import type { Direction, Rating, State, Vocabulary, Question } from './core.ts';
+import { publicContent } from './free.ts';
+import { independentAccuracy, prioritize, recordEvidence } from './learning.ts';
 
 export interface DailyItem {
   wordId: string;
@@ -15,6 +17,21 @@ export interface DailySession {
   items: DailyItem[];
   completedAt: number | null;
   excluded?: string[];
+  practice?: { questions: Question[]; responses: (string | null)[]; index: number };
+}
+
+export function addDailyPractice(state: State, words: Vocabulary[]): void {
+  const session = state.daily;
+  if (!session || session.practice || !session.items.length) return;
+  const category = words.find(w => w.id === session.items[0].wordId)?.weeks[0] || state.preferences.week;
+  const pool = publicContent.sentences.filter(s => s.category === category);
+  const harder = independentAccuracy(state).ready;
+  const candidates = prioritize(pool.slice(0, harder ? 6 : 2).map(s => ({ id: s.id, prompt: s.prompt, answer: s.answer, explanation: s.explanation })), state);
+  const completion = candidates[0];
+  const sentence = prioritize(pool.filter(s => s.id !== completion.id).slice(0, harder ? 5 : 2).map(s => ({ id: s.id, prompt: s.es, answer: s.en, explanation: s.explanation })), state)[0];
+  const recall = prioritize(recallQuestions(words.filter(w => w.weeks.includes(category) && !session.items.some(i => i.wordId === w.id)), words, 'es-en'), state)[0];
+  if (!recall) return;
+  session.practice = { questions: [completion, sentence, recall], responses: [null, null, null], index: 0 };
 }
 
 export function hasLearning(state: State): boolean {
@@ -75,11 +92,18 @@ export function rateDaily(state: State, words: Vocabulary[], sessionId: string, 
 export function completeDaily(state: State, now = Date.now()): boolean {
   const session = state.daily;
   if (!session || session.completedAt !== null || !session.items.length || session.items.some(i => i.rating === null)) return false;
+  if (session.practice && session.practice.index < 3) return false;
   session.completedAt = now;
   if (!state.history.some(r => r.id === session.id)) state.history.push({
     id: session.id, label: 'Práctica diaria · autoevaluación', kind: 'game', at: now,
     score: session.items.filter(i => i.rating === 'known').length, total: session.items.length, selfScore: null,
   });
+  if (session.practice) {
+    const p = session.practice;
+    recordEvidence(state, p.questions, p.responses, now);
+    state.history.push({ id: `${session.id}-written`, label: 'Práctica diaria · respuestas escritas sin ayuda', kind: 'game', at: now,
+      score: p.questions.filter((q, i) => questionCorrect(q, p.responses[i])).length, total: p.questions.length, selfScore: null });
+  }
   // Reading the recap alone does not earn another day of activity.
   return true;
 }

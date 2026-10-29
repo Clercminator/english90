@@ -5,7 +5,7 @@ import zipfile
 
 root = Path(__file__).resolve().parents[1]
 subprocess.run(['node', 'scripts/check-public-build.mjs'], cwd=root, check=True)
-target = root / 'release' / 'English_90_Trainer_V3.2_Public.zip'
+target = root / 'release' / 'English_90_Trainer_V1.0_Public.zip'
 target.parent.mkdir(exist_ok=True)
 files = sorted(p for p in (root / 'dist').rglob('*') if p.is_file())
 with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as archive:

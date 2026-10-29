@@ -7,8 +7,12 @@ export const categories = source.categories;
 export const publicVocabulary = { weeks: categories.map(c => ({ week: c.id, vocabulary: c.vocabulary })) };
 export function sentenceQuestions(category: number, mode: Mode): Question[] {
   return source.sentences.filter(s => s.category === category).map(s => mode === 'ordering'
-    ? { id: s.id, prompt: s.es, answer: s.en, explanation: `Frase de práctica: ${s.en}`, tokens: shuffle(s.en.split(/\s+/)) }
+    ? { id: s.id, prompt: s.es, answer: s.en, explanation: s.explanation, tokens: shuffle(s.en.split(/\s+/)) }
     : { id: s.id, prompt: s.prompt, answer: s.answer, explanation: s.explanation });
+}
+export function wordExamples(word: Vocabulary) {
+  const plain = (text: string) => ` ${normalize(text).replace(/[^\p{L}\p{N}' ]/gu, ' ').replace(/\s+/g, ' ')} `;
+  return source.sentences.filter(s => word.weeks.includes(s.category) && plain(s.en).includes(plain(word.en).trimEnd() + ' ')).slice(0, 2);
 }
 export function categoryProgress(words: Vocabulary[], state: State, direction: Direction) {
   return categories.map(category => {
@@ -25,6 +29,9 @@ export function publicResume(hash: string): string {
   return hash;
 }
 export const uniqueTerms = new Set(categories.flatMap(c => c.vocabulary.map(v => normalize(v.en)))).size;
+
+// These extensions require structures introduced later than their situation's main lesson.
+export const challengeSentences = new Set(['practice-5-5', 'practice-5-6', 'practice-6-4', 'practice-6-6', 'practice-7-6', 'practice-8-5', 'practice-8-6', 'practice-9-6', 'practice-10-6', 'practice-11-5', 'practice-12-6']);
 
 
 export const outcomes: Record<number, string> = {

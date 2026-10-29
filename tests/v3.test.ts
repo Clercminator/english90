@@ -19,14 +19,14 @@ test('public content is a strict selected subset and never includes the daily cu
   assert.equal(words.length, 791);
   const original = JSON.parse(await readFile('private/source/English_90_V2_Programa.json','utf8'));
   assert.deepEqual(words, vocabulary(original));
-  assert.equal(publicContent.sentences.length, 24);
+  assert.equal(publicContent.sentences.length, 72);
   assert.deepEqual(publicContent.tests.map(t => t.category), [1,4,8,12]);
   assert.equal(JSON.stringify(publicContent).includes('practice_prompt'), false);
   for(const category of publicContent.categories) {
     assert.deepEqual(Object.keys(category).sort(), ['id','tip','title','vocabulary']);
     for(const mode of ['ordering','completion'] as const) {
       const questions = sentenceQuestions(category.id,mode);
-      assert.equal(questions.length,2);
+      assert.equal(questions.length,6);
       for(const q of questions) {
         if(mode==='ordering') assert.deepEqual(q.tokens!.toSorted(), q.answer.split(/\s+/).sort());
         assert.ok(q.answer && q.explanation);
@@ -115,7 +115,7 @@ test('public build fails on PDFs, full source, maps and private prose even in re
     await cp('dist',dir,{recursive:true});
     await auditPublicBuild(dir);
     const original=JSON.parse(await readFile('private/source/English_90_V2_Programa.json','utf8'));
-    const cases=[['accidental.pdf','%PDF-1.7 private'],['assets/leak.js','%PDF-1.7 private'],['assets/leak.js',JSON.stringify(original)],['assets/leak.js',original.days.find(d=>d.practice_prompt?.length>70).practice_prompt],['assets/leak.js','//# sourceMappingURL=main.js.map'],['assets/private.json','{}'],['assets/leak.js','English 90 Premium 49.990'],['assets/leak.js','https://checkout.example/order']];
+    const cases=[['assets/leak.js',JSON.stringify(original.weeks[0])],['accidental.pdf','%PDF-1.7 private'],['assets/leak.js','%PDF-1.7 private'],['assets/leak.js',JSON.stringify(original)],['assets/leak.js',original.days.find(d=>d.practice_prompt?.length>70).practice_prompt],['assets/leak.js','//# sourceMappingURL=main.js.map'],['assets/private.json','{}'],['assets/leak.js','English 90 Premium 49.990'],['assets/leak.js','https://checkout.example/order']];
     for(const [name,body] of cases){
       const file=resolve(dir,name);await writeFile(file,body);
       await assert.rejects(()=>auditPublicBuild(dir), /Public|Private|Premium|Unapproved|Archived commercial/);
@@ -124,6 +124,7 @@ test('public build fails on PDFs, full source, maps and private prose even in re
     const approved=await auditPublicBuild(dir);
     let compressed=0;
     for(const path of approved.filter(p=>/\.(js|css)$/.test(p))) compressed+=gzipSync(await readFile(resolve(dir,path))).length;
-    assert.ok(compressed<45000,`Script/style transfer budget exceeded: ${compressed}`);
+    // V1 adds local audio, guided writing and the day-to-practice index; no runtime dependency.
+    assert.ok(compressed<60000,`Script/style transfer budget exceeded: ${compressed}`);
   } finally { await rm(dir,{recursive:true,force:true}); }
 });

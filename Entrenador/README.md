@@ -1,4 +1,4 @@
-# English 90 Trainer — V3.3
+# English 90 Trainer — candidato v1.0
 
 Aplicación estática gratuita para hispanohablantes, con TypeScript/Vite, rutas hash y progreso local. Sin backend, cuentas, servicios de analítica, suscripciones ni APIs de IA. La página Premium es informativa y dirige consultas al canal público de IMR Tech; no procesa pagos.
 
@@ -22,17 +22,17 @@ Playwright necesita sus navegadores (`npx playwright install chromium firefox we
 
 `Entrenador/daily.ts` selecciona hasta diez tarjetas: hasta cinco repasos pendientes, refuerzo opcional de tarjetas difíciles y hasta cinco nuevas; completa huecos con las disponibles. No repite un enunciado en la misma cola. Las tarjetas pendientes se ordenan con `dueWords`; cada calificación usa exclusivamente `schedule`, sin un calendario alternativo.
 
-La clave sigue siendo `english90-v2-progress-2`, con esquema 2. `daily` es un campo opcional validado; no se cambian los IDs del vocabulario, los intervalos, notas, tests, juegos ni registros antiguos. Los respaldos anteriores siguen siendo válidos. La sesión guarda cada calificación, puede reanudarse y conserva las tarjetas ya completadas al reorganizar. La recapitulación no vuelve a calificarlas. El historial diario usa el tipo de resultado existente y se presenta como autoevaluación.
+La clave sigue siendo `english90-v2-progress-2`, con esquema 2. `daily` es un campo opcional validado; no se cambian los IDs del vocabulario, los intervalos, notas, tests, juegos ni registros antiguos. Los respaldos anteriores siguen siendo válidos. La sesión guarda cada calificación, puede reanudarse y conserva las tarjetas ya completadas al reorganizar. Las sesiones nuevas añaden tres ejercicios distintos: completar una estructura, construir una frase y recordar una expresión por escrito. Los ejercicios y respuestas se guardan al comprobarlos. La recapitulación permite un repaso de errores sin modificar el resultado original. El historial mantiene separados la autoevaluación de tarjetas y el resultado escrito. Las sesiones antiguas sin esta etapa siguen siendo compatibles.
 
 Los cambios diarios se serializan mediante Web Locks cuando está disponible; además se actualiza el estado local antes de aplicar una calificación y se comprueba el número de repasos previo. En navegadores sin Web Locks se conserva la comprobación antes de escribir, aunque localStorage no ofrece transacciones entre pestañas. El guardado rechazado o corrupto se comunica sin sobrescribir el original. Exportar/importar sigue disponible desde Mi progreso; no hay sincronización entre dispositivos.
 
-La racha usa fechas locales y actividad de aprendizaje. Abrir Inicio, revelar una tarjeta o copiar un mensaje para IA no suma actividad. Los registros históricos de actividad se conservan tal como estaban: no se reconstruyen retroactivamente.
+La racha usa fechas locales y actividad de aprendizaje. Abrir Inicio, revelar una tarjeta, guardar un borrador o copiar un mensaje para IA no suma actividad. Una tarjeta calificada, una ronda terminada o un test enviado sí cuentan. Los registros históricos de actividad se conservan tal como estaban: no se reconstruyen retroactivamente.
 
 ## Publicación mediante Git
 
 Repositorio: `https://github.com/Clercminator/english90`. Se encontró vacío antes de este primer commit. Incluye código público y `dist/` ya compilado y auditado. El currículo, PDF, pedidos, credenciales, archivos administrativos, cachés y reportes de pruebas permanecen fuera de Git.
 
-Después del build y las pruebas, `npm run prepare:git` genera la configuración de Vercel para servir exclusivamente `dist/`, sin instalación ni compilación remotas. Se conservan las rutas estáticas, cabeceras y respuestas 404 del despliegue anterior. Hacer commit de fuentes, `dist/` y `vercel.json`, y push a `main`, para que la integración Git existente despliegue esos bytes. Verificar el estado del commit y el contenido servido en `https://english90.imrtech.xyz` antes de dar la publicación por terminada. No publicar la raíz del workspace ni cambiar DNS.
+Después del build y las pruebas, `npm run prepare:git` genera la configuración de Vercel para servir exclusivamente `dist/`, sin instalación ni compilación remotas. Se conservan las rutas estáticas, cabeceras y respuestas 404 del despliegue anterior. Hacer commit de fuentes, `dist/` y `vercel.json`. El push a `main` activa la integración Git y despliega esos bytes: requiere autorización explícita de publicación. El candidato v1.0 se prepara localmente, sin push ni despliegue automático. Verificar el estado del commit y el contenido servido en `https://english90.imrtech.xyz` antes de dar la publicación por terminada. No publicar la raíz del workspace ni cambiar DNS.
 
 `npm run prepare:vercel` y `npm run package:public` conservan la preparación aislada y el ZIP público como alternativas de entrega. Solo contienen archivos admitidos por la auditoría.
 
@@ -43,3 +43,37 @@ La ficha comercial local confirma un programa autoguiado de 90 días, manual dig
 Pendiente para habilitar una venta futura: precio vigente confirmado, disponibilidad y condiciones concretas de entrega/cambios, y destino de compra verificado. El canal de consulta actual es el WhatsApp publicado por IMR Tech, configurado en `site.config.json`; no se inventó un correo. `legalReviewed` permanece desactivado: la redacción técnica de los avisos no acredita una revisión jurídica.
 
 La publicidad sigue desactivada. Los tests históricos de consentimiento se ejecutan con respuestas simuladas; no activan proveedores. El archivo `archive/commercial-v3.1/public-pages.mjs` se conserva exclusivamente como fixture de regresión de las barreras del antiguo checkout y no se compila ni se sirve.
+
+
+## Alcance y auditoría de v1.0 (29 de octubre de 2026)
+
+Se reutilizan los 782 términos / 791 pares de vocabulario, 72 ejercicios de frases, cuatro tests gratuitos, búsqueda, repaso de errores, temporizador, animaciones, calendario, respaldo, pantalla de regreso y prompts externos. No se añaden dependencias ni servicios. El número de paquete 1.0.0 identifica el primer producto congelable; V2/V3 en nombres históricos describen las iteraciones anteriores, no versiones del respaldo.
+
+`learning.ts` registra intentos escritos independientes por expresión y fecha local. Las repeticiones inmediatas, rondas de errores y respuestas reveladas no aumentan este registro. Los errores persistentes tienen prioridad; después se eligen expresiones no practicadas o más antiguas. Diez intentos con al menos 80% de aciertos habilitan una selección diaria más exigente, sin asignar un nivel lingüístico. La secuencia normal deja las estructuras adelantadas para Desafío; todos los ejercicios siguen accesibles. La pantalla de progreso distingue tarjetas autoevaluadas, respuestas escritas y práctica oral sin puntuación. Los logros se derivan de actividad guardada y pueden compartirse como texto sin notas ni respuestas personales.
+
+`audio.ts` utiliza únicamente voces locales en inglés mediante Speech Synthesis. Ofrece repetición normal/lenta, cancelación al salir, aviso de errores y alternativa escrita. No usa micrófono ni reconocimiento; no mide pronunciación. Sin voz inglesa local, o con audio desactivado, la escucha continúa como lectura asistida y no suma un acierto de escucha. El interruptor de audio está en Mi progreso. La animación sigue la preferencia de movimiento reducido del sistema. Las tres situaciones orales reutilizan expresiones gratuitas de presentación, café y viajes; no copian diálogos privados.
+
+`guide-map.json` es un índice público de metadatos: día, semana, tema, IDs de vocabulario y de ejercicios existentes. No contiene explicaciones, lecturas, tareas, diálogos ni claves Premium. Se contrastó con el JSON actual: 90 días, 72 lecciones, 12 evaluaciones semanales y seis proyectos. El día 18 conduce a seis expresiones y dos ejercicios sobre aficiones. Cuando no existe un ejercicio de frases suficientemente relacionado, se ofrece solo vocabulario; no se inventa una equivalencia. Los enlaces de día mantienen la selección al reanudar la actividad.
+
+El PDF tiene 168 páginas. Sus 48 preguntas semanales aparecen en el JSON y en el texto extraído del PDF. Los puntos de control están en las páginas 62 (día 30) y 113 (día 60); no se confunden con los cuatro tests gratuitos. La página 160 remite a un examen final que sigue ausente, junto con su clave. Falta crear y revisar editorialmente ese instrumento, sus respuestas y criterios de corrección antes de prometer una evaluación completa del día 90. El Trainer y Premium informan de esta limitación. También se observan marcas editoriales literales como `<b>Comprensión:</b>` y etiquetas duplicadas de interlocutor en la página 62 del PDF; no se modificó el archivo comercial.
+
+Correcciones de contenido: la pregunta comparativa ahora incluye «than the other one»; se acotan dos enunciados modales ambiguos; los tests admiten alternativas válidas como «have to», «need to», «repeat», «can» y «might» en sus contextos. Las comprobaciones admiten contracciones comunes y variantes como centre/center y travelling/traveling, conservando tiempo verbal y negación. Se conserva el vocabulario original y sus variantes regionales; la comparación automática no pretende abarcar todas las paráfrasis posibles.
+
+El paquete público se verifica por lista de archivos permitidos y detección de PDF, prosa Premium, estructuras del currículo, mapas de fuentes, archivos comprimidos y patrones de credenciales. El índice de acompañamiento y el contenido gratuito son públicos intencionalmente. El presupuesto comprimido de JS/CSS pasa de 45 a 60 kB para cubrir audio, práctica mixta e índice de guía; el candidato se mantiene por debajo de ese límite, sin librerías de ejecución nuevas. `npm run package:public` produce `release/English_90_Trainer_V1.0_Public.zip` con comprobación de bytes contra `dist/`.
+
+### Validación del candidato
+
+- Línea base verificada antes de ampliar: 44 tests unitarios y 105 tests de navegador.
+- `npm run build`: validación del contenido, TypeScript, Vite y auditoría pública correctas; 19 archivos públicos.
+- `npm run lint` y `git diff --check`: correctos.
+- `npm test`: 50 pruebas aprobadas.
+- `npm run test:pdf`: tres pruebas aprobadas; validan herramientas de entrega y protección, no una certificación educativa.
+- `npx playwright test --workers=2`: 120 pruebas aprobadas en Chromium, Firefox y WebKit móvil; incluye axe WCAG A/AA, navegación por teclado, movimiento reducido, almacenamiento, recuperación, guía, escucha simulada y alternativa sin audio. También se revisaron capturas móviles de guía, escucha y práctica oral.
+- `npm run check:public`, `npm run prepare:git` y `npm run package:public`: correctos. ZIP contrastado byte a byte con los 19 archivos de `dist/`; JS/CSS suman 53.459 bytes comprimidos.
+- Comprobación de producción por HTTP: seguía sirviendo `main-B0DHohpc.js`, anterior al candidato local `main-BBkF2Avi.js`. El WhatsApp configurado sigue publicado en el sitio de IMR Tech. No se ejecutó push ni despliegue.
+
+### Acciones que requieren revisión humana
+
+1. En un iPhone y un Android reales, abrir Escuchar y escribir, comprobar voz inglesa normal/lenta, interrupción al navegar y vuelta tras bloquear la pantalla. Repetir con una voz inglesa no instalada y con audio desactivado. La simulación del navegador comprueba el flujo, no la calidad acústica del sistema operativo.
+2. Completar la revisión editorial del examen final y la clave antes de anunciar ese componente de la guía. Las tarjetas y tests gratuitos funcionan sin él; no generan un resultado oficial.
+3. Autorizar la publicación del candidato; solo entonces ejecutar el proceso de push/despliegue y verificar el dominio. Hasta ese paso, producción continúa con la versión anterior.

@@ -1,0 +1,1495 @@
+[
+  {
+    "day": 1,
+    "week": 1,
+    "category": 1,
+    "topic": "Primer contacto",
+    "kind": "lesson",
+    "vocabulary": [
+      "hello|hola",
+      "good morning|buenos días",
+      "name|nombre",
+      "from|de (origen)",
+      "live|vivir",
+      "city|ciudad"
+    ],
+    "sentences": [
+      "practice-1-1"
+    ]
+  },
+  {
+    "day": 2,
+    "week": 1,
+    "category": 1,
+    "topic": "¿De dónde eres?",
+    "kind": "lesson",
+    "vocabulary": [
+      "from|de (origen)",
+      "live|vivir",
+      "city|ciudad",
+      "country|país",
+      "job|empleo",
+      "student|estudiante"
+    ],
+    "sentences": [
+      "practice-1-4"
+    ]
+  },
+  {
+    "day": 3,
+    "week": 1,
+    "category": 1,
+    "topic": "A qué te dedicas",
+    "kind": "lesson",
+    "vocabulary": [
+      "country|país",
+      "job|empleo",
+      "student|estudiante",
+      "teacher|profesor",
+      "engineer|ingeniero",
+      "friend|amigo"
+    ],
+    "sentences": [
+      "practice-1-3",
+      "practice-1-5"
+    ]
+  },
+  {
+    "day": 4,
+    "week": 1,
+    "category": 1,
+    "topic": "Preguntas con be",
+    "kind": "lesson",
+    "vocabulary": [
+      "teacher|profesor",
+      "engineer|ingeniero",
+      "friend|amigo",
+      "happy|feliz",
+      "busy|ocupado",
+      "new|nuevo"
+    ],
+    "sentences": [
+      "practice-1-2"
+    ]
+  },
+  {
+    "day": 5,
+    "week": 1,
+    "category": 1,
+    "topic": "Describir personas",
+    "kind": "lesson",
+    "vocabulary": [
+      "happy|feliz",
+      "busy|ocupado",
+      "new|nuevo",
+      "here|aquí",
+      "today|hoy",
+      "nice|agradable"
+    ],
+    "sentences": [
+      "practice-1-3"
+    ]
+  },
+  {
+    "day": 6,
+    "week": 1,
+    "category": 1,
+    "topic": "Mini conversación",
+    "kind": "lesson",
+    "vocabulary": [
+      "here|aquí",
+      "today|hoy",
+      "nice|agradable",
+      "meet|conocer",
+      "thanks|gracias",
+      "hello|hola"
+    ],
+    "sentences": [
+      "practice-1-1",
+      "practice-1-2"
+    ]
+  },
+  {
+    "day": 7,
+    "week": 1,
+    "category": 1,
+    "topic": "Evaluación de semana 1",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-1-1",
+      "practice-1-2"
+    ]
+  },
+  {
+    "day": 8,
+    "week": 2,
+    "category": 2,
+    "topic": "Mi mañana",
+    "kind": "lesson",
+    "vocabulary": [
+      "wake up|despertarse",
+      "get up|levantarse",
+      "breakfast|desayuno",
+      "work|trabajar",
+      "study|estudiar",
+      "start|empezar"
+    ],
+    "sentences": [
+      "practice-2-1"
+    ]
+  },
+  {
+    "day": 9,
+    "week": 2,
+    "category": 2,
+    "topic": "Mi jornada",
+    "kind": "lesson",
+    "vocabulary": [
+      "work|trabajar",
+      "study|estudiar",
+      "start|empezar",
+      "finish|terminar",
+      "early|temprano",
+      "late|tarde"
+    ],
+    "sentences": [
+      "practice-2-3"
+    ]
+  },
+  {
+    "day": 10,
+    "week": 2,
+    "category": 2,
+    "topic": "Tercera persona",
+    "kind": "lesson",
+    "vocabulary": [
+      "finish|terminar",
+      "early|temprano",
+      "late|tarde",
+      "usually|normalmente",
+      "always|siempre",
+      "sometimes|a veces"
+    ],
+    "sentences": [
+      "practice-2-3"
+    ]
+  },
+  {
+    "day": 11,
+    "week": 2,
+    "category": 2,
+    "topic": "Preguntas con do",
+    "kind": "lesson",
+    "vocabulary": [
+      "usually|normalmente",
+      "always|siempre",
+      "sometimes|a veces",
+      "never|nunca",
+      "every day|cada día",
+      "morning|mañana"
+    ],
+    "sentences": [
+      "practice-2-2"
+    ]
+  },
+  {
+    "day": 12,
+    "week": 2,
+    "category": 2,
+    "topic": "Preguntas con does",
+    "kind": "lesson",
+    "vocabulary": [
+      "never|nunca",
+      "every day|cada día",
+      "morning|mañana",
+      "afternoon|tarde",
+      "evening|tarde-noche",
+      "home|casa"
+    ],
+    "sentences": [
+      "practice-2-5"
+    ]
+  },
+  {
+    "day": 13,
+    "week": 2,
+    "category": 2,
+    "topic": "Frecuencia",
+    "kind": "lesson",
+    "vocabulary": [
+      "afternoon|tarde",
+      "evening|tarde-noche",
+      "home|casa",
+      "office|oficina",
+      "week|semana",
+      "wake up|despertarse"
+    ],
+    "sentences": [
+      "practice-2-3"
+    ]
+  },
+  {
+    "day": 14,
+    "week": 2,
+    "category": 2,
+    "topic": "Evaluación de semana 2",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-2-1",
+      "practice-2-2"
+    ]
+  },
+  {
+    "day": 15,
+    "week": 3,
+    "category": 3,
+    "topic": "¿Qué haces?",
+    "kind": "lesson",
+    "vocabulary": [
+      "now|ahora",
+      "right now|justo ahora",
+      "listen|escuchar",
+      "watch|ver",
+      "read|leer",
+      "run|correr"
+    ],
+    "sentences": [
+      "practice-3-1"
+    ]
+  },
+  {
+    "day": 16,
+    "week": 3,
+    "category": 3,
+    "topic": "Alrededor mío",
+    "kind": "lesson",
+    "vocabulary": [
+      "watch|ver",
+      "read|leer",
+      "run|correr",
+      "play|jugar",
+      "together|juntos",
+      "music|música"
+    ],
+    "sentences": [
+      "practice-3-3"
+    ]
+  },
+  {
+    "day": 17,
+    "week": 3,
+    "category": 3,
+    "topic": "Hábito o ahora",
+    "kind": "lesson",
+    "vocabulary": [
+      "play|jugar",
+      "together|juntos",
+      "music|música",
+      "movie|película",
+      "weekend|fin de semana",
+      "hobby|pasatiempo"
+    ],
+    "sentences": [
+      "practice-3-1",
+      "practice-3-3"
+    ]
+  },
+  {
+    "day": 18,
+    "week": 3,
+    "category": 3,
+    "topic": "Hobbies",
+    "kind": "lesson",
+    "vocabulary": [
+      "movie|película",
+      "weekend|fin de semana",
+      "hobby|pasatiempo",
+      "enjoy|disfrutar",
+      "prefer|preferir",
+      "outside|afuera"
+    ],
+    "sentences": [
+      "practice-3-2",
+      "practice-3-6"
+    ]
+  },
+  {
+    "day": 19,
+    "week": 3,
+    "category": 3,
+    "topic": "Invitaciones",
+    "kind": "lesson",
+    "vocabulary": [
+      "enjoy|disfrutar",
+      "prefer|preferir",
+      "outside|afuera",
+      "inside|adentro",
+      "tonight|esta noche",
+      "weather|clima"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 20,
+    "week": 3,
+    "category": 3,
+    "topic": "El clima",
+    "kind": "lesson",
+    "vocabulary": [
+      "inside|adentro",
+      "tonight|esta noche",
+      "weather|clima",
+      "rain|lluvia",
+      "sunny|soleado",
+      "now|ahora"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 21,
+    "week": 3,
+    "category": 3,
+    "topic": "Evaluación de semana 3",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-3-1",
+      "practice-3-2"
+    ]
+  },
+  {
+    "day": 22,
+    "week": 4,
+    "category": 4,
+    "topic": "Pedir en un café",
+    "kind": "lesson",
+    "vocabulary": [
+      "water|agua",
+      "bread|pan",
+      "rice|arroz",
+      "milk|leche",
+      "apple|manzana",
+      "coffee|café"
+    ],
+    "sentences": [
+      "practice-4-1"
+    ]
+  },
+  {
+    "day": 23,
+    "week": 4,
+    "category": 4,
+    "topic": "En el supermercado",
+    "kind": "lesson",
+    "vocabulary": [
+      "milk|leche",
+      "apple|manzana",
+      "coffee|café",
+      "tea|té",
+      "vegetables|verduras",
+      "fruit|fruta"
+    ],
+    "sentences": [
+      "practice-4-3",
+      "practice-4-6"
+    ]
+  },
+  {
+    "day": 24,
+    "week": 4,
+    "category": 4,
+    "topic": "Precios",
+    "kind": "lesson",
+    "vocabulary": [
+      "tea|té",
+      "vegetables|verduras",
+      "fruit|fruta",
+      "menu|menú",
+      "bill|cuenta",
+      "price|precio"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 25,
+    "week": 4,
+    "category": 4,
+    "topic": "Cantidades",
+    "kind": "lesson",
+    "vocabulary": [
+      "menu|menú",
+      "bill|cuenta",
+      "price|precio",
+      "cheap|barato",
+      "expensive|caro",
+      "cash|efectivo"
+    ],
+    "sentences": [
+      "practice-4-2"
+    ]
+  },
+  {
+    "day": 26,
+    "week": 4,
+    "category": 4,
+    "topic": "Describir la cocina",
+    "kind": "lesson",
+    "vocabulary": [
+      "cheap|barato",
+      "expensive|caro",
+      "cash|efectivo",
+      "card|tarjeta",
+      "order|pedir",
+      "some|algo de / algunos"
+    ],
+    "sentences": [
+      "practice-4-3"
+    ]
+  },
+  {
+    "day": 27,
+    "week": 4,
+    "category": 4,
+    "topic": "En restaurante",
+    "kind": "lesson",
+    "vocabulary": [
+      "card|tarjeta",
+      "order|pedir",
+      "some|algo de / algunos",
+      "any|algo de / ninguno",
+      "how much|cuánto (cantidad o precio)",
+      "water|agua"
+    ],
+    "sentences": [
+      "practice-4-4"
+    ]
+  },
+  {
+    "day": 28,
+    "week": 4,
+    "category": 4,
+    "topic": "Evaluación de semana 4",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-4-1",
+      "practice-4-2"
+    ]
+  },
+  {
+    "day": 29,
+    "week": 5,
+    "category": 5,
+    "topic": "Ayer",
+    "kind": "lesson",
+    "vocabulary": [
+      "yesterday|ayer",
+      "last week|la semana pasada",
+      "ago|hace (tiempo)",
+      "went|fui/fue (go)",
+      "saw|vi/vio (see)",
+      "ate|comí/comió (eat)"
+    ],
+    "sentences": [
+      "practice-5-1"
+    ]
+  },
+  {
+    "day": 30,
+    "week": 5,
+    "category": 5,
+    "topic": "Ir y venir",
+    "kind": "lesson",
+    "vocabulary": [
+      "went|fui/fue (go)",
+      "saw|vi/vio (see)",
+      "ate|comí/comió (eat)",
+      "had|tuve/tuvo (have)",
+      "made|hice/hizo (make)",
+      "bought|compré/compró (buy)"
+    ],
+    "sentences": [
+      "practice-5-3"
+    ]
+  },
+  {
+    "day": 31,
+    "week": 5,
+    "category": 5,
+    "topic": "Una experiencia",
+    "kind": "lesson",
+    "vocabulary": [
+      "had|tuve/tuvo (have)",
+      "made|hice/hizo (make)",
+      "bought|compré/compró (buy)",
+      "met|conocí/encontré (meet)",
+      "visited|visité (visit)",
+      "called|llamé (call)"
+    ],
+    "sentences": [
+      "practice-5-1",
+      "practice-5-3"
+    ]
+  },
+  {
+    "day": 32,
+    "week": 5,
+    "category": 5,
+    "topic": "Preguntar por el pasado",
+    "kind": "lesson",
+    "vocabulary": [
+      "met|conocí/encontré (meet)",
+      "visited|visité (visit)",
+      "called|llamé (call)",
+      "arrived|llegué (arrive)",
+      "left|salí (leave)",
+      "fun|diversión"
+    ],
+    "sentences": [
+      "practice-5-2"
+    ]
+  },
+  {
+    "day": 33,
+    "week": 5,
+    "category": 5,
+    "topic": "Negar en pasado",
+    "kind": "lesson",
+    "vocabulary": [
+      "arrived|llegué (arrive)",
+      "left|salí (leave)",
+      "fun|diversión",
+      "trip|viaje",
+      "family|familia",
+      "story|historia"
+    ],
+    "sentences": [
+      "practice-5-4"
+    ]
+  },
+  {
+    "day": 34,
+    "week": 5,
+    "category": 5,
+    "topic": "Mini historia",
+    "kind": "lesson",
+    "vocabulary": [
+      "trip|viaje",
+      "family|familia",
+      "story|historia",
+      "before|antes",
+      "after|después",
+      "yesterday|ayer"
+    ],
+    "sentences": [
+      "practice-5-1",
+      "practice-5-3"
+    ]
+  },
+  {
+    "day": 35,
+    "week": 5,
+    "category": 5,
+    "topic": "Evaluación de semana 5",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-5-1",
+      "practice-5-2"
+    ]
+  },
+  {
+    "day": 36,
+    "week": 6,
+    "category": 6,
+    "topic": "Cómo llegar",
+    "kind": "lesson",
+    "vocabulary": [
+      "station|estación",
+      "airport|aeropuerto",
+      "ticket|boleto/billete",
+      "bus|autobús",
+      "train|tren",
+      "street|calle"
+    ],
+    "sentences": [
+      "practice-6-1"
+    ]
+  },
+  {
+    "day": 37,
+    "week": 6,
+    "category": 6,
+    "topic": "Orientación",
+    "kind": "lesson",
+    "vocabulary": [
+      "bus|autobús",
+      "train|tren",
+      "street|calle",
+      "corner|esquina",
+      "left|izquierda",
+      "right|derecha"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 38,
+    "week": 6,
+    "category": 6,
+    "topic": "Ubicaciones",
+    "kind": "lesson",
+    "vocabulary": [
+      "corner|esquina",
+      "left|izquierda",
+      "right|derecha",
+      "straight|recto",
+      "near|cerca",
+      "far|lejos"
+    ],
+    "sentences": [
+      "practice-6-3"
+    ]
+  },
+  {
+    "day": 39,
+    "week": 6,
+    "category": 6,
+    "topic": "Billetes",
+    "kind": "lesson",
+    "vocabulary": [
+      "straight|recto",
+      "near|cerca",
+      "far|lejos",
+      "between|entre",
+      "next to|al lado de",
+      "opposite|frente a"
+    ],
+    "sentences": [
+      "practice-6-2"
+    ]
+  },
+  {
+    "day": 40,
+    "week": 6,
+    "category": 6,
+    "topic": "Problemas",
+    "kind": "lesson",
+    "vocabulary": [
+      "between|entre",
+      "next to|al lado de",
+      "opposite|frente a",
+      "behind|detrás de",
+      "map|mapa",
+      "departure|salida"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 41,
+    "week": 6,
+    "category": 6,
+    "topic": "Llegada",
+    "kind": "lesson",
+    "vocabulary": [
+      "behind|detrás de",
+      "map|mapa",
+      "departure|salida",
+      "arrival|llegada",
+      "delay|retraso",
+      "station|estación"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 42,
+    "week": 6,
+    "category": 6,
+    "topic": "Evaluación de semana 6",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-6-1",
+      "practice-6-2"
+    ]
+  },
+  {
+    "day": 43,
+    "week": 7,
+    "category": 7,
+    "topic": "Mis planes",
+    "kind": "lesson",
+    "vocabulary": [
+      "tomorrow|mañana",
+      "next|próximo",
+      "later|más tarde",
+      "soon|pronto",
+      "plan|plan",
+      "goal|meta"
+    ],
+    "sentences": [
+      "practice-7-1",
+      "practice-7-3"
+    ]
+  },
+  {
+    "day": 44,
+    "week": 7,
+    "category": 7,
+    "topic": "Fin de semana",
+    "kind": "lesson",
+    "vocabulary": [
+      "soon|pronto",
+      "plan|plan",
+      "goal|meta",
+      "decide|decidir",
+      "hope|esperar",
+      "perhaps|quizás"
+    ],
+    "sentences": [
+      "practice-7-1",
+      "practice-7-3"
+    ]
+  },
+  {
+    "day": 45,
+    "week": 7,
+    "category": 7,
+    "topic": "Decisiones rápidas",
+    "kind": "lesson",
+    "vocabulary": [
+      "decide|decidir",
+      "hope|esperar",
+      "perhaps|quizás",
+      "probably|probablemente",
+      "definitely|definitivamente",
+      "travel|viajar"
+    ],
+    "sentences": [
+      "practice-7-2",
+      "practice-7-4"
+    ]
+  },
+  {
+    "day": 46,
+    "week": 7,
+    "category": 7,
+    "topic": "Predicciones",
+    "kind": "lesson",
+    "vocabulary": [
+      "probably|probablemente",
+      "definitely|definitivamente",
+      "travel|viajar",
+      "visit|visitar",
+      "meeting|reunión",
+      "appointment|cita"
+    ],
+    "sentences": [
+      "practice-7-2"
+    ]
+  },
+  {
+    "day": 47,
+    "week": 7,
+    "category": 7,
+    "topic": "Disponibilidad",
+    "kind": "lesson",
+    "vocabulary": [
+      "visit|visitar",
+      "meeting|reunión",
+      "appointment|cita",
+      "schedule|horario",
+      "available|disponible",
+      "free|libre"
+    ],
+    "sentences": [
+      "practice-7-5"
+    ]
+  },
+  {
+    "day": 48,
+    "week": 7,
+    "category": 7,
+    "topic": "Objetivos",
+    "kind": "lesson",
+    "vocabulary": [
+      "schedule|horario",
+      "available|disponible",
+      "free|libre",
+      "future|futuro",
+      "prepare|preparar",
+      "tomorrow|mañana"
+    ],
+    "sentences": [
+      "practice-7-1"
+    ]
+  },
+  {
+    "day": 49,
+    "week": 7,
+    "category": 7,
+    "topic": "Evaluación de semana 7",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-7-1",
+      "practice-7-2"
+    ]
+  },
+  {
+    "day": 50,
+    "week": 8,
+    "category": 8,
+    "topic": "Pedir aclaración",
+    "kind": "lesson",
+    "vocabulary": [
+      "help|ayudar",
+      "problem|problema",
+      "solution|solución",
+      "slowly|despacio",
+      "repeat|repetir",
+      "understand|entender"
+    ],
+    "sentences": [
+      "practice-8-1"
+    ]
+  },
+  {
+    "day": 51,
+    "week": 8,
+    "category": 8,
+    "topic": "Pedir ayuda",
+    "kind": "lesson",
+    "vocabulary": [
+      "slowly|despacio",
+      "repeat|repetir",
+      "understand|entender",
+      "explain|explicar",
+      "should|debería",
+      "must|deber"
+    ],
+    "sentences": [
+      "practice-8-1"
+    ]
+  },
+  {
+    "day": 52,
+    "week": 8,
+    "category": 8,
+    "topic": "Dar consejos",
+    "kind": "lesson",
+    "vocabulary": [
+      "explain|explicar",
+      "should|debería",
+      "must|deber",
+      "have to|tener que",
+      "need|necesitar",
+      "rest|descansar"
+    ],
+    "sentences": [
+      "practice-8-4"
+    ]
+  },
+  {
+    "day": 53,
+    "week": 8,
+    "category": 8,
+    "topic": "Explicar obligaciones",
+    "kind": "lesson",
+    "vocabulary": [
+      "have to|tener que",
+      "need|necesitar",
+      "rest|descansar",
+      "feel|sentirse",
+      "better|mejor",
+      "worse|peor"
+    ],
+    "sentences": [
+      "practice-8-2"
+    ]
+  },
+  {
+    "day": 54,
+    "week": 8,
+    "category": 8,
+    "topic": "Reglas",
+    "kind": "lesson",
+    "vocabulary": [
+      "feel|sentirse",
+      "better|mejor",
+      "worse|peor",
+      "important|importante",
+      "urgent|urgente",
+      "careful|cuidadoso"
+    ],
+    "sentences": [
+      "practice-8-3"
+    ]
+  },
+  {
+    "day": 55,
+    "week": 8,
+    "category": 8,
+    "topic": "Resolver un problema",
+    "kind": "lesson",
+    "vocabulary": [
+      "important|importante",
+      "urgent|urgente",
+      "careful|cuidadoso",
+      "advice|consejo",
+      "possible|posible",
+      "help|ayudar"
+    ],
+    "sentences": [
+      "practice-8-4"
+    ]
+  },
+  {
+    "day": 56,
+    "week": 8,
+    "category": 8,
+    "topic": "Evaluación de semana 8",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-8-1",
+      "practice-8-2"
+    ]
+  },
+  {
+    "day": 57,
+    "week": 9,
+    "category": 9,
+    "topic": "Mi trabajo",
+    "kind": "lesson",
+    "vocabulary": [
+      "project|proyecto",
+      "client|cliente",
+      "task|tarea",
+      "deadline|fecha límite",
+      "update|actualización",
+      "report|informe"
+    ],
+    "sentences": [
+      "practice-9-1"
+    ]
+  },
+  {
+    "day": 58,
+    "week": 9,
+    "category": 9,
+    "topic": "Actualizaciones",
+    "kind": "lesson",
+    "vocabulary": [
+      "deadline|fecha límite",
+      "update|actualización",
+      "report|informe",
+      "team|equipo",
+      "meeting|reunión",
+      "feedback|comentarios"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 59,
+    "week": 9,
+    "category": 9,
+    "topic": "Reuniones",
+    "kind": "lesson",
+    "vocabulary": [
+      "team|equipo",
+      "meeting|reunión",
+      "feedback|comentarios",
+      "improve|mejorar",
+      "result|resultado",
+      "issue|incidencia"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 60,
+    "week": 9,
+    "category": 9,
+    "topic": "Comparaciones",
+    "kind": "lesson",
+    "vocabulary": [
+      "improve|mejorar",
+      "result|resultado",
+      "issue|incidencia",
+      "priority|prioridad",
+      "easy|fácil",
+      "difficult|difícil"
+    ],
+    "sentences": [
+      "practice-9-2",
+      "practice-9-3",
+      "practice-9-5"
+    ]
+  },
+  {
+    "day": 61,
+    "week": 9,
+    "category": 9,
+    "topic": "Superlativos",
+    "kind": "lesson",
+    "vocabulary": [
+      "priority|prioridad",
+      "easy|fácil",
+      "difficult|difícil",
+      "useful|útil",
+      "faster|más rápido",
+      "better|mejor"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 62,
+    "week": 9,
+    "category": 9,
+    "topic": "Correo de trabajo",
+    "kind": "lesson",
+    "vocabulary": [
+      "useful|útil",
+      "faster|más rápido",
+      "better|mejor",
+      "best|el mejor",
+      "compare|comparar",
+      "project|proyecto"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 63,
+    "week": 9,
+    "category": 9,
+    "topic": "Evaluación de semana 9",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-9-1",
+      "practice-9-2"
+    ]
+  },
+  {
+    "day": 64,
+    "week": 10,
+    "category": 10,
+    "topic": "Mis experiencias",
+    "kind": "lesson",
+    "vocabulary": [
+      "ever|alguna vez",
+      "never|nunca",
+      "already|ya",
+      "yet|ya/todavía",
+      "experience|experiencia",
+      "abroad|en el extranjero"
+    ],
+    "sentences": [
+      "practice-10-1"
+    ]
+  },
+  {
+    "day": 65,
+    "week": 10,
+    "category": 10,
+    "topic": "Alguna vez",
+    "kind": "lesson",
+    "vocabulary": [
+      "yet|ya/todavía",
+      "experience|experiencia",
+      "abroad|en el extranjero",
+      "achieve|lograr",
+      "learn|aprender",
+      "try|probar"
+    ],
+    "sentences": [
+      "practice-10-3"
+    ]
+  },
+  {
+    "day": 66,
+    "week": 10,
+    "category": 10,
+    "topic": "Nunca",
+    "kind": "lesson",
+    "vocabulary": [
+      "achieve|lograr",
+      "learn|aprender",
+      "try|probar",
+      "finish|terminar",
+      "start|comenzar",
+      "change|cambiar"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 67,
+    "week": 10,
+    "category": 10,
+    "topic": "Ya o todavía",
+    "kind": "lesson",
+    "vocabulary": [
+      "finish|terminar",
+      "start|comenzar",
+      "change|cambiar",
+      "since|desde (punto temporal)",
+      "for|durante (periodo)",
+      "recently|recientemente"
+    ],
+    "sentences": [
+      "practice-10-2"
+    ]
+  },
+  {
+    "day": 68,
+    "week": 10,
+    "category": 10,
+    "topic": "Fecha concreta",
+    "kind": "lesson",
+    "vocabulary": [
+      "since|desde (punto temporal)",
+      "for|durante (periodo)",
+      "recently|recientemente",
+      "opportunity|oportunidad",
+      "challenge|desafío",
+      "success|éxito"
+    ],
+    "sentences": [
+      "practice-10-5"
+    ]
+  },
+  {
+    "day": 69,
+    "week": 10,
+    "category": 10,
+    "topic": "Logros",
+    "kind": "lesson",
+    "vocabulary": [
+      "opportunity|oportunidad",
+      "challenge|desafío",
+      "success|éxito",
+      "mistake|error",
+      "skill|habilidad",
+      "ever|alguna vez"
+    ],
+    "sentences": [
+      "practice-10-1"
+    ]
+  },
+  {
+    "day": 70,
+    "week": 10,
+    "category": 10,
+    "topic": "Evaluación de semana 10",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-10-1",
+      "practice-10-2"
+    ]
+  },
+  {
+    "day": 71,
+    "week": 11,
+    "category": 11,
+    "topic": "Dar una opinión",
+    "kind": "lesson",
+    "vocabulary": [
+      "because|porque",
+      "so|por eso/así que",
+      "although|aunque",
+      "however|sin embargo",
+      "agree|estar de acuerdo",
+      "disagree|estar en desacuerdo"
+    ],
+    "sentences": [
+      "practice-11-1"
+    ]
+  },
+  {
+    "day": 72,
+    "week": 11,
+    "category": 11,
+    "topic": "Explicar razones",
+    "kind": "lesson",
+    "vocabulary": [
+      "however|sin embargo",
+      "agree|estar de acuerdo",
+      "disagree|estar en desacuerdo",
+      "opinion|opinión",
+      "reason|razón",
+      "choice|elección"
+    ],
+    "sentences": [
+      "practice-11-4"
+    ]
+  },
+  {
+    "day": 73,
+    "week": 11,
+    "category": 11,
+    "topic": "Causa y consecuencia",
+    "kind": "lesson",
+    "vocabulary": [
+      "opinion|opinión",
+      "reason|razón",
+      "choice|elección",
+      "advantage|ventaja",
+      "disadvantage|desventaja",
+      "important|importante"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 74,
+    "week": 11,
+    "category": 11,
+    "topic": "Contrastar",
+    "kind": "lesson",
+    "vocabulary": [
+      "advantage|ventaja",
+      "disadvantage|desventaja",
+      "important|importante",
+      "simple|sencillo",
+      "clear|claro",
+      "different|diferente"
+    ],
+    "sentences": [
+      "practice-11-2",
+      "practice-11-3"
+    ]
+  },
+  {
+    "day": 75,
+    "week": 11,
+    "category": 11,
+    "topic": "Condiciones",
+    "kind": "lesson",
+    "vocabulary": [
+      "simple|sencillo",
+      "clear|claro",
+      "different|diferente",
+      "similar|similar",
+      "if|si (condición)",
+      "then|entonces"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 76,
+    "week": 11,
+    "category": 11,
+    "topic": "Acuerdos",
+    "kind": "lesson",
+    "vocabulary": [
+      "similar|similar",
+      "if|si (condición)",
+      "then|entonces",
+      "perhaps|quizás",
+      "prefer|preferir",
+      "because|porque"
+    ],
+    "sentences": [
+      "practice-11-6"
+    ]
+  },
+  {
+    "day": 77,
+    "week": 11,
+    "category": 11,
+    "topic": "Evaluación de semana 11",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-11-1",
+      "practice-11-2"
+    ]
+  },
+  {
+    "day": 78,
+    "week": 12,
+    "category": 12,
+    "topic": "Entrevista personal",
+    "kind": "lesson",
+    "vocabulary": [
+      "background|trayectoria",
+      "strength|fortaleza",
+      "weakness|debilidad",
+      "decision|decisión",
+      "opportunity|oportunidad",
+      "improve|mejorar"
+    ],
+    "sentences": [
+      "practice-12-1"
+    ]
+  },
+  {
+    "day": 79,
+    "week": 12,
+    "category": 12,
+    "topic": "Historia larga",
+    "kind": "lesson",
+    "vocabulary": [
+      "decision|decisión",
+      "opportunity|oportunidad",
+      "improve|mejorar",
+      "explain|explicar",
+      "clarify|aclarar",
+      "example|ejemplo"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 80,
+    "week": 12,
+    "category": 12,
+    "topic": "Resolver malentendidos",
+    "kind": "lesson",
+    "vocabulary": [
+      "explain|explicar",
+      "clarify|aclarar",
+      "example|ejemplo",
+      "solution|solución",
+      "experience|experiencia",
+      "prepare|preparar"
+    ],
+    "sentences": [
+      "practice-12-3",
+      "practice-12-5"
+    ]
+  },
+  {
+    "day": 81,
+    "week": 12,
+    "category": 12,
+    "topic": "Negociar un plan",
+    "kind": "lesson",
+    "vocabulary": [
+      "solution|solución",
+      "experience|experiencia",
+      "prepare|preparar",
+      "achieve|lograr",
+      "review|revisar",
+      "goal|meta"
+    ],
+    "sentences": [
+      "practice-12-2"
+    ]
+  },
+  {
+    "day": 82,
+    "week": 12,
+    "category": 12,
+    "topic": "Debate simple",
+    "kind": "lesson",
+    "vocabulary": [
+      "achieve|lograr",
+      "review|revisar",
+      "goal|meta",
+      "progress|progreso",
+      "confident|seguro de sí mismo",
+      "comfortable|cómodo"
+    ],
+    "sentences": []
+  },
+  {
+    "day": 83,
+    "week": 12,
+    "category": 12,
+    "topic": "Conversación abierta",
+    "kind": "lesson",
+    "vocabulary": [
+      "progress|progreso",
+      "confident|seguro de sí mismo",
+      "comfortable|cómodo",
+      "question|pregunta",
+      "answer|respuesta",
+      "background|trayectoria"
+    ],
+    "sentences": [
+      "practice-12-3"
+    ]
+  },
+  {
+    "day": 84,
+    "week": 12,
+    "category": 12,
+    "topic": "Evaluación de semana 12",
+    "kind": "assessment",
+    "vocabulary": [],
+    "sentences": [
+      "practice-12-1",
+      "practice-12-2"
+    ]
+  },
+  {
+    "day": 85,
+    "week": 13,
+    "category": 12,
+    "topic": "Una conversación de principio a fin",
+    "kind": "capstone",
+    "vocabulary": [],
+    "sentences": [
+      "practice-12-1",
+      "practice-12-2"
+    ]
+  },
+  {
+    "day": 86,
+    "week": 13,
+    "category": 5,
+    "topic": "Historia con tres tiempos",
+    "kind": "capstone",
+    "vocabulary": [],
+    "sentences": [
+      "practice-5-1",
+      "practice-5-2"
+    ]
+  },
+  {
+    "day": 87,
+    "week": 13,
+    "category": 6,
+    "topic": "Resolver un problema de viaje",
+    "kind": "capstone",
+    "vocabulary": [],
+    "sentences": [
+      "practice-6-1",
+      "practice-6-2"
+    ]
+  },
+  {
+    "day": 88,
+    "week": 13,
+    "category": 9,
+    "topic": "Reunión y seguimiento profesional",
+    "kind": "capstone",
+    "vocabulary": [],
+    "sentences": [
+      "practice-9-1",
+      "practice-9-2"
+    ]
+  },
+  {
+    "day": 89,
+    "week": 13,
+    "category": 12,
+    "topic": "Entrevista de trabajo",
+    "kind": "capstone",
+    "vocabulary": [],
+    "sentences": [
+      "practice-12-1",
+      "practice-12-2"
+    ]
+  },
+  {
+    "day": 90,
+    "week": 13,
+    "category": 12,
+    "topic": "Evaluación final y plan futuro",
+    "kind": "capstone",
+    "vocabulary": [],
+    "sentences": []
+  }
+]
