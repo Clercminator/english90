@@ -1,3 +1,4 @@
+import './theme';
 import { connectAdvertising } from './advertising';
 
 const ads = connectAdvertising();

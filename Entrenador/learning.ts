@@ -7,7 +7,7 @@ export const evidenceKey = (question: Question) => `${question.id}:${question.an
 export function recordEvidence(state: State, questions: Question[], responses: (string | null)[], now = Date.now(), assisted: number[] = []): void {
   const records = state.learning ||= {};
   questions.forEach((q, index) => {
-    if (assisted.includes(index) || responses[index] === null) return;
+    if (q.options || assisted.includes(index) || responses[index] === null) return;
     const key = evidenceKey(q), prior = records[key];
     if (prior && localDate(new Date(prior.lastAt)) === localDate(new Date(now))) return;
     const correct = questionCorrect(q, responses[index]);

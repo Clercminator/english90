@@ -26,7 +26,7 @@ test('public content is a strict selected subset and never includes the daily cu
     assert.deepEqual(Object.keys(category).sort(), ['id','tip','title','vocabulary']);
     for(const mode of ['ordering','completion'] as const) {
       const questions = sentenceQuestions(category.id,mode);
-      assert.equal(questions.length,6);
+      assert.equal(questions.length,8);
       for(const q of questions) {
         if(mode==='ordering') assert.deepEqual(q.tokens!.toSorted(), q.answer.split(/\s+/).sort());
         assert.ok(q.answer && q.explanation);
@@ -124,7 +124,7 @@ test('public build fails on PDFs, full source, maps and private prose even in re
     const approved=await auditPublicBuild(dir);
     let compressed=0;
     for(const path of approved.filter(p=>/\.(js|css)$/.test(p))) compressed+=gzipSync(await readFile(resolve(dir,path))).length;
-    // V1 adds local audio, guided writing and the day-to-practice index; no runtime dependency.
-    assert.ok(compressed<60000,`Script/style transfer budget exceeded: ${compressed}`);
+    // Includes original graded reading content, 24 harder sentences and themes; no runtime dependencies.
+    assert.ok(compressed<75000,`Script/style transfer budget exceeded: ${compressed}`);
   } finally { await rm(dir,{recursive:true,force:true}); }
 });

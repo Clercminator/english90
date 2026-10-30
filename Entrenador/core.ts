@@ -3,7 +3,7 @@ import { recordEvidence } from './learning.ts';
 import type { Evidence } from './learning.ts';
 export type Direction = 'en-es' | 'es-en';
 export type Rating = 'known' | 'difficult' | 'forgotten';
-export type Mode = 'translation' | 'recall' | 'completion' | 'ordering' | 'timed' | 'listening';
+export type Mode = 'translation' | 'recall' | 'completion' | 'ordering' | 'timed' | 'listening' | 'reading';
 export type Difficulty = 'gentle' | 'standard' | 'challenge';
 export type Section = 'home' | 'daily' | 'plan' | 'cards' | 'challenge' | 'assessments' | 'ai' | 'progress' | 'guide' | 'situations';
 export interface Word { en: string; es: string }
@@ -23,7 +23,7 @@ export interface Curriculum { title: string; days: Day[]; weeks: Week[]; quickst
 export interface Vocabulary extends Word { id: string; weeks: number[] }
 export interface Card { due: number; interval: number; reviews: number; rating: Rating }
 export interface Route { section: Section; day: number; week: number; mode: Mode }
-export interface Question { id: string; prompt: string; answer: string; explanation: string; options?: string[]; tokens?: string[]; acceptedAnswers?: string[] }
+export interface Question { id: string; prompt: string; answer: string; explanation: string; options?: string[]; tokens?: string[]; acceptedAnswers?: string[]; context?: string }
 export interface Quiz {
   id: string; mode: Mode; week: number; day: number; questions: Question[];
   responses: (string | null)[]; index: number; startedAt: number; deadline: number | null; finishedAt: number | null;
@@ -32,6 +32,7 @@ export interface Quiz {
   guideDay?: number;
 }
 export interface Assessment {
+  questions?: Question[];
   answers: string[]; reading: string[]; writing: string; notes: string;
   self: { reading: number | null; writing: number | null; speaking: number | null };
   submittedAt: number | null;
@@ -41,6 +42,7 @@ export interface Result {
   selfScore: number | null; assessment?: Assessment;
 }
 export interface State {
+  practiceTests?: Record<string, Assessment>;
   learning?: Record<string, Evidence>;
   daily?: DailySession;
   version: 2; day: number; done: Record<string, boolean>; cards: Record<string, Card>;
@@ -100,7 +102,7 @@ export function dayStatus(day: number, done: State['done']): 'completed' | 'avai
   return done[day] ? 'completed' : day === nextDay(done) ? 'available' : 'future';
 }
 const sections: Section[] = ['home', 'daily', 'plan', 'cards', 'challenge', 'assessments', 'ai', 'progress', 'guide', 'situations'];
-const modes: Mode[] = ['translation', 'recall', 'completion', 'ordering', 'timed', 'listening'];
+const modes: Mode[] = ['translation', 'recall', 'completion', 'ordering', 'timed', 'listening', 'reading'];
 export function parseRoute(hash: string, fallbackDay = 1): Route {
   const [path, search = ''] = hash.replace(/^#\/?/, '').split('?');
   const [section, day] = path.split('/'); const params = new URLSearchParams(search);
@@ -196,7 +198,7 @@ export function finishQuiz(state: State, quiz: Quiz, now = Date.now()): void {
   state.history.push({ id: quiz.id, label: `${quiz.retry ? 'Repaso de errores' : 'Práctica'} · categoría ${quiz.week} · ${modeLabel(quiz.mode)}${quiz.difficulty === 'challenge' ? ' · Desafío' : ''}`, kind: 'game', at: now, score: quizScore(quiz), total: quiz.questions.length, selfScore: null });
   touch(state, new Date(now));
 }
-export const modeLabel = (mode: Mode): string => ({ translation: 'Traducción', recall: 'Escribir de memoria', completion: 'Completar', ordering: 'Ordenar', timed: 'Reto de 60 segundos', listening: 'Escuchar y escribir' })[mode];
+export const modeLabel = (mode: Mode): string => ({ translation: 'Traducción', recall: 'Escribir de memoria', completion: 'Completar', ordering: 'Ordenar', timed: 'Reto de 60 segundos', listening: 'Escuchar y escribir', reading: 'Leer y comprender' })[mode];
 
 // Backups are untrusted. Reject unsupported versions and malformed nested state before replacing anything.
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -210,6 +212,16 @@ function validateAssessment(value: unknown): asserts value is Assessment {
   requireValid(strings(value.answers, 500) && value.answers.length === 4 && strings(value.reading, 2000) && value.reading.length === 3);
   requireValid(str(value.writing) && str(value.notes) && (value.submittedAt === null || num(value.submittedAt)) && object(value.self));
   for (const [k, max] of [['reading', 3], ['writing', 1], ['speaking', 2]] as const) requireValid(value.self[k] === null || integer(value.self[k], 0, max));
+  if (value.questions !== undefined) {
+    requireValid(Array.isArray(value.questions) && value.questions.length === 4);
+    value.questions.forEach(validateQuestion);
+  }
+}
+function validateQuestion(q: unknown): void {
+  requireValid(object(q) && str(q.id,1000) && str(q.prompt,2000) && str(q.answer,2000) && str(q.explanation,4000));
+  requireValid(q.context === undefined || str(q.context,12000));
+  requireValid(q.acceptedAnswers === undefined || (strings(q.acceptedAnswers,2000) && q.acceptedAnswers.length <= 100));
+  requireValid(q.options === undefined || (strings(q.options,2000) && q.options.length >= 2 && q.options.length <= 4 && q.options.includes(q.answer) && new Set(q.options.map(normalize)).size === q.options.length));
 }
 export function validateState(value: unknown): State {
   requireValid(object(value) && value.version === 2 && integer(value.day, 1, 90));
@@ -228,6 +240,10 @@ export function validateState(value: unknown): State {
   requireValid(value.lastCard === null || str(value.lastCard, 1000));
   requireValid(object(value.assessments) && Object.keys(value.assessments).every(k => integer(Number(k), 1, 12)));
   Object.values(value.assessments).forEach(validateAssessment);
+  if (value.practiceTests !== undefined) {
+    requireValid(object(value.practiceTests) && Object.keys(value.practiceTests).every(k => /^(?:[1-9]|1[0-2]):(?:gentle|standard|challenge)$/.test(k)));
+    Object.values(value.practiceTests).forEach(validateAssessment);
+  }
   requireValid(Array.isArray(value.history) && value.history.length <= 20000);
   for (const result of value.history) {
     requireValid(object(result) && str(result.id, 150) && str(result.label, 300) && ['game', 'assessment'].includes(String(result.kind)) && num(result.at));
@@ -246,6 +262,7 @@ export function validateState(value: unknown): State {
     requireValid(Array.isArray(q.questions) && q.questions.length > 0 && q.questions.length <= 10 && integer(q.index, 0, q.questions.length - 1));
     requireValid(q.assisted === undefined || (Array.isArray(q.assisted) && q.assisted.length <= q.questions.length && new Set(q.assisted).size === q.assisted.length && q.assisted.every(i => integer(i, 0, (q.questions as unknown[]).length - 1))));
     for (const item of q.questions) {
+      validateQuestion(item);
       requireValid(object(item) && str(item.id, 1000) && str(item.prompt, 2000) && str(item.answer, 2000) && str(item.explanation, 4000));
       requireValid(item.prompt.trim() && item.answer.trim());
       if (item.options !== undefined) requireValid(strings(item.options, 1000) && item.options.length <= 4);
@@ -275,6 +292,8 @@ export function validateState(value: unknown): State {
       const p = d.practice;
       requireValid(object(p) && Array.isArray(p.questions) && p.questions.length === 3 && Array.isArray(p.responses) && p.responses.length === 3 && p.responses.every(r => r === null || str(r, 2000)) && integer(p.index, 0, 3));
       for (const q of p.questions) requireValid(object(q) && str(q.id, 1000) && str(q.prompt, 2000) && str(q.answer, 2000) && str(q.explanation, 4000));
+      p.questions.forEach(validateQuestion);
+      requireValid(d.difficulty === undefined || ['gentle','standard','challenge'].includes(String(d.difficulty)));
       for (const q of p.questions as Record<string, unknown>[]) requireValid(q.acceptedAnswers === undefined || (strings(q.acceptedAnswers, 2000) && q.acceptedAnswers.length <= 100));
       requireValid(p.responses.slice(0, p.index).every(r => r !== null));
       requireValid(d.completedAt === null || p.index === 3);
@@ -289,7 +308,7 @@ export function validateState(value: unknown): State {
   // Strip unknown fields and prototypes by serializing the accepted schema.
   return JSON.parse(JSON.stringify({ version: 2, day: value.day, done: value.done, cards: value.cards, activity: value.activity,
     preferences: value.preferences, lastRoute: value.lastRoute, lastCard: value.lastCard, quiz: value.quiz,
-    assessments: value.assessments, history: value.history, notes: value.notes, ...(value.daily === undefined ? {} : { daily: value.daily }), ...(value.learning === undefined ? {} : { learning: value.learning }) })) as State;
+    assessments: value.assessments, history: value.history, notes: value.notes, ...(value.daily === undefined ? {} : { daily: value.daily }), ...(value.learning === undefined ? {} : { learning: value.learning }), ...(value.practiceTests === undefined ? {} : { practiceTests: value.practiceTests }) })) as State;
 }
 export function migrateLegacy(value: unknown, words: Vocabulary[]): State {
   requireValid(object(value) && (object(value.done) || object(value.cards)));

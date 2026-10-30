@@ -72,7 +72,7 @@ test('challenge removes options, mixes sentence categories and keeps active sett
   await expect(page.locator('#answerInput')).toBeVisible();
   let q = await page.evaluate(key => (JSON.parse(localStorage.getItem(key)!) as State).quiz!, STORAGE_KEY);
   expect(q.questions).toHaveLength(10);
-  expect(q.questions.every(item => /^practice-[789]-/.test(item.id))).toBe(true);
+  expect(q.questions.every(item => /^(?:practice|extension)-[789]-/.test(item.id))).toBe(true);
   await page.locator('#gameSettings summary').click();
   await page.locator('#difficulty').selectOption('standard');
   await expect(page.locator('#answerInput')).toBeVisible();

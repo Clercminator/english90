@@ -27,3 +27,31 @@ const words = data.categories.flatMap(c => c.vocabulary);
 assert.equal(new Set(words.map(w => w.en.toLowerCase())).size,782);
 assert.equal(new Set(words.map(w => `${w.en.toLowerCase()}|${w.es.toLowerCase()}`)).size,791);
 console.log('Public dataset validated: 782 expressions / 791 pairs, 12 categories, 72 sentence practices, 4 tests. No private curriculum fields.');
+const extra = JSON.parse(await readFile('Entrenador/extension-content.json', 'utf8'));
+assert.deepEqual(Object.keys(extra).sort(), ['readings','sentences']);
+assert.equal(extra.sentences.length,24); assert.equal(extra.readings.length,12);
+assert.equal(new Set([...data.sentences,...extra.sentences].map(s=>s.en.toLowerCase())).size,96);
+for (const c of data.categories) {
+  assert.equal(extra.sentences.filter(s=>s.category===c.id).length,2);
+  assert.equal(extra.readings.filter(r=>r.category===c.id).length,1);
+}
+for (const s of extra.sentences) {
+  assert.deepEqual(Object.keys(s).sort(), ['answer','category','en','es','explanation','id','prompt']);
+  ['id','en','es','prompt','answer','explanation'].forEach(k=>text(s[k]));
+  assert.equal((s.prompt.match(/___/g)||[]).length,1);
+}
+for (const r of extra.readings) {
+  assert.deepEqual(Object.keys(r).sort(), ['category','extension','id','intro','questions','text','title','writing']);
+  ['id','intro','text','extension','title','writing'].forEach(k=>text(r[k]));
+  assert.ok(r.intro.length < r.text.length);
+  assert.deepEqual(Object.keys(r.questions).sort(), ['challenge','gentle','standard']);
+  for(const questions of Object.values(r.questions)) {
+    assert.equal(questions.length,2);
+    for(const q of questions) {
+      ['prompt','answer','explanation'].forEach(k=>text(q[k]));
+      assert.equal(q.options.length,3); assert.ok(q.options.includes(q.answer));
+      assert.equal(new Set(q.options.map(o=>o.toLowerCase())).size,3);
+    }
+  }
+}
+console.log('Extension validated: 24 original sentence exercises, 12 graded reading sets / 72 comprehension questions.');

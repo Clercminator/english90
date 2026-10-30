@@ -206,12 +206,12 @@ test('all categories and game modes render; difficulty preference persists', asy
     await expect(page.locator('main')).not.toContainText('undefined');
   }
   await page.goto('/#/challenge');
-  await page.getByRole('combobox', {name:'Ritmo', exact:true}).selectOption('gentle');
+  await page.getByRole('combobox', {name:'Dificultad', exact:true}).selectOption('gentle');
   await page.getByRole('button', {name:'Comenzar actividad'}).click();
   expect((await saved(page)).quiz!.questions).toHaveLength(5);
   await page.reload();
   await page.locator('#gameSettings summary').click();
-  await expect(page.getByRole('combobox', {name:'Ritmo', exact:true})).toHaveValue('gentle');
+  await expect(page.getByRole('combobox', {name:'Dificultad', exact:true})).toHaveValue('gentle');
 });
 
 test('key views meet automated WCAG AA checks and fit the viewport', async ({ page }) => {
@@ -273,11 +273,12 @@ test('disabled or blocked ads never interrupt practice or request Google scripts
 });
 
 test('educational pages are readable without JavaScript', async ({ browser, baseURL }) => {
-  const context = await browser.newContext({javaScriptEnabled:false});
+  const context = await browser.newContext({javaScriptEnabled:false,colorScheme:'dark'});
   const page = await context.newPage();
   for (const path of ['/', '/aprender/recordar-vocabulario/', '/aprender/frases-para-conversar/', '/aprender/practicar-con-ia/']) {
     await page.goto(`${baseURL}${path}`);
     await expect(page.locator('main h1')).toBeVisible();
+    await expect(page.locator('main')).toHaveCSS('color','rgb(36, 59, 74)');
     expect((await page.locator('main').innerText()).length).toBeGreaterThan(300);
     const config = JSON.parse(readFileSync('site.config.json', 'utf8'));
     if (config.siteUrl) {

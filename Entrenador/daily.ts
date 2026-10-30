@@ -1,7 +1,8 @@
 import { cardKey, dueWords, localDate, normalize, schedule, touch, recallQuestions, questionCorrect } from './core.ts';
-import type { Direction, Rating, State, Vocabulary, Question } from './core.ts';
-import { publicContent } from './free.ts';
-import { independentAccuracy, prioritize, recordEvidence } from './learning.ts';
+import type { Direction, Rating, State, Vocabulary, Question, Difficulty } from './core.ts';
+import { publicContent, challengeSentences } from './free.ts';
+import { prioritize, recordEvidence } from './learning.ts';
+import { practiceTest, extensionContent, readingQuestions } from './levels.ts';
 
 export interface DailyItem {
   wordId: string;
@@ -17,6 +18,7 @@ export interface DailySession {
   items: DailyItem[];
   completedAt: number | null;
   excluded?: string[];
+  difficulty?: Difficulty;
   practice?: { questions: Question[]; responses: (string | null)[]; index: number };
 }
 
@@ -24,11 +26,21 @@ export function addDailyPractice(state: State, words: Vocabulary[]): void {
   const session = state.daily;
   if (!session || session.practice || !session.items.length) return;
   const category = words.find(w => w.id === session.items[0].wordId)?.weeks[0] || state.preferences.week;
-  const pool = publicContent.sentences.filter(s => s.category === category);
-  const harder = independentAccuracy(state).ready;
-  const candidates = prioritize(pool.slice(0, harder ? 6 : 2).map(s => ({ id: s.id, prompt: s.prompt, answer: s.answer, explanation: s.explanation })), state);
+  const difficulty = state.preferences.difficulty || 'standard';
+  session.difficulty = difficulty;
+  if (difficulty === 'gentle') {
+    const questions = practiceTest(category,'gentle').slice(0,3);
+    session.practice = { questions, responses:[null,null,null], index:0 }; return;
+  }
+  if (difficulty === 'challenge') {
+    const items = extensionContent.sentences.filter(s => s.category === category);
+    session.practice = { questions:[{id:items[0].id,prompt:items[0].prompt,answer:items[0].answer,explanation:items[0].explanation},
+      {id:items[1].id,prompt:items[1].es,answer:items[1].en,explanation:items[1].explanation},readingQuestions(category,'challenge')[1]], responses:[null,null,null],index:0 }; return;
+  }
+  const pool = publicContent.sentences.filter(s => s.category === category && !challengeSentences.has(s.id));
+  const candidates = prioritize(pool.slice(0, 4).map(s => ({ id: s.id, prompt: s.prompt, answer: s.answer, explanation: s.explanation })), state);
   const completion = candidates[0];
-  const sentence = prioritize(pool.filter(s => s.id !== completion.id).slice(0, harder ? 5 : 2).map(s => ({ id: s.id, prompt: s.es, answer: s.en, explanation: s.explanation })), state)[0];
+  const sentence = prioritize(pool.filter(s => s.id !== completion.id).slice(0, 3).map(s => ({ id: s.id, prompt: s.es, answer: s.en, explanation: s.explanation })), state)[0];
   const recall = prioritize(recallQuestions(words.filter(w => w.weeks.includes(category) && !session.items.some(i => i.wordId === w.id)), words, 'es-en'), state)[0];
   if (!recall) return;
   session.practice = { questions: [completion, sentence, recall], responses: [null, null, null], index: 0 };
@@ -37,6 +49,7 @@ export function addDailyPractice(state: State, words: Vocabulary[]): void {
 export function hasLearning(state: State): boolean {
   return Object.values(state.cards).some(c => c.reviews > 0) || state.history.length > 0 ||
     Object.values(state.done).some(Boolean) || Object.values(state.notes).some(n => n.trim()) ||
+    Object.values(state.practiceTests || {}).some(a => a.answers.some(v => v.trim()) || a.notes.trim()) ||
     Object.values(state.assessments).some(a => a.answers.some(v => v.trim()) || a.notes.trim()) ||
     !!state.quiz?.responses.some(r => r !== null);
 }
@@ -101,7 +114,7 @@ export function completeDaily(state: State, now = Date.now()): boolean {
   if (session.practice) {
     const p = session.practice;
     recordEvidence(state, p.questions, p.responses, now);
-    state.history.push({ id: `${session.id}-written`, label: 'Práctica diaria · respuestas escritas sin ayuda', kind: 'game', at: now,
+    state.history.push({ id: `${session.id}-written`, label: `Práctica diaria · ${session.difficulty === 'gentle' ? 'con opciones' : session.difficulty === 'challenge' ? 'desafío escrito y lectura' : 'respuestas escritas sin ayuda'}`, kind: 'game', at: now,
       score: p.questions.filter((q, i) => questionCorrect(q, p.responses[i])).length, total: p.questions.length, selfScore: null });
   }
   // Reading the recap alone does not earn another day of activity.

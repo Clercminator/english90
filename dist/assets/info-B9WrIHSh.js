@@ -1,0 +1,1 @@
+import{t as e}from"./advertising--qQeFCAD.js";var t=e();document.body.dataset.article===`true`&&t.setPlacement(`article`);

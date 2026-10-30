@@ -1,0 +1,1146 @@
+{
+  "sentences": [
+    {
+      "id": "extension-1-1",
+      "category": 1,
+      "en": "The colleague who helped me yesterday speaks three languages.",
+      "es": "El colega que me ayudó ayer habla tres idiomas.",
+      "prompt": "The colleague ___ helped me yesterday speaks three languages. (who / which)",
+      "answer": "who",
+      "explanation": "Who introduce una oración relativa sobre una persona. Aquí es el sujeto de helped."
+    },
+    {
+      "id": "extension-1-2",
+      "category": 1,
+      "en": "She asked me where I had grown up.",
+      "es": "Ella me preguntó dónde había crecido.",
+      "prompt": "She asked me where I ___ grown up. (have: anterior a la pregunta)",
+      "answer": "had",
+      "explanation": "En este relato pasado, had grown up sitúa la infancia antes de la pregunta. La pregunta indirecta conserva el orden sujeto + verbo."
+    },
+    {
+      "id": "extension-2-1",
+      "category": 2,
+      "en": "I used to drive to work, but now I cycle.",
+      "es": "Antes iba al trabajo en auto, pero ahora voy en bicicleta.",
+      "prompt": "I ___ to drive to work, but now I cycle. (used / use)",
+      "answer": "used",
+      "explanation": "Used to + verbo expresa un hábito pasado que ya cambió. No equivale a be used to, estar acostumbrado a algo."
+    },
+    {
+      "id": "extension-2-2",
+      "category": 2,
+      "en": "By the time I arrived, the meeting had already started.",
+      "es": "Cuando llegué, la reunión ya había comenzado.",
+      "prompt": "By the time I arrived, the meeting ___ already started. (had / has)",
+      "answer": "had",
+      "explanation": "Had started señala la acción anterior a arrived. Las dos acciones se sitúan en un relato pasado."
+    },
+    {
+      "id": "extension-3-1",
+      "category": 3,
+      "en": "I would rather stay home than go out tonight.",
+      "es": "Preferiría quedarme en casa antes que salir esta noche.",
+      "prompt": "I would rather ___ home than go out tonight. (stay)",
+      "answer": "stay",
+      "explanation": "Después de would rather usamos el verbo base sin to. La comparación se introduce con than."
+    },
+    {
+      "id": "extension-3-2",
+      "category": 3,
+      "en": "She suggested joining a local photography group.",
+      "es": "Ella sugirió unirse a un grupo local de fotografía.",
+      "prompt": "She suggested ___ a local photography group. (join)",
+      "answer": "joining",
+      "explanation": "Suggest puede ir seguido de un verbo en -ing: suggested joining. No se usa suggested to join en esta estructura."
+    },
+    {
+      "id": "extension-4-1",
+      "category": 4,
+      "en": "The meal was prepared without any dairy products.",
+      "es": "La comida se preparó sin ningún producto lácteo.",
+      "prompt": "The meal was ___ without any dairy products. (prepare)",
+      "answer": "prepared",
+      "explanation": "La pasiva usa be + participio: was prepared. El foco está en la comida, no en quién la preparó."
+    },
+    {
+      "id": "extension-4-2",
+      "category": 4,
+      "en": "Although the portions were small, the food was excellent.",
+      "es": "Aunque las porciones eran pequeñas, la comida estaba excelente.",
+      "prompt": "___ the portions were small, the food was excellent. (Although / Despite)",
+      "answer": "Although",
+      "explanation": "Although va seguido de una oración con sujeto y verbo. Despite necesitaría una construcción nominal, como despite the small portions."
+    },
+    {
+      "id": "extension-5-1",
+      "category": 5,
+      "en": "If I had left earlier, I would have caught the train.",
+      "es": "Si hubiera salido antes, habría alcanzado el tren.",
+      "prompt": "If I had left earlier, I would ___ caught the train. (have / had)",
+      "answer": "have",
+      "explanation": "Para imaginar otro resultado pasado usamos if + had + participio y would have + participio. El hecho pasado no cambia."
+    },
+    {
+      "id": "extension-5-2",
+      "category": 5,
+      "en": "We had been waiting for an hour when the bus finally arrived.",
+      "es": "Llevábamos una hora esperando cuando por fin llegó el autobús.",
+      "prompt": "We had been ___ for an hour when the bus finally arrived. (wait)",
+      "answer": "waiting",
+      "explanation": "Had been waiting destaca la duración de una actividad anterior a otra acción pasada. Después de been va la forma en -ing en esta estructura."
+    },
+    {
+      "id": "extension-6-1",
+      "category": 6,
+      "en": "The flight might have been cancelled because of the storm.",
+      "es": "Puede que el vuelo se haya cancelado por la tormenta.",
+      "prompt": "The flight might ___ been cancelled because of the storm. (have / has)",
+      "answer": "have",
+      "explanation": "Might have been + participio expresa una posibilidad sobre un hecho pasado en pasiva. Después de might se usa have, no has."
+    },
+    {
+      "id": "extension-6-2",
+      "category": 6,
+      "en": "I wish I had checked the departure time.",
+      "es": "Ojalá hubiera revisado la hora de salida.",
+      "prompt": "I wish I ___ checked the departure time. (had / have)",
+      "answer": "had",
+      "explanation": "Wish + pasado perfecto expresa un arrepentimiento sobre el pasado: no comprobé la hora y ahora desearía haberlo hecho."
+    },
+    {
+      "id": "extension-7-1",
+      "category": 7,
+      "en": "By Friday, we will have finished the first stage.",
+      "es": "Para el viernes, habremos terminado la primera etapa.",
+      "prompt": "By Friday, we will ___ finished the first stage. (have / had)",
+      "answer": "have",
+      "explanation": "Will have + participio sitúa una acción como terminada antes de un momento futuro. By Friday marca ese límite."
+    },
+    {
+      "id": "extension-7-2",
+      "category": 7,
+      "en": "We will go ahead unless the weather gets worse.",
+      "es": "Seguiremos adelante a menos que empeore el tiempo.",
+      "prompt": "We will go ahead ___ the weather gets worse. (unless / despite)",
+      "answer": "unless",
+      "explanation": "Unless introduce una condición equivalente a if not. La condición lleva presente, aunque el resultado se refiera al futuro."
+    },
+    {
+      "id": "extension-8-1",
+      "category": 8,
+      "en": "You should have asked for clarification before signing.",
+      "es": "Deberías haber pedido una aclaración antes de firmar.",
+      "prompt": "You should ___ asked for clarification before signing. (have / had)",
+      "answer": "have",
+      "explanation": "Should have + participio comenta una acción pasada que habría sido conveniente. No es la misma estructura que un consejo para el presente."
+    },
+    {
+      "id": "extension-8-2",
+      "category": 8,
+      "en": "Visitors are required to show identification at reception.",
+      "es": "Los visitantes deben mostrar una identificación en recepción.",
+      "prompt": "Visitors are ___ to show identification at reception. (require)",
+      "answer": "required",
+      "explanation": "Are required to + verbo presenta una obligación mediante una construcción pasiva. Required es el participio de require."
+    },
+    {
+      "id": "extension-9-1",
+      "category": 9,
+      "en": "The report must be submitted before the deadline.",
+      "es": "El informe debe entregarse antes de la fecha límite.",
+      "prompt": "The report must ___ submitted before the deadline. (be / been)",
+      "answer": "be",
+      "explanation": "La pasiva con un modal usa modal + be + participio: must be submitted. Must no va seguido de been directamente."
+    },
+    {
+      "id": "extension-9-2",
+      "category": 9,
+      "en": "The manager said that the figures would be reviewed.",
+      "es": "La gerente dijo que las cifras se revisarían.",
+      "prompt": "The manager said that the figures ___ be reviewed. (would / will: futuro desde un momento pasado)",
+      "answer": "would",
+      "explanation": "En este relato, would expresa un futuro visto desde el momento pasado de said. Be reviewed mantiene la construcción pasiva."
+    },
+    {
+      "id": "extension-10-1",
+      "category": 10,
+      "en": "I have been studying English since I changed jobs.",
+      "es": "Estudio inglés desde que cambié de trabajo.",
+      "prompt": "I have ___ studying English since I changed jobs. (been / being)",
+      "answer": "been",
+      "explanation": "Have been + verbo en -ing destaca una actividad que comenzó antes y continúa. Since introduce el momento de inicio."
+    },
+    {
+      "id": "extension-10-2",
+      "category": 10,
+      "en": "This is the most useful course I have ever taken.",
+      "es": "Este es el curso más útil que he hecho.",
+      "prompt": "This is the most useful course I have ever ___. (take)",
+      "answer": "taken",
+      "explanation": "Después de have usamos el participio taken, no el pasado simple took. Ever conecta la comparación con la experiencia hasta ahora."
+    },
+    {
+      "id": "extension-11-1",
+      "category": 11,
+      "en": "Despite having little time, she checked every detail.",
+      "es": "A pesar de tener poco tiempo, ella revisó cada detalle.",
+      "prompt": "Despite ___ little time, she checked every detail. (have)",
+      "answer": "having",
+      "explanation": "Después de despite puede usarse un sustantivo o una forma en -ing. Having permite expresar la acción sin añadir una oración completa."
+    },
+    {
+      "id": "extension-11-2",
+      "category": 11,
+      "en": "The proposal is worth considering, provided that costs remain low.",
+      "es": "Vale la pena considerar la propuesta, siempre que los costos sigan siendo bajos.",
+      "prompt": "The proposal is worth considering, ___ that costs remain low. (provided / despite)",
+      "answer": "provided",
+      "explanation": "Provided that introduce una condición: la propuesta resulta aceptable solo si se cumple esa condición. No expresa un contraste."
+    },
+    {
+      "id": "extension-12-1",
+      "category": 12,
+      "en": "Could you explain why the deadline has been changed?",
+      "es": "¿Podrías explicar por qué se cambió la fecha límite?",
+      "prompt": "Could you explain why the deadline has ___ changed? (been / being)",
+      "answer": "been",
+      "explanation": "Has been changed es una pasiva en presente perfecto. Dentro de la pregunta indirecta, el sujeto aparece antes del verbo."
+    },
+    {
+      "id": "extension-12-2",
+      "category": 12,
+      "en": "What I meant was that we needed more evidence.",
+      "es": "Lo que quise decir fue que necesitábamos más evidencia.",
+      "prompt": "What I ___ was that we needed more evidence. (mean: pasado)",
+      "answer": "meant",
+      "explanation": "Meant es el pasado irregular de mean. What I meant was… permite aclarar la intención de una intervención anterior."
+    }
+  ],
+  "readings": [
+    {
+      "id": "reading-1",
+      "category": 1,
+      "title": "Joining a new team",
+      "intro": "Maya is an engineer. She starts a new job on Monday. Her colleague Sam shows her the office.",
+      "text": "Maya introduces herself to a new team on Monday. She has worked as an engineer for five years, but this is her first job in a small company. Sam offers to show her around. Maya asks who she should contact when she has a question, rather than pretending that she already knows how everything works.",
+      "extension": "At her previous workplace, newcomers received a detailed handbook. Here, responsibilities are less clearly divided. Maya initially finds this confusing, although she appreciates being able to speak directly to colleagues. She decides to keep a list of useful contacts and check her understanding after meetings. Her manager welcomes the questions because earlier misunderstandings have delayed projects. Maya concludes that asking for guidance can demonstrate responsibility rather than a lack of ability.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "What is Maya’s job?",
+            "answer": "Engineer",
+            "options": [
+              "Engineer",
+              "Teacher",
+              "Receptionist"
+            ],
+            "explanation": "El texto dice que Maya es ingeniera."
+          },
+          {
+            "prompt": "Who shows Maya the office?",
+            "answer": "Sam",
+            "options": [
+              "Sam",
+              "Maya’s manager",
+              "A client"
+            ],
+            "explanation": "Sam es el colega que le muestra la oficina."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "What is new for Maya?",
+            "answer": "Working in a small company",
+            "options": [
+              "Working in a small company",
+              "Working as an engineer",
+              "Starting a career with no previous experience"
+            ],
+            "explanation": "Ya tiene cinco años de experiencia, pero nunca había trabajado en una empresa pequeña."
+          },
+          {
+            "prompt": "Why does Maya ask who to contact?",
+            "answer": "To know where to get help",
+            "options": [
+              "To know where to get help",
+              "To arrange another interview before joining",
+              "To find out who will replace Sam"
+            ],
+            "explanation": "Pregunta a quién acudir cuando tenga una duda."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "Which assumption does Maya challenge?",
+            "answer": "Asking questions always suggests incompetence",
+            "options": [
+              "Asking questions always suggests incompetence",
+              "Experience removes the need for a list of contacts",
+              "Direct contact with colleagues prevents confusion"
+            ],
+            "explanation": "La conclusión contrapone pedir orientación con la idea de parecer incapaz."
+          },
+          {
+            "prompt": "Why is the manager receptive to questions?",
+            "answer": "Clarification may prevent delays",
+            "options": [
+              "Clarification may prevent delays",
+              "Questions will replace the need to check understanding",
+              "Maya needs to explain the handbook to new colleagues"
+            ],
+            "explanation": "Los malentendidos anteriores retrasaron proyectos; aclarar dudas puede evitar que se repitan."
+          }
+        ]
+      },
+      "writing": "Present a professional or personal change. Explain two difficulties, how you would respond, and why asking for help can be useful."
+    },
+    {
+      "id": "reading-2",
+      "category": 2,
+      "title": "A different commute",
+      "intro": "Luis goes to work by bus. The trip takes thirty minutes. On Fridays, he works at home.",
+      "text": "Luis used to drive to the office every day. Now he takes the bus four days a week and works from home on Fridays. The bus journey takes thirty minutes, ten minutes longer than driving. However, he can read on the way and no longer has to pay for parking. He thinks the change is worthwhile.",
+      "extension": "The arrangement is not perfect: services are less frequent in the evening, so staying late can mean a long wait. Luis has discussed this with his team and now schedules most meetings before four. He knows that colleagues who live outside the bus network may not have the same choice. For that reason, he supports flexible working arrangements rather than a rule requiring everyone to use public transport.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "How does Luis travel to work?",
+            "answer": "By bus",
+            "options": [
+              "By bus",
+              "By train",
+              "By bicycle"
+            ],
+            "explanation": "El texto indica que Luis va en autobús."
+          },
+          {
+            "prompt": "Where does he work on Fridays?",
+            "answer": "At home",
+            "options": [
+              "At home",
+              "At a station",
+              "At a café"
+            ],
+            "explanation": "Los viernes trabaja en casa."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "How long did driving take?",
+            "answer": "Twenty minutes",
+            "options": [
+              "Twenty minutes",
+              "Thirty minutes",
+              "Forty minutes"
+            ],
+            "explanation": "El autobús tarda treinta minutos, diez más que el auto: antes tardaba veinte."
+          },
+          {
+            "prompt": "Which benefit does Luis mention?",
+            "answer": "He saves money on parking",
+            "options": [
+              "He saves money on parking",
+              "He arrives ten minutes earlier",
+              "He works at home four days a week"
+            ],
+            "explanation": "Ya no paga estacionamiento; el trayecto es más largo, no más corto."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "Why does Luis prefer flexibility to a compulsory rule?",
+            "answer": "Not everyone has access to the same transport",
+            "options": [
+              "Not everyone has access to the same transport",
+              "The team has agreed to work from home every day",
+              "The bus is faster than driving for all his colleagues"
+            ],
+            "explanation": "Reconoce que algunos colegas viven fuera de la red de autobuses."
+          },
+          {
+            "prompt": "What does changing meeting times address?",
+            "answer": "The reduced evening service",
+            "options": [
+              "The reduced evening service",
+              "The longer journey in the morning",
+              "The need to work from home on Fridays"
+            ],
+            "explanation": "Programar reuniones antes de las cuatro reduce el riesgo de esperar mucho al salir tarde."
+          }
+        ]
+      },
+      "writing": "Compare two ways of travelling or organising your day. Recommend one while acknowledging a situation in which the other would work better."
+    },
+    {
+      "id": "reading-3",
+      "category": 3,
+      "title": "The photography group",
+      "intro": "A local photography group meets on Saturdays. Members take photos in the park. New members can use a phone.",
+      "text": "A photography group invites new members to its Saturday walks. Expensive equipment is not required; a phone is enough. Each walk has a theme, such as light or movement. Afterwards, members choose one photograph and explain their choice. The organiser says that discussing an ordinary image carefully can be more useful than taking hundreds of pictures without looking at them again.",
+      "extension": "Some experienced members initially wanted separate walks for beginners. Others argued that mixed groups allow people to learn from different perspectives. The group agreed to keep the walks open to everyone while offering optional technical sessions afterwards. Attendance has increased, but the organiser cautions that numbers alone do not show whether people are learning. She also collects examples of how members explain changes in their work.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "When does the group meet?",
+            "answer": "On Saturdays",
+            "options": [
+              "On Saturdays",
+              "On Mondays",
+              "Every evening"
+            ],
+            "explanation": "Las reuniones son los sábados."
+          },
+          {
+            "prompt": "Can a new member use a phone?",
+            "answer": "Yes",
+            "options": [
+              "Yes",
+              "Only after buying a camera",
+              "Only at home"
+            ],
+            "explanation": "El texto dice que los nuevos miembros pueden usar un teléfono."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "What happens after a walk?",
+            "answer": "Members discuss a chosen photograph",
+            "options": [
+              "Members discuss a chosen photograph",
+              "Members choose a theme for every future walk",
+              "Members submit all their pictures without discussion"
+            ],
+            "explanation": "Cada persona elige una fotografía y explica su elección."
+          },
+          {
+            "prompt": "What does the organiser value?",
+            "answer": "Reflecting on a photograph",
+            "options": [
+              "Reflecting on a photograph",
+              "Taking as many photographs as possible",
+              "Choosing only unusual subjects"
+            ],
+            "explanation": "La explicación compara revisar una imagen con tomar cientos sin volver a mirarlas."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "What compromise did the group reach?",
+            "answer": "Shared walks with optional technical sessions",
+            "options": [
+              "Shared walks with optional technical sessions",
+              "Separate walks followed by shared technical sessions",
+              "Shared walks with technical sessions required for beginners"
+            ],
+            "explanation": "Mantuvieron los paseos abiertos y añadieron sesiones técnicas opcionales."
+          },
+          {
+            "prompt": "Why does the organiser collect explanations?",
+            "answer": "Attendance alone does not demonstrate learning",
+            "options": [
+              "Attendance alone does not demonstrate learning",
+              "She needs to decide who can join the technical sessions",
+              "Higher attendance has made it harder to choose a theme"
+            ],
+            "explanation": "Busca evidencia de cambios en el trabajo, además de contar participantes."
+          }
+        ]
+      },
+      "writing": "Propose an activity for people with different experience levels. Explain how beginners and experienced participants could both benefit."
+    },
+    {
+      "id": "reading-4",
+      "category": 4,
+      "title": "A café changes its menu",
+      "intro": "The café sells soup and sandwiches. There is a vegetable soup today. Customers order at the counter.",
+      "text": "A neighbourhood café has introduced a smaller menu. The owner says that preparing fewer dishes helps the kitchen buy fresh ingredients and waste less food. Some regular customers miss their favourite meals, but others welcome the shorter wait. The café still offers a vegetable soup and two sandwiches each day. Customers with allergies are asked to speak to staff before ordering.",
+      "extension": "After a month, the amount of discarded food has fallen, although the owner cannot yet tell whether the change has increased profit: ingredient prices have risen at the same time. She plans to keep the smaller menu for another month and record both costs and sales. She has also added one rotating special to give returning customers some variety without restoring the entire old menu.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "What kind of soup is available today?",
+            "answer": "Vegetable soup",
+            "options": [
+              "Vegetable soup",
+              "Chicken soup",
+              "Fish soup"
+            ],
+            "explanation": "La sopa mencionada es de verduras."
+          },
+          {
+            "prompt": "Where do customers order?",
+            "answer": "At the counter",
+            "options": [
+              "At the counter",
+              "At a bus stop",
+              "Online only"
+            ],
+            "explanation": "El texto señala que se pide en el mostrador."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "Why did the café reduce its menu?",
+            "answer": "To use fresher ingredients and reduce waste",
+            "options": [
+              "To use fresher ingredients and reduce waste",
+              "To make room for more dishes each day",
+              "To bring back the customers’ favourite meals"
+            ],
+            "explanation": "La dueña relaciona menos platos con ingredientes frescos y menos desperdicio."
+          },
+          {
+            "prompt": "What should a customer with an allergy do?",
+            "answer": "Speak to staff before ordering",
+            "options": [
+              "Speak to staff before ordering",
+              "Choose the vegetable soup without asking",
+              "Wait until after eating to tell the staff"
+            ],
+            "explanation": "Se pide explícitamente hablar con el personal antes de ordenar."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "Why is the effect on profit still uncertain?",
+            "answer": "Ingredient prices changed too",
+            "options": [
+              "Ingredient prices changed too",
+              "The rotating special has replaced all the regular dishes",
+              "Lower waste proves that customers are spending more"
+            ],
+            "explanation": "Los precios de los ingredientes aumentaron, lo que impide atribuir el beneficio solo al menú."
+          },
+          {
+            "prompt": "What is the purpose of the rotating special?",
+            "answer": "To add variety without restoring the full menu",
+            "options": [
+              "To add variety without restoring the full menu",
+              "To find the dish that should replace the whole menu",
+              "To bring back every former dish at the same time"
+            ],
+            "explanation": "Un especial que cambia ofrece variedad sin recuperar todo el menú anterior."
+          }
+        ]
+      },
+      "writing": "Recommend a menu or service change. Discuss its benefits, one possible disadvantage, and what information would help evaluate the result."
+    },
+    {
+      "id": "reading-5",
+      "category": 5,
+      "title": "A missed connection",
+      "intro": "Nora visited a friend last weekend. Her train arrived late. Her friend met her at the station.",
+      "text": "Nora had planned to reach her friend’s town before lunch, but her first train was delayed. By the time she arrived at the connecting station, the next train had left. She called her friend, bought a sandwich, and waited for a later service. Her friend met her at the station in the afternoon, and they changed their plans for the day.",
+      "extension": "Looking back, Nora realises that she had allowed only ten minutes between trains. The timetable made the journey look convenient, but it left little room for a delay. She does not blame herself for the first train being late; she does think a longer connection would have made the trip less stressful. Next time, she intends to compare the reliability of a route as well as its advertised duration.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "Who did Nora visit?",
+            "answer": "A friend",
+            "options": [
+              "A friend",
+              "Her doctor",
+              "A teacher"
+            ],
+            "explanation": "Nora visitó a una amiga o un amigo."
+          },
+          {
+            "prompt": "Where did they meet?",
+            "answer": "At the station",
+            "options": [
+              "At the station",
+              "At the airport",
+              "At Nora’s office"
+            ],
+            "explanation": "Su amigo o amiga la recibió en la estación."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "Why did Nora miss the connection?",
+            "answer": "The first train arrived after the connecting train had left",
+            "options": [
+              "The first train arrived after the connecting train had left",
+              "She stopped for food before trying to catch the connection",
+              "Her friend asked her to take a later service"
+            ],
+            "explanation": "La secuencia usa had left para indicar que el segundo tren ya se había ido."
+          },
+          {
+            "prompt": "What did Nora do after calling her friend?",
+            "answer": "She bought food and waited",
+            "options": [
+              "She bought food and waited",
+              "She met her friend before buying lunch",
+              "She returned to the first station to wait"
+            ],
+            "explanation": "Compró un sándwich y esperó un servicio posterior."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "Which distinction does Nora make?",
+            "answer": "The delay was outside her control, but the short connection was her choice",
+            "options": [
+              "The delay was outside her control, but the short connection was her choice",
+              "The timetable was wrong about when the second train left",
+              "Choosing a longer connection would have prevented the first delay"
+            ],
+            "explanation": "Distingue la causa del retraso de su decisión de dejar poco margen."
+          },
+          {
+            "prompt": "What will she consider next time?",
+            "answer": "Reliability as well as journey time",
+            "options": [
+              "Reliability as well as journey time",
+              "The advertised duration without allowing time for delays",
+              "The length of the visit rather than the connection time"
+            ],
+            "explanation": "Quiere comparar la fiabilidad además de la duración anunciada."
+          }
+        ]
+      },
+      "writing": "Describe an event that did not go as planned. Separate what you could control from what you could not, and explain what you would change next time."
+    },
+    {
+      "id": "reading-6",
+      "category": 6,
+      "title": "Finding a suitable route",
+      "intro": "The museum is near the river. Bus 12 stops outside it. The museum closes at six.",
+      "text": "A visitor asks how to reach the riverside museum. The information officer suggests bus 12, which stops outside the entrance. Walking takes about twenty minutes, but the usual route includes stairs. When the visitor explains that her father has difficulty using stairs, the officer points out a longer, step-free route. The museum closes at six, so they decide to take the bus there and walk back.",
+      "extension": "The visitor notices that the printed map marks the shortest walking route but does not indicate the steps. She suggests adding accessibility information to future editions. The officer agrees that a route described as convenient may not suit everyone. However, he explains that temporary roadworks can also affect access, so checking current conditions remains important even when a map has been improved.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "Which bus goes to the museum?",
+            "answer": "Bus 12",
+            "options": [
+              "Bus 12",
+              "Bus 6",
+              "Bus 20"
+            ],
+            "explanation": "El autobús indicado es el 12."
+          },
+          {
+            "prompt": "When does the museum close?",
+            "answer": "At six",
+            "options": [
+              "At six",
+              "At twelve",
+              "At twenty past six"
+            ],
+            "explanation": "La hora de cierre es las seis."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "Why is the usual walking route unsuitable?",
+            "answer": "It includes stairs",
+            "options": [
+              "It includes stairs",
+              "It is longer than the step-free route",
+              "The bus stops too far from the entrance"
+            ],
+            "explanation": "El padre tiene dificultades con las escaleras de esa ruta."
+          },
+          {
+            "prompt": "How will they travel to the museum?",
+            "answer": "By bus",
+            "options": [
+              "By bus",
+              "On foot along the step-free route",
+              "On foot using the shorter route"
+            ],
+            "explanation": "Deciden ir en autobús y volver caminando."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "What limitation does the visitor identify in the map?",
+            "answer": "It shows distance without enough accessibility information",
+            "options": [
+              "It shows distance without enough accessibility information",
+              "It recommends the longer route as the shortest one",
+              "It indicates steps but does not show the museum entrance"
+            ],
+            "explanation": "La ruta más corta está marcada, pero las escaleras no."
+          },
+          {
+            "prompt": "Why is an improved map not sufficient on its own?",
+            "answer": "Temporary changes can affect access",
+            "options": [
+              "Temporary changes can affect access",
+              "The revised map will leave out the step-free route",
+              "The shortest route is always the most accessible one"
+            ],
+            "explanation": "Las obras temporales pueden cambiar las condiciones de acceso."
+          }
+        ]
+      },
+      "writing": "Explain how you would choose a route for a group with different needs. Discuss distance, accessibility, cost, and changing conditions."
+    },
+    {
+      "id": "reading-7",
+      "category": 7,
+      "title": "Planning an outdoor event",
+      "intro": "The neighbourhood picnic is on Sunday. It starts at noon in the park. People can bring food to share.",
+      "text": "Residents are planning a picnic for Sunday at noon. They will use the park if the weather is dry. A nearby hall is available as a backup, but it must be booked by Friday. The organisers want to avoid charging an entrance fee, so they are asking people to bring food and reusable cups. They will announce the final location on Saturday morning.",
+      "extension": "One organiser suggests waiting until Sunday to decide, since weather forecasts can change. Another points out that volunteers need time to move tables and that some guests will not have internet access during the journey. They agree to make the decision on Saturday and contact those guests by phone. They accept that the decision may not match the eventual weather perfectly, but consider predictable arrangements more useful than a last-minute change.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "On which day is the picnic?",
+            "answer": "Sunday",
+            "options": [
+              "Sunday",
+              "Friday",
+              "Saturday"
+            ],
+            "explanation": "El picnic es el domingo."
+          },
+          {
+            "prompt": "What can people bring?",
+            "answer": "Food to share",
+            "options": [
+              "Food to share",
+              "An entrance ticket",
+              "Office equipment"
+            ],
+            "explanation": "Pueden llevar comida para compartir."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "By when must the hall be booked?",
+            "answer": "Friday",
+            "options": [
+              "Friday",
+              "Saturday evening",
+              "Sunday morning"
+            ],
+            "explanation": "El salón debe reservarse como máximo el viernes."
+          },
+          {
+            "prompt": "When will the final location be announced?",
+            "answer": "Saturday morning",
+            "options": [
+              "Saturday morning",
+              "Friday morning",
+              "Sunday before noon"
+            ],
+            "explanation": "Se anunciará el sábado por la mañana."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "Why do the organisers reject a last-minute decision?",
+            "answer": "Volunteers and guests need time to prepare",
+            "options": [
+              "Volunteers and guests need time to prepare",
+              "The hall can still be booked at any time on Sunday",
+              "A Saturday forecast will be more accurate than a Sunday one"
+            ],
+            "explanation": "El traslado de mesas y la comunicación con invitados necesitan tiempo."
+          },
+          {
+            "prompt": "What trade-off do they accept?",
+            "answer": "A potentially less accurate weather decision in exchange for clearer arrangements",
+            "options": [
+              "A potentially less accurate weather decision in exchange for clearer arrangements",
+              "A more accurate forecast in exchange for less preparation time",
+              "A later decision in exchange for simpler communication"
+            ],
+            "explanation": "Priorizan la previsibilidad, aunque el clima final pueda ser distinto de lo esperado."
+          }
+        ]
+      },
+      "writing": "Plan an event with uncertain conditions. Explain your backup plan, when you would decide, and the trade-off between flexibility and reliability."
+    },
+    {
+      "id": "reading-8",
+      "category": 8,
+      "title": "Clarifying instructions",
+      "intro": "Rosa has a new form to complete. She asks a colleague for help. The colleague explains the first section.",
+      "text": "Rosa is completing a form for a training course. One instruction asks for a contact address, but does not say whether this should be her home or workplace. Instead of guessing, she asks the coordinator to clarify it. The coordinator explains that either is acceptable as long as Rosa can receive messages there. Rosa then repeats the instruction in her own words to check that she has understood.",
+      "extension": "The coordinator realises that several applicants may have had the same doubt without mentioning it. He updates the instructions with a short example. Rosa appreciates the change but suggests testing the wording with someone who has never seen the form. Both agree that an explanation can seem obvious to the person who wrote it while remaining unclear to a new reader. They decide to review the other sections as well.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "What is Rosa completing?",
+            "answer": "A form",
+            "options": [
+              "A form",
+              "A shopping list",
+              "A train timetable"
+            ],
+            "explanation": "Rosa está completando un formulario."
+          },
+          {
+            "prompt": "What does she do when she needs help?",
+            "answer": "She asks a colleague",
+            "options": [
+              "She asks a colleague",
+              "She throws away the form",
+              "She signs without reading"
+            ],
+            "explanation": "Pide ayuda a un colega."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "What is unclear in the instruction?",
+            "answer": "Which type of address is acceptable",
+            "options": [
+              "Which type of address is acceptable",
+              "Whether the course takes place at home or at work",
+              "Whether the coordinator can receive messages"
+            ],
+            "explanation": "No se especifica si la dirección debe ser de casa o del trabajo."
+          },
+          {
+            "prompt": "Why does Rosa repeat the explanation?",
+            "answer": "To check her understanding",
+            "options": [
+              "To check her understanding",
+              "To ask the coordinator to choose an address for her",
+              "To change the instruction before completing the form"
+            ],
+            "explanation": "Reformular permite comprobar que entendió correctamente."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "What broader issue does Rosa’s question reveal?",
+            "answer": "Other applicants may share an unreported difficulty",
+            "options": [
+              "Other applicants may share an unreported difficulty",
+              "Applicants prefer workplace addresses to home addresses",
+              "The form requires information that neither address can provide"
+            ],
+            "explanation": "El coordinador reconoce que otros podrían haber tenido la misma duda sin preguntar."
+          },
+          {
+            "prompt": "Why test the new wording with an unfamiliar reader?",
+            "answer": "The writer’s knowledge may hide remaining ambiguity",
+            "options": [
+              "The writer’s knowledge may hide remaining ambiguity",
+              "A new example removes any need to review other sections",
+              "Someone familiar with the form can represent every new reader"
+            ],
+            "explanation": "Quien redactó la instrucción conoce el contexto y puede pasar por alto lo que falta para un lector nuevo."
+          }
+        ]
+      },
+      "writing": "Explain how you would clarify an ambiguous instruction politely. Suggest a way to prevent the same misunderstanding for other people."
+    },
+    {
+      "id": "reading-9",
+      "category": 9,
+      "title": "Choosing a work tool",
+      "intro": "The team needs a new tool. Tool A costs less. Tool B includes training.",
+      "text": "A team is comparing two tools for managing projects. Tool A has a lower monthly price, while Tool B includes staff training and faster support. The team has little experience with either system. Its manager asks everyone to estimate the time needed to learn each one before making a recommendation. She wants to compare the total cost, not just the subscription price.",
+      "extension": "During a short trial, experienced staff complete tasks more quickly with Tool A, but new colleagues find Tool B easier to understand. The manager notes that the trial involved only one type of project and should not be treated as proof that either tool is always better. She proposes a second trial using a more complex task and asks the team to record errors as well as speed. A decision will follow once the results have been discussed.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "Which tool costs less?",
+            "answer": "Tool A",
+            "options": [
+              "Tool A",
+              "Tool B",
+              "Both cost the same"
+            ],
+            "explanation": "Tool A tiene el precio menor."
+          },
+          {
+            "prompt": "What does Tool B include?",
+            "answer": "Training",
+            "options": [
+              "Training",
+              "Free computers",
+              "A new office"
+            ],
+            "explanation": "Tool B incluye capacitación."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "What does the manager want to compare?",
+            "answer": "Total cost including learning time",
+            "options": [
+              "Total cost including learning time",
+              "Only the monthly subscription prices",
+              "Only the speed of the support service"
+            ],
+            "explanation": "Pide estimar el tiempo de aprendizaje para comparar el costo total."
+          },
+          {
+            "prompt": "Why might training matter to this team?",
+            "answer": "They have little experience with either tool",
+            "options": [
+              "They have little experience with either tool",
+              "They already know both tools well",
+              "They need to train the tool providers"
+            ],
+            "explanation": "El equipo tiene poca experiencia con ambas herramientas."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "Why does the manager limit the conclusion from the first trial?",
+            "answer": "It covered only one kind of task",
+            "options": [
+              "It covered only one kind of task",
+              "New colleagues finished every task faster with Tool A",
+              "The trial compared subscription prices but no practical tasks"
+            ],
+            "explanation": "Una sola clase de proyecto no permite afirmar que una opción sea siempre mejor."
+          },
+          {
+            "prompt": "Why record errors in the next trial?",
+            "answer": "Speed alone may not reflect effective performance",
+            "options": [
+              "Speed alone may not reflect effective performance",
+              "The fastest tool will necessarily produce the fewest errors",
+              "Training time matters only when both tools have the same price"
+            ],
+            "explanation": "Una tarea rápida pero llena de errores puede ser menos eficaz; hace falta más de una medida."
+          }
+        ]
+      },
+      "writing": "Recommend one of two tools or services. Compare cost, ease of use, and reliability, and explain what evidence could change your recommendation."
+    },
+    {
+      "id": "reading-10",
+      "category": 10,
+      "title": "Measuring progress",
+      "intro": "Eva studies English every week. She has finished three short books. She writes down new expressions.",
+      "text": "Eva has been studying English for a year. At first, she measured progress by counting completed exercises. Recently, she has started recording short summaries of things she reads. She notices that she can now explain familiar topics with fewer pauses, although she still struggles when a conversation changes direction unexpectedly. She plans to practise with different partners rather than repeating only familiar dialogues.",
+      "extension": "When Eva compares recordings, she chooses similar tasks so that an easier topic does not create a misleading impression of improvement. She also keeps examples of misunderstandings and asks what caused them. A high practice score encourages her, but she knows that recognising an answer does not necessarily mean she can produce it in conversation. Her next goal is to explain a viewpoint, respond to a disagreement, and clarify an unfamiliar expression without abandoning the conversation.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "What has Eva finished?",
+            "answer": "Three short books",
+            "options": [
+              "Three short books",
+              "Three jobs",
+              "A university degree"
+            ],
+            "explanation": "Ha terminado tres libros cortos."
+          },
+          {
+            "prompt": "What does she write down?",
+            "answer": "New expressions",
+            "options": [
+              "New expressions",
+              "Bus routes",
+              "Food prices"
+            ],
+            "explanation": "Anota expresiones nuevas."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "What still causes difficulty?",
+            "answer": "Unexpected changes in conversation",
+            "options": [
+              "Unexpected changes in conversation",
+              "Retelling every familiar topic",
+              "Finishing any written exercise"
+            ],
+            "explanation": "Le cuesta cuando la conversación cambia de dirección de forma inesperada."
+          },
+          {
+            "prompt": "What does Eva plan to change?",
+            "answer": "Practise with different partners",
+            "options": [
+              "Practise with different partners",
+              "Repeat familiar dialogues with the same partner",
+              "Measure progress only by counting exercises"
+            ],
+            "explanation": "Quiere ampliar los interlocutores y no limitarse a diálogos conocidos."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "Why compare recordings of similar tasks?",
+            "answer": "To reduce the effect of differences in task difficulty",
+            "options": [
+              "To reduce the effect of differences in task difficulty",
+              "To select easier topics and increase her practice score",
+              "To replace conversations with tasks she can already complete"
+            ],
+            "explanation": "Un tema más fácil podría dar una impresión engañosa de mejora."
+          },
+          {
+            "prompt": "Which distinction does Eva recognise?",
+            "answer": "Recognising an answer differs from producing it spontaneously",
+            "options": [
+              "Recognising an answer differs from producing it spontaneously",
+              "Finishing more exercises is enough to handle unexpected replies",
+              "Fewer pauses on familiar topics means unfamiliar topics are equally easy"
+            ],
+            "explanation": "El texto distingue reconocimiento y producción en una conversación."
+          }
+        ]
+      },
+      "writing": "Describe evidence of improvement in a skill. Explain the limits of one measurement and propose a realistic next goal."
+    },
+    {
+      "id": "reading-11",
+      "category": 11,
+      "title": "A library proposal",
+      "intro": "The library opens at nine. Some residents want it to close later. They want more time to read after work.",
+      "text": "Residents have proposed extending the library’s evening opening hours. Supporters say this would help people who work during the day. Others are concerned about staffing costs. The library director suggests opening late on two evenings for three months before deciding whether to expand the schedule permanently. She plans to collect attendance figures and comments from visitors.",
+      "extension": "Some supporters argue that a public service should not be judged only by the number of visitors. A quiet evening may still be valuable to someone who has no other place to study. The director agrees, but notes that staff time is limited and that longer hours could mean reducing another service. She proposes asking visitors what they use the evening sessions for and which alternatives they would have if the library were closed.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "When does the library open?",
+            "answer": "At nine",
+            "options": [
+              "At nine",
+              "At six",
+              "At midnight"
+            ],
+            "explanation": "La biblioteca abre a las nueve."
+          },
+          {
+            "prompt": "Why do some residents want later opening hours?",
+            "answer": "To read after work",
+            "options": [
+              "To read after work",
+              "To close the library permanently",
+              "To avoid reading"
+            ],
+            "explanation": "Quieren disponer de más tiempo después del trabajo."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "What does the director propose initially?",
+            "answer": "A three-month trial on two evenings",
+            "options": [
+              "A three-month trial on two evenings",
+              "A permanent extension beginning on two evenings",
+              "A trial on every evening for two months"
+            ],
+            "explanation": "Propone probar dos tardes durante tres meses antes de una decisión permanente."
+          },
+          {
+            "prompt": "What concern do some residents raise?",
+            "answer": "Staffing costs",
+            "options": [
+              "Staffing costs",
+              "Reduced demand during the day",
+              "The length of the trial period"
+            ],
+            "explanation": "La preocupación mencionada es el costo del personal."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "Why might attendance alone be an incomplete measure?",
+            "answer": "A small number of visitors may receive substantial benefit",
+            "options": [
+              "A small number of visitors may receive substantial benefit",
+              "High attendance would prove that no other service needs funding",
+              "The director has decided that comments should replace all attendance data"
+            ],
+            "explanation": "El beneficio para una persona sin otro lugar donde estudiar puede ser importante aunque asista poca gente."
+          },
+          {
+            "prompt": "What constraint does the director emphasise?",
+            "answer": "Extending hours may require reducing another service",
+            "options": [
+              "Extending hours may require reducing another service",
+              "The trial requires the library to stop opening during the day",
+              "Staffing costs will fall automatically when the library opens later"
+            ],
+            "explanation": "El tiempo del personal es limitado, por lo que ampliar un servicio puede afectar a otro."
+          }
+        ]
+      },
+      "writing": "Argue for or against a change to a public service. Acknowledge a counterargument and explain what evidence should inform the decision."
+    },
+    {
+      "id": "reading-12",
+      "category": 12,
+      "title": "Reaching an agreement",
+      "intro": "Two colleagues are planning a presentation. One wants more examples. The other wants a shorter talk.",
+      "text": "Two colleagues disagree about a presentation. One wants to include more examples, while the other worries that the audience will lose interest if it is too long. Instead of repeating their positions, they ask what the audience needs to understand. They agree to keep two detailed examples in the main talk and provide the remaining information in a separate document.",
+      "extension": "During rehearsal, they discover that one of the examples takes much longer to explain than expected. Rather than simply speaking faster, they remove background details that are not necessary for the main point. They check with a colleague who is unfamiliar with the project to see whether the explanation still makes sense. Both recognise that agreement on a plan does not remove the need to test it and revise it when new information appears.",
+      "questions": {
+        "gentle": [
+          {
+            "prompt": "What are the colleagues planning?",
+            "answer": "A presentation",
+            "options": [
+              "A presentation",
+              "A holiday",
+              "A menu"
+            ],
+            "explanation": "Están preparando una presentación."
+          },
+          {
+            "prompt": "What does one colleague want?",
+            "answer": "More examples",
+            "options": [
+              "More examples",
+              "A different office",
+              "A later train"
+            ],
+            "explanation": "Uno quiere incluir más ejemplos."
+          }
+        ],
+        "standard": [
+          {
+            "prompt": "What question helps them reach agreement?",
+            "answer": "What the audience needs to understand",
+            "options": [
+              "What the audience needs to understand",
+              "Which colleague has more experience",
+              "How many examples they can read out quickly"
+            ],
+            "explanation": "Cambian el foco hacia las necesidades del público."
+          },
+          {
+            "prompt": "Where will the additional information go?",
+            "answer": "In a separate document",
+            "options": [
+              "In a separate document",
+              "In a longer version of the spoken presentation",
+              "In the introduction to each of the two examples"
+            ],
+            "explanation": "Conservan dos ejemplos y entregan el resto en un documento aparte."
+          }
+        ],
+        "challenge": [
+          {
+            "prompt": "Why do they consult someone unfamiliar with the project?",
+            "answer": "To check whether essential information is still clear",
+            "options": [
+              "To check whether essential information is still clear",
+              "To choose which colleague should deliver the presentation",
+              "To confirm that removing an example would shorten the talk"
+            ],
+            "explanation": "Un lector o interlocutor nuevo puede detectar información esencial que falte."
+          },
+          {
+            "prompt": "What does the final sentence imply about agreement?",
+            "answer": "A shared plan may still need revision",
+            "options": [
+              "A shared plan may still need revision",
+              "Rehearsal should confirm the plan without changing its content",
+              "A compromise makes feedback from outsiders unnecessary"
+            ],
+            "explanation": "Llegar a un acuerdo no elimina la necesidad de probarlo y adaptarlo."
+          }
+        ]
+      },
+      "writing": "Explain a disagreement and propose a compromise. Address the other person’s concern, justify your proposal, and say how you would evaluate it."
+    }
+  ]
+}
