@@ -54,3 +54,63 @@ body{min-height:100vh}.container{padding-bottom:24px}#status:empty{margin:0}.ide
 @media(max-width:560px){.theme-choice{display:grid;gap:0;font-size:11px}.theme-choice select{max-width:94px}.head-inner{gap:10px}.reading-passage{padding:15px;font-size:16px}}
 
 .exercise select{width:100%;padding:13px;margin:8px 0 18px;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:16px;background:var(--white);color:var(--ink)}input[type=checkbox]{width:auto;margin-right:8px}:root[data-theme=dark] .option-number{color:var(--muted);border-color:var(--line)}
+
+/* Shared select presentation; the underlying select retains form semantics. */
+.field{align-content:start;align-self:start}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));align-items:start;gap:20px}
+.controls .field{min-width:0;width:100%;max-width:none;margin:0}
+.difficulty-note{font-weight:400;line-height:1.6}
+.select-control{position:relative;display:block;min-width:0;width:100%;max-width:100%;border:1px solid #a6bbb5;border-radius:10px;background:var(--white);color:var(--ink);box-shadow:0 1px 2px #142b4108;transition:border-color .15s,box-shadow .15s}
+.select-control:hover{border-color:var(--teal)}
+.select-control:focus-within{border-color:var(--teal);outline:2px solid var(--teal);outline-offset:3px}
+.select-control:after{content:'';position:absolute;right:17px;top:21px;width:7px;height:7px;border-right:2px solid var(--teal);border-bottom:2px solid var(--teal);transform:rotate(45deg);pointer-events:none}
+.select-value{display:block;padding:13px 43px 13px 15px;min-height:50px;font-size:16px;font-weight:550;line-height:1.5;white-space:normal;overflow-wrap:anywhere;pointer-events:none}
+.select-control>select{position:absolute;inset:0;opacity:0;width:100%;max-width:none;min-width:0;height:100%;min-height:0;margin:0;padding:0;border:0;cursor:pointer;font-size:16px}
+.select-control:has(select:disabled){opacity:.65;box-shadow:none}
+.select-control>select:disabled{cursor:default}
+.theme-choice{flex-shrink:0}
+.theme-choice .select-control{width:112px}
+.theme-choice .select-value{font-size:14px;min-height:44px;padding:11px 30px 11px 12px}
+.theme-choice .select-control:after{top:18px;right:13px;width:6px;height:6px}
+.theme-choice .select-control>select{max-width:none}
+.select-menu{position:fixed;z-index:100;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#839b92 transparent;padding:6px;border:1px solid #a6bbb5;border-radius:12px;background:var(--white);color:var(--ink);box-shadow:0 12px 36px #142b412b;font:400 16px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif}
+.select-option{position:relative;min-height:44px;border-radius:7px;padding:11px 35px 11px 12px;cursor:pointer;overflow-wrap:anywhere}
+.select-option+.select-option{margin-top:3px}
+.select-option:hover,.select-option.is-active{background:var(--mint);box-shadow:inset 0 0 0 1px var(--teal)}
+.select-option[aria-selected=true]{font-weight:650;color:var(--teal);background:var(--mint)}
+.select-option[aria-selected=true]:after{content:'✓';position:absolute;right:12px;top:11px;font-weight:700}
+.select-option[aria-disabled=true]{opacity:.5;cursor:default}
+:root[data-theme=dark] :is(.select-control,.select-menu){border-color:#607b89;background:#192730;color:#e0e7ec}
+:root[data-theme=dark] .select-option:is(:hover,.is-active,[aria-selected=true]){background:#29473f;color:#b7eadd}
+.exercise>.select-control{margin:10px 0 20px}
+#assessmentForm{max-width:780px}
+#assessmentForm fieldset{margin-top:22px}
+#assessmentForm .exercise{padding:16px 0;margin:0 0 12px;border-bottom:1px solid var(--line)}
+#assessmentForm .exercise label{display:block;line-height:1.65}
+#assessmentForm .exercise input{max-width:none}
+#assessmentForm+.tile{max-width:780px}
+.reading-passage{max-width:100%;overflow-wrap:anywhere}
+@media(max-width:600px){
+  .controls{grid-template-columns:minmax(0,1fr);gap:18px}
+  .theme-choice .select-control{width:98px}
+  .theme-choice .select-value{font-size:13px}
+  .theme-choice{font-size:11px}
+  .panel{padding:22px 16px}
+  .panel h1{font-size:clamp(26px,6vw,34px)}
+  #assessmentForm .exercise{padding:12px 0}
+  #assessmentForm .exercise label{font-size:16px}
+  #assessmentForm .reading-passage{padding:15px 13px;margin:12px 0 18px;line-height:1.8}
+  #assessmentForm>button{width:100%}
+  .difficulty-control{max-width:none}
+}
+@media(max-width:360px){
+  .head-inner{padding:14px 12px;gap:8px}
+  .identity{gap:8px;min-width:0}
+  .identity small{font-size:11px}
+  .symbol{font-size:21px;padding:8px}
+  .theme-choice .select-control{width:92px}
+  .container{padding-left:10px;padding-right:10px}
+  .tabs a{font-size:10px}
+  .panel{padding:20px 13px}
+  .question-box{padding:18px 12px}
+}

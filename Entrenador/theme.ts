@@ -1,3 +1,5 @@
+import { syncSelect } from './selects';
+
 export const THEME_KEY = 'english90-theme';
 type Theme = 'system' | 'light' | 'dark';
 const system = matchMedia('(prefers-color-scheme: dark)');
@@ -11,7 +13,7 @@ function apply(): void {
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#101b24' : '#142b41');
   const select = document.getElementById('themeChoice') as HTMLSelectElement | null;
-  if (select) select.value = preference;
+  if (select) { select.value = preference; syncSelect(select); }
 }
 preference = read(); apply();
 system.addEventListener('change', apply);
