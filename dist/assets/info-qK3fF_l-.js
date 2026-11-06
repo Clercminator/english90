@@ -1,1 +1,0 @@
-import{t as e}from"./advertising-IrunllWl.js";var t=e();document.body.dataset.article===`true`&&t.setPlacement(`article`);

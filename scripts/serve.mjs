@@ -10,6 +10,11 @@ const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; ch
 createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
+    if (url.pathname === '/api/commerce' && process.env.ENGLISH90_LOCAL_API === 'true') {
+      const chunks=[]; for await (const chunk of req) chunks.push(chunk);
+      const response=await fetch(`http://127.0.0.1:4174${url.pathname}${url.search}`,{method:req.method,headers:{'Content-Type':'application/json',...(req.headers.origin?{Origin:req.headers.origin}:{}),...(req.headers.authorization?{Authorization:req.headers.authorization}:{})},...(['GET','HEAD'].includes(req.method)?{}:{body:Buffer.concat(chunks)})});
+      res.writeHead(response.status,Object.fromEntries(response.headers)); res.end(Buffer.from(await response.arrayBuffer())); return;
+    }
     let file = resolve(root, `.${decodeURIComponent(url.pathname)}`);
     if (file !== root && !file.startsWith(root + sep)) throw new Error('Outside root');
     if ((await stat(file)).isDirectory()) {

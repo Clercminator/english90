@@ -1,4 +1,5 @@
 import './theme';
+import { renderCommercial } from './commerce';
 import { difficultyLabels, difficultyDescriptions, readingQuestions, practiceTest, speakingTask, extensionContent } from './levels';
 import { createDaily, rateDaily, completeDaily, hasLearning, addDailyPractice } from './daily';
 import { audioAvailable, speakEnglish, stopAudio } from './audio';
@@ -500,6 +501,7 @@ async function prepareImport(file?: File): Promise<void> {
 }
 
 function render(write = true): void {
+  if (renderCommercial($('view'))) { if (timer) clearInterval(timer); return; }
   stopAudio();
   suppressWrite = !write;
   if (timer) clearInterval(timer);
@@ -529,4 +531,5 @@ window.addEventListener('storage', ev => {
   catch { warning('Otra pestaña cambió el progreso con datos incompatibles. Exporta tu sesión antes de recargar.'); protectOriginal = true; }
 });
 document.addEventListener('visibilitychange', updateTimer);
+window.addEventListener('english90:access', () => render(false));
 render();

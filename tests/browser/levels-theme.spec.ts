@@ -10,6 +10,7 @@ test('theme persists on learning and public pages and system choice responds to 
   await page.getByLabel('Tema del sitio').selectOption('dark');
   for(const path of ['/#/cards','/#/assessments','/premium/','/privacidad/','/contacto/']){
     await page.goto(path); await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
+    if(path==='/premium/') { await expect(page.locator('.sales-page')).toBeVisible(); continue; }
     await expect(page.getByLabel('Tema del sitio')).toHaveValue('dark');
     await expect(page.locator('.theme-choice')).toHaveCSS('color','rgb(174, 189, 200)');
   }

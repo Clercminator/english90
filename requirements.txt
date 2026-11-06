@@ -1,0 +1,4 @@
+pikepdf==10.17.0
+cryptography==48.0.0
+requests==2.34.1
+svix==1.96.1

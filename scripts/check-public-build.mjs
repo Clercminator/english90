@@ -7,7 +7,7 @@ export async function auditPublicBuild(directory = 'dist') {
   const root = resolve(directory);
   if ((await lstat(root)).isSymbolicLink()) throw new Error('Public build root cannot be a symlink.');
   const config = JSON.parse(await readFile('site.config.json', 'utf8'));
-  const allowed = new Set(['index.html', '404.html', 'robots.txt', 'sitemap.xml', 'ads.txt', 'share.svg', 'share.png', ...publicPages(config).map(p => `${p.path.slice(1)}index.html`)]);
+  const allowed = new Set(['index.html', '404.html', 'robots.txt', 'sitemap.xml', 'ads.txt', 'share.svg', 'share.png', 'comprar/index.html', 'cuenta/index.html', 'pago/index.html', ...publicPages(config).map(p => `${p.path.slice(1)}index.html`)]);
   const source = JSON.parse(await readFile('private/source/English_90_V2_Programa.json', 'utf8'));
   const normalize = value => value.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
   const privateTexts = [
@@ -20,7 +20,7 @@ export async function auditPublicBuild(directory = 'dist') {
       const full = resolve(dir, entry.name); const name = relative(root, full).replaceAll('\\', '/');
       if ((await lstat(full)).isSymbolicLink()) throw new Error(`Public symlink forbidden: ${name}`);
       if (entry.isDirectory()) { await scan(full); continue; }
-      if (!allowed.has(name) && !/^assets\/[a-zA-Z0-9_-]+\.(js|css)$/.test(name)) throw new Error(`Unapproved public file: ${name}`);
+      if (!allowed.has(name) && !/^assets\/[a-zA-Z0-9_-]+\.(js|css|webp)$/.test(name)) throw new Error(`Unapproved public file: ${name}`);
       if (['.pdf','.json','.map','.zip','.py','.ts'].includes(extname(name))) throw new Error(`Private/source/archive output forbidden: ${name}`);
       const content = await readFile(full); const text = content.toString('utf8');
       if (content.subarray(0,5).toString() === '%PDF-' || /English_90_V2_|practice_prompt|day_goal_evidence|reading_questions|grammar_rules|anchor_en|anchor_es|"new_assessment"|sourceMappingURL|credentials\.dpapi|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|sk-proj-[a-zA-Z0-9_-]{20,}/.test(text)) throw new Error(`Private material or source map found in ${name}`);

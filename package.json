@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.ts",
     "test:browser": "playwright test",
+    "test:commerce": "python -m unittest discover -s tests/commerce -v && node tests/commerce/database.mjs",
     "build": "npm run validate:data && npm run typecheck && vite build && node scripts/package-build.mjs",
     "preview": "node scripts/serve.mjs",
     "test:pdf": "python -m unittest discover -s tests -p test_pdf.py",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
+    "@electric-sql/pglite": "0.5.15",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",
@@ -30,5 +32,8 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.72.1",
     "vite": "8.3.5"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.119.0"
   }
 }

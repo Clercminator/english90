@@ -49,7 +49,7 @@ for(const width of [320,1280])test.describe(`select layout at ${width}px`,()=>{
     test.setTimeout(60000);
     for(const theme of ['light','dark']){
       for(const path of ['/#/home','/#/daily','/#/cards','/#/challenge','/#/assessments?week=11','/#/guide','/#/situations','/#/ai','/#/progress','/premium/','/aprender/','/contacto/']){
-        await page.goto(path);await page.locator('#themeChoice').selectOption(theme);
+        await page.goto(path);if(path!='/premium/')await page.locator('#themeChoice').selectOption(theme);
         await expect(page.locator('main h1')).toBeVisible();
         expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),path).toBe(true);
         const controls=await page.locator('.select-control').evaluateAll(nodes=>nodes.filter(n=>n.getBoundingClientRect().width).map(n=>{const r=n.getBoundingClientRect();return{left:r.left,right:r.right,height:r.height};}));

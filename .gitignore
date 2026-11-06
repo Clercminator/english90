@@ -3,7 +3,9 @@ tmp/
 test-results/
 playwright-report/
 .vercel/
+supabase/.temp/
 .env*
+!.env.example
 /English_90_Trainer_Production.zip
 private/
 release/

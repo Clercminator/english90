@@ -4,7 +4,24 @@
   "installCommand": "",
   "buildCommand": "",
   "outputDirectory": "dist",
+  "functions": {
+    "api/commerce.py": {
+      "maxDuration": 300,
+      "includeFiles": "server/*.py",
+      "excludeFiles": "{dist/**,Entrenador/**,tests/**,scripts/**,supabase/**,private/**,archive/**,release/**,tmp/**,node_modules/**}"
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/commerce?action=operations",
+      "schedule": "0 5 * * *"
+    }
+  ],
   "routes": [
+    {
+      "src": "/api/commerce",
+      "dest": "/api/commerce"
+    },
     {
       "src": "/(.*)",
       "headers": {
@@ -62,6 +79,17 @@
       "dest": "/aprender/recordar-vocabulario/index.html"
     },
     {
+      "src": "/comprar",
+      "status": 308,
+      "headers": {
+        "Location": "/comprar/"
+      }
+    },
+    {
+      "src": "/comprar/",
+      "dest": "/comprar/index.html"
+    },
+    {
       "src": "/contacto",
       "status": 308,
       "headers": {
@@ -82,6 +110,39 @@
     {
       "src": "/cookies/",
       "dest": "/cookies/index.html"
+    },
+    {
+      "src": "/cuenta",
+      "status": 308,
+      "headers": {
+        "Location": "/cuenta/"
+      }
+    },
+    {
+      "src": "/cuenta/",
+      "dest": "/cuenta/index.html"
+    },
+    {
+      "src": "/entrega-y-reembolsos",
+      "status": 308,
+      "headers": {
+        "Location": "/entrega-y-reembolsos/"
+      }
+    },
+    {
+      "src": "/entrega-y-reembolsos/",
+      "dest": "/entrega-y-reembolsos/index.html"
+    },
+    {
+      "src": "/pago",
+      "status": 308,
+      "headers": {
+        "Location": "/pago/"
+      }
+    },
+    {
+      "src": "/pago/",
+      "dest": "/pago/index.html"
     },
     {
       "src": "/premium",

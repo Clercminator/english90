@@ -10,6 +10,8 @@ await writeFile('vercel.json', JSON.stringify({
   installCommand: '',
   buildCommand: '',
   outputDirectory: 'dist',
-  routes: vercelOutputConfig(files).routes,
+  functions: { 'api/commerce.py': { maxDuration: 300, includeFiles: 'server/*.py', excludeFiles: '{dist/**,Entrenador/**,tests/**,scripts/**,supabase/**,private/**,archive/**,release/**,tmp/**,node_modules/**}' } },
+  crons: [{ path: '/api/commerce?action=operations', schedule: '0 5 * * *' }],
+  routes: [ { src: '/api/commerce', dest: '/api/commerce' }, ...vercelOutputConfig(files).routes ],
 }, null, 2) + '\n');
 console.log(`Git deployment prepared: ${files.length} audited files in dist; no remote build or install.`);

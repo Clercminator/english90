@@ -6,9 +6,9 @@ export default defineConfig({
   root: 'Entrenador',
   base: '/',
   publicDir: false,
-  define: { __ADS_ENABLED__: JSON.stringify(siteConfig.ads.enabled) },
+  define: { __ADS_ENABLED__: JSON.stringify(siteConfig.ads.enabled), __COMMERCE_LANDING__: JSON.stringify(process.env.VITE_COMMERCE_LANDING === 'true'), __PREMIUM_GUARD__: JSON.stringify(process.env.VITE_PREMIUM_GUARD === 'true') },
   build: { outDir: '../dist', emptyOutDir: true, target: 'es2022', sourcemap: false,
-    rolldownOptions: { input: { main: resolve('Entrenador/index.html'), info: resolve('Entrenador/info.html') } } },
+    rolldownOptions: { input: { main: resolve('Entrenador/index.html'), info: resolve('Entrenador/info.html'), sales: resolve('Entrenador/sales.html') } } },
   plugins: [{ name: 'private-content-boundary',
     generateBundle(_options, bundle) {
       for (const asset of Object.values(bundle)) if (asset.type === 'chunk') for (const module of Object.keys(asset.modules)) {

@@ -1,0 +1,1 @@
+function e(){return{setPlacement(e){}}}export{e as t};
