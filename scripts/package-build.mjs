@@ -6,6 +6,7 @@ import { auditPublicBuild } from './check-public-build.mjs';
 
 const config = validateConfig(JSON.parse(await readFile('site.config.json','utf8')));
 const pages = publicPages(config);
+await copyFile('Entrenador/assets/manrope-license.txt','dist/assets/manrope-license.txt');
 const content = JSON.parse(await readFile('Entrenador/public-content.json', 'utf8'));
 const expressionCount = new Set(content.categories.flatMap(c => c.vocabulary.map(v => v.en.toLowerCase()))).size;
 const template = await readFile('dist/info.html','utf8');

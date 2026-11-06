@@ -1,6 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import './commerce.css';
 import cover from './assets/guide-cover.webp';
+import trainerPreview from './assets/trainer-desktop.webp';
+import mountains from './assets/mountain-journey.webp';
+import mountainsMobile from './assets/mountain-journey-mobile.webp';
 import { siteConfig } from './config';
 
 declare const __COMMERCE_LANDING__: boolean;
@@ -41,17 +44,50 @@ async function configure(): Promise<Config> {
 
 const brand = `<a class="sales-brand" href="/comprar/" aria-label="English90 · Inicio">English<span>90</span><svg viewBox="0 0 150 12" aria-hidden="true"><path d="M3 5 Q52 15 100 5 T147 5"/></svg></a>`;
 const footer = `<footer class="sales-footer">${brand}<p>Un producto de <strong>IMR Tech SpA</strong></p><div><a href="/terminos/">Términos y Condiciones</a><a href="/privacidad/">Política de Privacidad</a><a href="/entrega-y-reembolsos/">Entrega y Reembolsos</a><a href="${escape(support)}">Soporte</a></div></footer>`;
-const icon = (name: string) => `<span class="sales-icon" aria-hidden="true">${({calendar:'▦',route:'◇',guide:'▱'} as Record<string,string>)[name]}</span>`;
+const lineIcon = (name: string) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${({
+  calendar:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4m8-4v4M4 11h16M8 15h1m6 0h1m-8 3h1"/>',
+  route:'<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5L16 8Z"/>',
+  guide:'<rect x="4" y="4" width="16" height="12" rx="1"/><path d="M2 20h20m-13-4v4m6-4v4"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>',
+  lock:'<rect x="6" y="10" width="12" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/>',
+  check:'<path d="m5 12 4 4L19 6"/>',
+  arrow:'<path d="M4 12h16m-6-6 6 6-6 6"/>',
+} as Record<string,string>)[name]}</svg>`;
+const icon = (name: string) => `<span class="sales-icon">${lineIcon(name)}</span>`;
 
 export function landingMarkup(): string {
-  return `<div class="sales-page"><header class="sales-header">${brand}</header><section class="sales-hero" aria-labelledby="salesTitle"><div class="sales-copy"><p class="sales-kicker">TU GUÍA. TU PRÁCTICA. TU RITMO.</p><h1 id="salesTitle">Deja de estudiar inglés sin rumbo.<br><mark>Sigue un plan claro de 90 días.</mark></h1><p>English90 combina una guía paso a paso con práctica online para ayudarte a saber qué estudiar, cómo practicar y cómo avanzar a tu ritmo, sin depender de horarios de clases.</p><a class="sales-jump" href="#purchase">Conoce tu próximo paso <span aria-hidden="true">↓</span></a></div><figure class="sales-product"><div class="book-wrap"><img src="${cover}" alt="Portada de la edición de referencia de la guía English90" width="595" height="842" fetchpriority="high"></div><figcaption>Vista de la guía · edición de referencia.<br>La edición de entrega se confirmará antes de habilitar la venta.</figcaption></figure></section><section id="purchase" class="sales-purchase" aria-labelledby="offerTitle"><div class="sales-offer"><p class="sales-kicker">UN PAGO · UNA RUTA PARA EMPEZAR</p><h2 id="offerTitle">English90 Premium</h2><p class="sales-price">$59.990 <span>CLP</span></p><p class="sales-includes">Guía digital protegida + práctica online.<br>Precio final. Sin suscripción.</p></div><form id="purchaseForm" class="sales-form"><label for="buyerEmail">Tu correo electrónico</label><input id="buyerEmail" type="email" name="email" autocomplete="email" placeholder="tu@correo.cl" maxlength="254" required><label class="sales-consent"><input id="buyerConsent" type="checkbox" required><span>Acepto los <a href="/terminos/" target="_blank" rel="noopener">Términos y Condiciones</a> y la <a href="/privacidad/" target="_blank" rel="noopener">Política de Privacidad</a>.</span></label><button class="sales-cta" type="submit">Quiero English90 por $59.990 <span aria-hidden="true">→</span></button><p class="sales-secure">Pago a través de Mercado Pago Checkout Pro</p><p id="checkoutMessage" role="status" aria-live="polite"></p></form></section><ul class="sales-benefits"><li>${icon('calendar')}<p><strong>Estudia a tu ritmo,</strong><br>sin horarios ni clases obligatorias.</p></li><li>${icon('route')}<p><strong>Sigue una ruta paso a paso</strong><br>en lugar de preguntarte qué estudiar.</p></li><li>${icon('guide')}<p><strong>Recibe tu guía por email</strong><br>y recupera el acceso desde tu cuenta English90.</p></li></ul>${footer}</div>`;
+  return `<div class="sales-page sales-landing"><div class="sales-inner">
+    <header class="sales-header">${brand}</header>
+    <section class="sales-hero" aria-labelledby="salesTitle">
+      <div class="sales-copy"><h1 id="salesTitle"><span class="sales-lead">Deja de estudiar inglés sin rumbo.</span> <mark>Sigue un plan claro <span class="sales-duration">de 90 días.</span></mark></h1>
+        <p>English90 combina una guía paso a paso con práctica online para ayudarte a saber qué estudiar, cómo practicar y cómo avanzar a tu ritmo, sin depender de horarios de clases.</p></div>
+      <figure class="sales-product"><div class="product-composition">
+        <div class="laptop-mockup"><div class="device-screen"><img src="${trainerPreview}" alt="Captura real del inicio de la plataforma de práctica English90, en su tema oscuro" width="1280" height="800" fetchpriority="high"></div><div class="device-base"></div></div>
+        <div class="book-wrap"><img src="${cover}" alt="Portada de la edición de referencia de la guía English90" width="595" height="842" fetchpriority="high"></div>
+        </div><figcaption>Guía: edición de referencia. Plataforma: captura real.</figcaption></figure>
+      <a class="sales-jump sales-cta" href="#purchase">Quiero mi guía English90 ${lineIcon('arrow')}</a>
+    </section>
+    <section id="purchase" class="sales-purchase" aria-labelledby="offerTitle">
+      <div class="sales-offer"><h2 id="offerTitle">English90 Premium</h2><p class="sales-price">$59.990 <span>CLP</span></p>
+        <ul class="sales-inclusions"><li>${lineIcon('check')}<span>Guía digital de English90.</span></li><li>${lineIcon('check')}<span>Práctica online a tu ritmo.</span></li><li>${lineIcon('check')}<span>Entrega digital por email.</span></li></ul>
+        <p class="sales-payment-note">Precio final · Pago único · Sin suscripción</p></div>
+      <form id="purchaseForm" class="sales-form"><label class="sales-email-label" for="buyerEmail">Tu correo electrónico</label>
+        <div class="sales-email-field">${lineIcon('mail')}<input id="buyerEmail" type="email" name="email" autocomplete="email" placeholder="Tu correo electrónico" maxlength="254" required></div>
+        <label class="sales-consent"><input id="buyerConsent" type="checkbox" required><span>Acepto los <a href="/terminos/" target="_blank" rel="noopener">Términos y Condiciones</a> y la <a href="/privacidad/" target="_blank" rel="noopener">Política de Privacidad</a>.</span></label>
+        <button class="sales-cta" type="submit">Quiero English90 por $59.990 ${lineIcon('arrow')}</button>
+        <p class="sales-secure">${lineIcon('lock')} Pago a través de Mercado Pago Checkout Pro</p><p id="checkoutMessage" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+    <ul class="sales-benefits"><li>${icon('calendar')}<p><strong>Estudia a tu ritmo,</strong><br>sin horarios ni clases obligatorias.</p></li><li>${icon('route')}<p><strong>Sigue una ruta paso a paso</strong><br>en lugar de preguntarte qué estudiar.</p></li><li>${icon('guide')}<p><strong>Recibe tu guía por email</strong><br>y practica online con tu cuenta English90.</p></li></ul>
+    </div><div class="sales-journey" aria-hidden="true"><img src="${mountainsMobile}" srcset="${mountainsMobile} 800w, ${mountains} 1600w" sizes="100vw" alt="" width="1600" height="533" loading="lazy" decoding="async"></div>${footer}
+  </div>`;
 }
 
 function cryptoToken(): string { return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replaceAll('+','-').replaceAll('/','_').replaceAll('=',''); }
 function bindLanding(): void {
   event('landing_view');
   find<HTMLAnchorElement>('purchase')?.querySelector('a')?.addEventListener('click', () => event('cta_click'));
-  document.querySelector('.sales-jump')?.addEventListener('click', ev => { ev.preventDefault(); event('cta_click'); find('buyerEmail').focus(); find('purchase').scrollIntoView({ behavior:'smooth',block:'center' }); });
+  document.querySelector('.sales-jump')?.addEventListener('click', ev => { ev.preventDefault(); event('cta_click'); find('buyerEmail').focus({preventScroll:true}); find('purchase').scrollIntoView({ behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center' }); });
   const form = find<HTMLFormElement>('purchaseForm');
   form.onsubmit = async ev => {
     ev.preventDefault();
@@ -133,6 +169,7 @@ export function renderCommercial(view: HTMLElement, force?: string): boolean {
   const path=force || (hash==='#/comprar'?'landing':hash==='#/cuenta'?'account':hash==='#/pago'?'payment':!hash&&__COMMERCE_LANDING__?'landing':'');
   const guard=__PREMIUM_GUARD__ && Date.now()>accessUntil && /^#\/(guide|plan)(\/|\?|$)/.test(location.hash);
   document.body.classList.toggle('commercial',!!path || guard);
+  document.body.classList.toggle('sales-landing-view',path==='landing');
   const id=++renderId;
   if(!path && !guard) return false;
   document.title='English90 · '+(path==='landing'?'Tu plan de inglés de 90 días':path==='payment'?'Estado de tu pago':'Mi cuenta');

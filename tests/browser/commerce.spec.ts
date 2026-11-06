@@ -72,11 +72,46 @@ test('readiness capture uses the actual disabled landing and working legal links
   await expect(page.locator('.sales-copy h1')).toHaveCSS('font-family',/system-ui/);
   await expect(page.locator('.sales-offer h2')).toHaveCSS('font-family',/system-ui/);
   await expect(page.locator('.sales-product figcaption')).toContainText('edición de referencia');
-  await expect(page.locator('.sales-product img')).toBeVisible();
+  await expect(page.locator('.book-wrap img')).toBeVisible();
+  await expect(page.locator('.laptop-mockup img')).toBeVisible();
   await expect(page.locator('.sales-page del,.sales-page s')).toHaveCount(0);
   await expect(page.getByLabel('Acepto los')).not.toBeChecked();
   await expect(page.getByLabel('Tu correo electrónico',{exact:true})).toHaveValue('');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   for(const path of ['/terminos/','/privacidad/','/entrega-y-reembolsos/']) expect((await request.get(path)).status()).toBe(200);
   await page.screenshot({path:`tmp/readiness-sales-${info.project.name}.png`,fullPage:true});
+});
+
+for (const width of [320,375,390,428,768,1024,1440,1920]) test.describe(`sales redesign at ${width}px`,()=>{
+  test.use({viewport:{width,height:width===768?600:900},reducedMotion:'reduce'});
+  test('composition, purchase focus, highlights and real assets fit the viewport',async({page},info)=>{
+    await page.goto('/comprar/');
+    await page.evaluate(()=>document.fonts.ready);
+    await expect(page.getByRole('heading',{level:1})).toContainText('Sigue un plan claro de 90 días.');
+    expect(await page.locator('.sales-duration').evaluate(el=>el.getClientRects().length)).toBe(1);
+    await expect(page.getByRole('link',{name:'Quiero mi guía English90'})).toBeVisible();
+    await expect(page.locator('.laptop-mockup img')).toBeVisible();
+    await expect(page.locator('.sales-benefits li')).toHaveCount(3);
+    await expect(page.locator('.sales-form input')).toHaveCount(2);
+    await expect(page.locator('.sales-landing')).not.toContainText(/Conoce tu próximo paso|Antes:|79\.990|Oferta de lanzamiento/);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    const boxes=await page.locator('.sales-copy mark,.sales-price,.sales-form .sales-cta').evaluateAll(nodes=>nodes.flatMap(node=>[...node.getClientRects()].map(r=>({left:r.left,right:r.right}))));
+    for(const box of boxes){expect(box.left).toBeGreaterThanOrEqual(0);expect(box.right).toBeLessThanOrEqual(width);}
+    const copy=await page.locator('.sales-copy').boundingBox(),product=await page.locator('.sales-product').boundingBox();
+    if(width<768) expect(product!.y).toBeGreaterThanOrEqual(copy!.y+copy!.height);
+    else expect(product!.x).toBeGreaterThanOrEqual(copy!.x+copy!.width);
+    const response=await page.request.get('/comprar/');
+    expect(await response.text()).toContain('rel="canonical" href="https://english90.imrtech.xyz/comprar/"');
+    await page.getByRole('link',{name:'Quiero mi guía English90'}).click();
+    await expect(page.getByLabel('Tu correo electrónico',{exact:true})).toBeFocused();
+    await expect(page.getByLabel('Acepto los')).not.toBeChecked();
+    await expect(page.getByRole('status')).toContainText('Venta en preparación');
+    if(info.project.name==='chromium-desktop') {
+      await page.locator('.sales-journey').scrollIntoViewIfNeeded();
+      await page.waitForFunction(()=>[...document.querySelectorAll<HTMLImageElement>('.sales-landing img')].every(img=>img.complete&&img.naturalWidth>0));
+      await page.evaluate(()=>{(document.activeElement as HTMLElement)?.blur();window.scrollTo(0,0);});
+      await page.screenshot({path:`tmp/redesign-sales-${width}.png`,fullPage:true});
+    }
+    if(width===390||width===1440) expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+  });
 });
