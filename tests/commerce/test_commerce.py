@@ -4,9 +4,12 @@ from datetime import timedelta
 import hashlib
 import hmac
 import io
+from http.client import HTTPConnection
+from http.server import HTTPServer
 import json
 import os
 import time
+from threading import Thread
 import unittest
 from unittest.mock import patch
 from uuid import uuid4
@@ -14,6 +17,7 @@ from uuid import uuid4
 import pikepdf
 from svix.webhooks import Webhook
 from server import commerce as c
+from api.commerce import handler
 
 
 ENV={'SITE_URL':'https://english90.imrtech.xyz','COMMERCE_ENABLED':'true','COMMERCE_ENV':'sandbox',
@@ -87,6 +91,21 @@ class Commerce(unittest.TestCase):
         with patch.dict(os.environ,{'SUPABASE_PUBLISHABLE_KEY':'sb_secret_fixture'}):
             response=c.dispatch('GET','config',{}, {},b'','ip')
             self.assertFalse(response['enabled']); self.assertEqual(response['supabaseKey'],'')
+
+    def test_http_handler_config_no_cache_invalid_json_and_method_boundary(self):
+        server=HTTPServer(('127.0.0.1',0),handler)
+        thread=Thread(target=server.serve_forever,daemon=True); thread.start()
+        try:
+            conn=HTTPConnection('127.0.0.1',server.server_port,timeout=5)
+            conn.request('GET','/api/commerce?action=config'); response=conn.getresponse()
+            self.assertEqual(response.status,200); self.assertIn('no-store',response.getheader('Cache-Control'))
+            payload=response.read().decode(); self.assertNotIn('fixture-only',payload)
+            conn.request('POST','/api/commerce?action=checkout',body='invalid-json')
+            response=conn.getresponse(); self.assertEqual(response.status,400); response.read()
+            conn.request('GET','/api/commerce?action=password')
+            response=conn.getresponse(); self.assertEqual(response.status,405); response.read(); conn.close()
+        finally:
+            server.shutdown(); server.server_close(); thread.join()
 
     def test_checkout_authoritative_price_consent_and_durable_key(self):
         db=DB(); body={'key':str(uuid4()),'token':'a'*43,'email':'BUYER@example.com','consent':True}
