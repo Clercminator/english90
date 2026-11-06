@@ -17,7 +17,9 @@ if args.command=='inspect':
           headers={'apikey':os.environ['SUPABASE_SECRET_KEY'],'Authorization':'Bearer '+os.environ['SUPABASE_SECRET_KEY']},timeout=30)
 else:
     response=requests.post(os.environ['SITE_URL'].rstrip('/')+'/api/commerce?action=operations',
-        headers={'Authorization':'Bearer '+os.environ['CRON_SECRET']},
+        headers={'Authorization':'Bearer '+os.environ['CRON_SECRET'],
+                 **({'x-vercel-protection-bypass':os.environ['VERCEL_AUTOMATION_BYPASS_SECRET']}
+                    if os.environ.get('VERCEL_AUTOMATION_BYPASS_SECRET') else {})},
         json={} if args.command=='run' else {'order':args.order,'retry':args.command=='retry','resend':args.command=='resend'},timeout=300)
 if not response.ok:
     raise SystemExit(f'Operation failed (HTTP {response.status_code}). Inspect provider/owner logs without printing credentials.')

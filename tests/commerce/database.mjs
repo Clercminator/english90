@@ -10,8 +10,9 @@ create function auth.uid() returns uuid language sql stable as $$ select nullif(
 grant usage on schema auth to authenticated,service_role;
 create table storage.buckets(id text primary key,name text,public boolean);
 `);
-const migration = (await readdir('supabase/migrations')).find(p => p.endsWith('_commerce.sql'));
-await db.exec(await readFile(`supabase/migrations/${migration}`,'utf8'));
+for(const migration of (await readdir('supabase/migrations')).filter(p=>p.endsWith('.sql')).sort()) {
+  await db.exec(await readFile(`supabase/migrations/${migration}`,'utf8'));
+}
 const a='00000000-0000-4000-8000-000000000001', b='00000000-0000-4000-8000-000000000002';
 const o='00000000-0000-4000-8000-000000000003';
 await db.query(`insert into auth.users(id,email,email_confirmed_at) values($1,'a@example.com',now()),($2,'b@example.com',now())`,[a,b]);
@@ -34,6 +35,10 @@ await db.exec('reset role');
 assert.equal((await db.query('select user_id from entitlements')).rows[0].user_id,a);
 assert.equal((await db.query(`select * from commerce_lease($1,$2)`,[o,a])).rows.length,1);
 assert.equal((await db.query(`select * from commerce_lease($1,$2)`,[o,b])).rows.length,0);
+await db.exec("update guide_deliveries set email_id='failed-message',status='failed',lease_until=null,lease_id=null");
+assert.equal((await db.query(`select * from commerce_lease($1,$2)`,[o,b])).rows.length,0);
+await db.exec("update guide_deliveries set email_id=null,status='ready'");
+assert.equal((await db.query(`select * from commerce_lease($1,$2)`,[o,b])).rows.length,1);
 await db.exec(`set role authenticated; set "test.uid"='${b}';`);
 assert.equal((await db.query('select id,status from orders')).rows.length,0);
 await db.exec(`set "test.uid"='${a}';`);
@@ -52,5 +57,22 @@ assert.equal((await db.query('select status from guide_deliveries')).rows[0].sta
 assert.equal((await db.query('select public from storage.buckets where public=true')).rows.length,0);
 assert.equal((await db.query(`select commerce_rate('fixture',1,60) as ok`)).rows[0].ok,true);
 assert.equal((await db.query(`select commerce_rate('fixture',1,60) as ok`)).rows[0].ok,false);
+// Validate the scheduler SQL and optional protection header without installing
+// extensions or making a network request. These schemas are local fixtures.
+await db.exec(`create schema vault; create schema net; create schema cron;
+create table vault.decrypted_secrets(name text,decrypted_secret text);
+create table cron.jobs(command text);
+create function cron.schedule(text,text,text) returns integer language sql as $$ insert into cron.jobs values($3) returning 1 $$;
+create function net.http_post(url text,headers jsonb,body jsonb,timeout_milliseconds integer) returns jsonb language sql as $$ select headers $$;
+insert into vault.decrypted_secrets values('english90_site_url','https://fixture.vercel.app'),('english90_cron_secret','fixture-cron');`);
+const schedule=(await readFile('supabase/schedule-commerce.sql','utf8')).replace(/^create extension.*$/gm,'');
+await db.exec(schedule);
+const command=(await db.query('select command from cron.jobs')).rows[0].command;
+let headers=(await db.query(command)).rows[0].http_post;
+assert.equal(headers.Authorization,'Bearer fixture-cron');
+assert.equal(headers['x-vercel-protection-bypass'],undefined);
+await db.exec("insert into vault.decrypted_secrets values('english90_vercel_bypass_secret','fixture-bypass')");
+headers=(await db.query(command)).rows[0].http_post;
+assert.equal(headers['x-vercel-protection-bypass'],'fixture-bypass');
 await db.close();
 console.log('PostgreSQL migration, RLS, ownership, payment idempotency/reversal, leases, email ordering and rate limits passed (PGlite; Auth/Storage schemas are fixtures).');

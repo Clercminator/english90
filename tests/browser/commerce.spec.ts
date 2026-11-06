@@ -64,3 +64,19 @@ test('legacy practice preserves access and does not load the Auth SDK',async({pa
   const transfer=await page.evaluate(()=>performance.getEntriesByType('resource').filter(r=>/\.(js|css)$/.test(r.name)).reduce((n,r)=>n+(r as PerformanceResourceTiming).encodedBodySize,0));
   expect(transfer).toBeLessThan(300000);
 });
+
+test('readiness capture uses the actual disabled landing and working legal links',async({page,request},info)=>{
+  await page.goto('/comprar/');
+  await expect(page.getByRole('status')).toContainText('Venta en preparación');
+  await expect(page.locator('.sales-price')).toHaveText('$59.990 CLP');
+  await expect(page.locator('.sales-copy h1')).toHaveCSS('font-family',/system-ui/);
+  await expect(page.locator('.sales-offer h2')).toHaveCSS('font-family',/system-ui/);
+  await expect(page.locator('.sales-product figcaption')).toContainText('edición de referencia');
+  await expect(page.locator('.sales-product img')).toBeVisible();
+  await expect(page.locator('.sales-page del,.sales-page s')).toHaveCount(0);
+  await expect(page.getByLabel('Acepto los')).not.toBeChecked();
+  await expect(page.getByLabel('Tu correo electrónico',{exact:true})).toHaveValue('');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  for(const path of ['/terminos/','/privacidad/','/entrega-y-reembolsos/']) expect((await request.get(path)).status()).toBe(200);
+  await page.screenshot({path:`tmp/readiness-sales-${info.project.name}.png`,fullPage:true});
+});

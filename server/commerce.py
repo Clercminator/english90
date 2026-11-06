@@ -361,6 +361,11 @@ def fulfillment(db, order_id):
     if not rows:
         return
     delivery=rows[0]
+    # Provider-confirmed failed sends require an explicit new email attempt.
+    # Replaying their old idempotency key would return the old message, not resend.
+    if delivery.get('email_id'):
+        db.patch_delivery(order_id,lease,lease_id=None,lease_until=None)
+        return
     try:
         order=db.order(order_id)
         if order['status']!='paid':
@@ -479,8 +484,10 @@ def operate(db, headers, body):
             db.rest('orders','PATCH',{'updated_at':stamp()},id='eq.'+order['id'])
         except Problem:
             continue
-    deliveries=db.rest('guide_deliveries',select='order_id',status='in.(pending,processing,ready,queued,failed)',
-                        next_attempt_at='lte.'+stamp(),order='next_attempt_at.asc',limit='1')
+    deliveries=db.rest('guide_deliveries',select='order_id,orders!inner(status)',status='in.(pending,processing,ready,queued,failed)',
+                        email_id='is.null',next_attempt_at='lte.'+stamp(),
+                        order='next_attempt_at.asc',limit='1',**{'orders.status':'eq.paid',
+                        'or':f'(lease_until.is.null,lease_until.lt.{stamp()})'})
     for delivery in deliveries:
         fulfillment(db,delivery['order_id'])
     db.rpc('commerce_email_events')

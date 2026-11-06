@@ -7,6 +7,9 @@ import io
 from http.client import HTTPConnection
 from http.server import HTTPServer
 import json
+import runpy
+import sys
+from contextlib import redirect_stdout
 import os
 import time
 from threading import Thread
@@ -49,7 +52,7 @@ def remote(o):
 class DB:
     def __init__(self,o=None):
         self.o=o or order(); self.url='https://fixture.supabase.co'; self.headers={}; self.calls=[]
-        self.d=None; self.payloads=[]; self.uploads=[]; self.allowed=True
+        self.d=None; self.payloads=[]; self.uploads=[]; self.allowed=True; self.queries=[]
 
     def rpc(self,name,**params):
         self.calls.append((name,params))
@@ -60,6 +63,7 @@ class DB:
         if name=='commerce_payment': return params['p_status']
 
     def rest(self,table,method='GET',data=None,**params):
+        self.queries.append((table,params))
         if table=='products': return [{'price_clp':59990}]
         if table=='orders':
             if method=='POST': self.o={**data,'status':'pending'}
@@ -230,6 +234,36 @@ class Commerce(unittest.TestCase):
             'email_payload':{'html':'fixture'},'email_started_at':(c.now()-timedelta(hours=25)).isoformat()}
         with patch.object(c,'http') as request: c.fulfillment(db,db.o['id']); request.assert_not_called()
         self.assertEqual(db.d['last_error_code'],'email_outcome_requires_review')
+
+    def test_confirmed_email_failure_never_becomes_sent_by_replaying_old_key(self):
+        db=DB(); db.o['status']='paid'
+        db.d={'status':'failed','attempts':1,'email_id':'known-failed-message','email_attempt':0,
+              'storage_path':'file','last_error_code':'email.failed'}
+        # Even if a stale worker acquired a lease, it must not replay this message.
+        with patch.object(c,'http') as request:
+            c.fulfillment(db,db.o['id']); request.assert_not_called()
+        self.assertEqual(db.d['status'],'failed')
+        self.assertEqual(db.d['last_error_code'],'email.failed')
+
+    def test_worker_excludes_reversed_leased_and_confirmed_send_rows_before_limit(self):
+        db=DB()
+        with patch.object(c,'reconcile',return_value='pending'):
+            c.operate(db,{'authorization':'Bearer '+ENV['CRON_SECRET']},{})
+        query=next(params for table,params in db.queries if table=='guide_deliveries')
+        self.assertEqual(query['orders.status'],'eq.paid')
+        self.assertIn('!inner',query['select'])
+        self.assertEqual(query['email_id'],'is.null')
+        self.assertIn('lease_until.lt.',query['or'])
+
+    def test_owner_recovery_sends_optional_preview_header_without_printing_it(self):
+        output=io.StringIO()
+        with patch.dict(os.environ,{'VERCEL_AUTOMATION_BYPASS_SECRET':'fixture-private-bypass'}), \
+             patch.object(sys,'argv',['commerce-ops.py','run']), \
+             patch('requests.post') as request, redirect_stdout(output):
+            request.return_value.ok=True; request.return_value.text='{"processed":0}'
+            runpy.run_path('scripts/commerce-ops.py',run_name='__main__')
+        self.assertEqual(request.call_args.kwargs['headers']['x-vercel-protection-bypass'],'fixture-private-bypass')
+        self.assertNotIn('fixture-private-bypass',output.getvalue())
 
 
 if __name__=='__main__': unittest.main()
