@@ -92,6 +92,20 @@ class Commerce(unittest.TestCase):
                            ('MP_ACCESS_TOKEN','APP-live'),('COMMERCE_ENV','production')]:
             with patch.dict(os.environ,{name:value}), self.assertRaises(c.Problem): c.enabled()
 
+    def test_sandbox_fixture_never_approves_production_or_other_buyers(self):
+        test_env={'SANDBOX_TEST_MODE':'true','VERCEL_ENV':'preview','SANDBOX_BUYER_EMAIL':'owner@example.com',
+                  'MASTER_PDF_PATH':'sandbox/noncommercial-fixture-v1.pdf','GUIDE_VERSION':'sandbox-fixture-v1',
+                  'LEGAL_APPROVED':'false','MASTER_PDF_APPROVED':'false'}
+        with patch.dict(os.environ,test_env):
+            c.enabled()
+            for change in [{'VERCEL_ENV':'production'},{'MASTER_PDF_PATH':'approved/english90.pdf'},
+                           {'GUIDE_VERSION':'commercial'},{'FULFILLMENT_SCHEDULER_READY':'false'},
+                           {'COMMERCE_ENV':'production'}]:
+                with patch.dict(os.environ,change), self.assertRaises(c.Problem): c.enabled()
+            with self.assertRaises(c.Problem) as error:
+                c.checkout(DB(),{'email':'other@example.com'},'ip')
+            self.assertEqual(error.exception.code,'sandbox_buyer_required')
+
     def test_server_key_is_never_returned_as_public_config(self):
         with patch.dict(os.environ,{'SUPABASE_PUBLISHABLE_KEY':'sb_secret_fixture'}):
             response=c.dispatch('GET','config',{}, {},b'','ip')
@@ -241,7 +255,7 @@ class Commerce(unittest.TestCase):
         db.d={'order_id':db.o['id'],'status':'pending','attempts':0,'email_attempt':0}
         sends=[]
         def provider(_method,url,**kwargs):
-            if 'generate_link' in url: return {'action_link':'https://fixture.supabase.co/auth/verify?token=fixture'}
+            if 'generate_link' in url: return {'action_link':'https://fixture.supabase.co/auth/v1/verify?token=fixture&redirect_to=https%3A%2F%2Fenglish90.imrtech.xyz%2Fcuenta%2F'}
             sends.append(copy.deepcopy(kwargs))
             if len(sends)==1: raise c.Problem('provider_unavailable',502)
             return {'id':'email-fixture'}
@@ -252,6 +266,14 @@ class Commerce(unittest.TestCase):
         self.assertEqual(db.d['status'],'sent'); self.assertNotIn('delivered_at',db.d)
         password=c.unseal(db.d['password_ciphertext'],db.o['id'])
         self.assertNotIn(password,json.dumps(db.d['email_payload']))
+
+    def test_activation_link_rejects_supabase_redirect_fallback_and_external_hosts(self):
+        valid='https://fixture.supabase.co/auth/v1/verify?token=fixture&redirect_to=https%3A%2F%2Fenglish90.imrtech.xyz%2Fcuenta%2F'
+        self.assertEqual(c.validated_activation_link(DB(),{'action_link':valid}),valid)
+        for value in [valid.replace('fixture.supabase.co','evil.example'),
+                      valid.replace('https%3A%2F%2Fenglish90.imrtech.xyz%2Fcuenta%2F','http%3A%2F%2Flocalhost%3A3000'),
+                      valid.split('&')[0],None]:
+            with self.assertRaises(c.Problem): c.validated_activation_link(DB(),{'action_link':value})
 
     def test_unpaid_and_bounced_deliveries_not_automatically_sent(self):
         db=DB(); db.d={'status':'pending'}

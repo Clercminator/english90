@@ -115,7 +115,7 @@ function bindLanding(): void {
       button.disabled=false;
     }
   };
-  void configure().then(c => { if (!c.enabled) find('checkoutMessage').textContent='Venta en preparación. El cobro aún no está habilitado.'; }).catch(() => { find('checkoutMessage').textContent='Venta en preparación. El servicio de compra aún no está conectado.'; });
+  void configure().then(c => { if (c.environment==='sandbox') find('checkoutMessage').textContent=c.enabled?'PRUEBA SANDBOX: sin cobro real. Entrega un PDF técnico de prueba; solo admite el correo autorizado.':'Entorno de pruebas. El checkout aún no está habilitado.'; else if (!c.enabled) find('checkoutMessage').textContent='Venta en preparación. El cobro aún no está habilitado.'; }).catch(() => { find('checkoutMessage').textContent='Venta en preparación. El servicio de compra aún no está conectado.'; });
 }
 
 function shell(content: string): string { return `<div class="sales-page sales-account"><header class="sales-header">${brand}<a href="/cuenta/">Mi cuenta</a></header><section class="account-panel">${content}</section>${footer}</div>`; }

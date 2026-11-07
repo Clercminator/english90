@@ -94,7 +94,15 @@ def enabled():
     mode = env('COMMERCE_ENV')
     if mode not in ('sandbox', 'production'):
         raise Problem('configuration_invalid', 503)
-    for flag in ('LEGAL_APPROVED', 'MASTER_PDF_APPROVED', 'FULFILLMENT_SCHEDULER_READY'):
+    fixture = mode == 'sandbox' and os.environ.get('SANDBOX_TEST_MODE') == 'true'
+    if fixture and (os.environ.get('VERCEL_ENV') != 'preview' or
+                    env('MASTER_PDF_PATH') != 'sandbox/noncommercial-fixture-v1.pdf' or
+                    env('GUIDE_VERSION') != 'sandbox-fixture-v1'):
+        raise Problem('sandbox_fixture_required', 503)
+    if fixture:
+        email(env('SANDBOX_BUYER_EMAIL'))
+    flags = ('FULFILLMENT_SCHEDULER_READY',) if fixture else ('LEGAL_APPROVED', 'MASTER_PDF_APPROVED', 'FULFILLMENT_SCHEDULER_READY')
+    for flag in flags:
         if os.environ.get(flag) != 'true':
             raise Problem('sales_not_ready', 503)
     if mode == 'production' and (os.environ.get('LIVE_SALES_APPROVED') != 'true' or os.environ.get('VERCEL_ENV') != 'production'):
@@ -199,6 +207,8 @@ def checkout_url(result):
 def checkout(db, body, ip):
     enabled()
     buyer = email(body.get('email'))
+    if os.environ.get('COMMERCE_ENV') == 'sandbox' and os.environ.get('SANDBOX_TEST_MODE') == 'true' and buyer != email(env('SANDBOX_BUYER_EMAIL')):
+        raise Problem('sandbox_buyer_required',403)
     if body.get('consent') is not True:
         raise Problem('consent_required')
     if set(body)-{'email','consent','key','token','attribution'}:
@@ -366,6 +376,17 @@ def protect_pdf(master, password):
     return data
 
 
+def validated_activation_link(db, activation):
+    value = activation.get('action_link') or activation.get('properties',{}).get('action_link')
+    if not isinstance(value,str):
+        raise Problem('activation_link_failed',502)
+    link = urlparse(value)
+    if (link.scheme != 'https' or link.netloc != urlparse(db.url).netloc or link.path != '/auth/v1/verify' or
+        parse_qs(link.query).get('redirect_to') != [site()+'/cuenta/']):
+        raise Problem('activation_redirect_not_allowed',503)
+    return value
+
+
 def fulfillment(db, order_id):
     lease=str(uuid4())
     rows=db.rpc('commerce_lease',p_order=order_id,p_lease=lease)
@@ -394,12 +415,12 @@ def fulfillment(db, order_id):
             # generate_link handles existing/new accounts; only opening the link verifies ownership.
             activation=http('POST',db.url+'/auth/v1/admin/generate_link?'+urlencode({'redirect_to':site()+'/cuenta/'}),headers=db.headers,
                             data={'type':'magiclink','email':order['customer_email']})
-            action_link=activation.get('action_link') or activation.get('properties',{}).get('action_link')
-            if not action_link:
-                raise Problem('activation_link_failed',502)
+            action_link=validated_activation_link(db,activation)
             url=db.sign(delivery['storage_path'],86400)
             account=site()+'/cuenta'
-            message=f'''<html lang="es"><body><h1>English90 · Tu compra está confirmada</h1>
+            test = order['environment'] == 'sandbox'
+            notice = '<p><strong>PRUEBA SANDBOX: no es una compra real. El PDF es una muestra técnica sin contenido comercial.</strong></p>' if test else ''
+            message=f'''<html lang="es"><body><h1>English90 · {'Compra de prueba confirmada' if test else 'Tu compra está confirmada'}</h1>{notice}
 <p>Pago único: $59.990 CLP. Gracias por elegir una ruta de estudio a tu ritmo.</p>
 <p><a href="{html.escape(url,quote=True)}">Descargar tu guía protegida</a> (enlace válido durante 24 horas).</p>
 <p><a href="{html.escape(action_link,quote=True)}">Activar o ingresar a mi cuenta</a>. Este enlace es de un solo uso.</p>
@@ -407,7 +428,7 @@ def fulfillment(db, order_id):
 La contraseña no se envía por correo. Si el enlace de acceso venció, solicita otro en <a href="{account}">Mi cuenta</a>.</p>
 <p>La práctica se guarda en tu navegador, sin sincronización entre dispositivos.</p>
 <p>Soporte: {html.escape(env('SUPPORT_EMAIL'))} · IMR Tech SpA</p></body></html>'''
-            payload={'from':env('RESEND_FROM'),'to':[order['customer_email']],'subject':'Tu guía English90 y acceso a tu cuenta','html':message,
+            payload={'from':env('RESEND_FROM'),'to':[order['customer_email']],'subject':'[SANDBOX] English90 · PDF de prueba y acceso' if test else 'Tu guía English90 y acceso a tu cuenta','html':message,
                      'tags':[{'name':'order_id','value':order_id}]}
             delivery=db.patch_delivery(order_id,lease,email_payload=payload,email_started_at=stamp(),status='queued')
         started=datetime.fromisoformat(delivery['email_started_at'].replace('Z','+00:00'))
