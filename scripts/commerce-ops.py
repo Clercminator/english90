@@ -12,7 +12,7 @@ if args.command!='run':
     try: args.order=str(UUID(args.order))
     except (ValueError,TypeError,AttributeError): parser.error('--order must be an internal UUID')
 if args.command=='inspect':
-    url=os.environ['SUPABASE_URL']+'/rest/v1/guide_deliveries'
+    url=(os.environ.get('SUPABASE_PROJECT_URL') or os.environ['SUPABASE_URL']).rstrip('/')+'/rest/v1/guide_deliveries'
     response=requests.get(url,params={'order_id':'eq.'+args.order,'select':'order_id,status,attempts,last_error_code,sent_at,delivered_at,lease_until'},
           headers={'apikey':os.environ['SUPABASE_SECRET_KEY'],'Authorization':'Bearer '+os.environ['SUPABASE_SECRET_KEY']},timeout=30)
 else:

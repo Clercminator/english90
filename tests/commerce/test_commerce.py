@@ -27,7 +27,8 @@ ENV={'SITE_URL':'https://english90.imrtech.xyz','COMMERCE_ENABLED':'true','COMME
      'FULFILLMENT_SCHEDULER_READY':'true',
      'LEGAL_APPROVED':'true','MASTER_PDF_APPROVED':'true','MP_ACCESS_TOKEN':'TEST-fixture',
      'MP_MERCHANT_ID':'123','MP_APPLICATION_ID':'456','MP_WEBHOOK_SECRET':'fixture-only-secret',
-     'SUPABASE_URL':'https://fixture.supabase.co','SUPABASE_SECRET_KEY':'fixture-only',
+     'MP_WEBHOOK_SECRET_PRUEBA':'fixture-only-secret',
+     'SUPABASE_PROJECT_URL':'https://fixture.supabase.co','SUPABASE_SECRET_KEY':'fixture-only',
      'SUPABASE_PUBLISHABLE_KEY':'sb_publishable_fixture','RESEND_API_KEY':'fixture-only','RESEND_FROM':'English90 <test@example.com>',
      'RESEND_WEBHOOK_SECRET':'whsec_'+base64.b64encode(b'fixture-webhook-secret-32-bytes!!').decode(),
      'PDF_SECRET_KEY':base64.b64encode(bytes(range(32))).decode(),'GUIDE_VERSION':'test-fixture',
@@ -96,6 +97,34 @@ class Commerce(unittest.TestCase):
             response=c.dispatch('GET','config',{}, {},b'','ip')
             self.assertFalse(response['enabled']); self.assertEqual(response['supabaseKey'],'')
 
+    def test_project_url_takes_precedence_and_supports_legacy_configuration(self):
+        with patch.dict(os.environ, {'SUPABASE_URL':'https://legacy.supabase.co'}):
+            self.assertEqual(c.Store().url, ENV['SUPABASE_PROJECT_URL'])
+            self.assertEqual(c.dispatch('GET','config',{}, {},b'','ip')['supabaseUrl'], ENV['SUPABASE_PROJECT_URL'])
+            with patch.dict(os.environ, {'SUPABASE_PROJECT_URL':''}):
+                self.assertEqual(c.Store().url, 'https://legacy.supabase.co')
+
+    def test_webhook_secrets_are_strictly_separated_by_environment(self):
+        with patch.dict(os.environ, {'MP_WEBHOOK_SECRET':'production-only','MP_WEBHOOK_SECRET_PRUEBA':'test-only'}):
+            self.assertEqual(c.env('MP_WEBHOOK_SECRET'),'test-only')
+            with patch.dict(os.environ, {'MP_WEBHOOK_SECRET_PRUEBA':''}), self.assertRaises(c.Problem):
+                c.env('MP_WEBHOOK_SECRET')
+            with patch.dict(os.environ, {'COMMERCE_ENV':'production'}):
+                self.assertEqual(c.env('MP_WEBHOOK_SECRET'),'production-only')
+
+    def test_checkout_checks_provider_account_before_creating_order(self):
+        with patch.dict(os.environ, {'MP_ACCESS_TOKEN':'APP_USR-fixture'}):
+            for tags,merchant,site in [([], '123','MLC'),(['test_user'],'other','MLC'),(['test_user'],'123','MLA')]:
+                with patch.object(c,'http',return_value={'id':merchant,'site_id':site,'tags':tags}) as provider:
+                    with self.assertRaises(c.Problem): c.mp('POST','/v1/orders',{},'fixture')
+                    self.assertEqual(provider.call_count,1)
+            with patch.object(c,'http',side_effect=[{'id':'123','site_id':'MLC','tags':['test_user']},{'id':'ORDTST123'}]) as provider:
+                self.assertEqual(c.mp('POST','/v1/orders',{},'fixture')['id'],'ORDTST123')
+                self.assertEqual(provider.call_count,2)
+            with patch.dict(os.environ, {'COMMERCE_ENV':'production'}), patch.object(c,'http',return_value={'id':'123','site_id':'MLC','tags':['test_user']}) as provider:
+                with self.assertRaises(c.Problem): c.mp('POST','/v1/orders',{},'fixture')
+                self.assertEqual(provider.call_count,1)
+
     def test_http_handler_config_no_cache_invalid_json_and_method_boundary(self):
         server=HTTPServer(('127.0.0.1',0),handler)
         thread=Thread(target=server.serve_forever,daemon=True); thread.start()
@@ -110,6 +139,13 @@ class Commerce(unittest.TestCase):
             response=conn.getresponse(); self.assertEqual(response.status,405); response.read(); conn.close()
         finally:
             server.shutdown(); server.server_close(); thread.join()
+
+    def test_vercel_runtime_handle_request_hook_does_not_reenter_dispatch(self):
+        instance=handler.__new__(handler)
+        with patch.object(instance,'dispatch_commerce') as dispatch, patch.object(instance,'handle_request',create=True,side_effect=AssertionError('runtime hook reentered')):
+            instance.do_GET()
+            instance.do_POST()
+            self.assertEqual(dispatch.call_count,2)
 
     def test_checkout_authoritative_price_consent_and_durable_key(self):
         db=DB(); body={'key':str(uuid4()),'token':'a'*43,'email':'BUYER@example.com','consent':True}

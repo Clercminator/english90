@@ -33,6 +33,10 @@ class Problem(Exception):
 
 def env(name):
     value = os.environ.get(name, '')
+    if name == 'SUPABASE_PROJECT_URL':
+        value = value or os.environ.get('SUPABASE_URL', '')
+    if name == 'MP_WEBHOOK_SECRET' and os.environ.get('COMMERCE_ENV') == 'sandbox':
+        value = os.environ.get('MP_WEBHOOK_SECRET_PRUEBA', '')
     if not value:
         raise Problem('configuration_missing', 503)
     return value
@@ -95,11 +99,11 @@ def enabled():
             raise Problem('sales_not_ready', 503)
     if mode == 'production' and (os.environ.get('LIVE_SALES_APPROVED') != 'true' or os.environ.get('VERCEL_ENV') != 'production'):
         raise Problem('live_sales_disabled', 503)
-    if mode == 'sandbox' and not env('MP_ACCESS_TOKEN').startswith('TEST-'):
+    if mode == 'sandbox' and not env('MP_ACCESS_TOKEN').startswith(('TEST-', 'APP_USR-')):
         raise Problem('sandbox_credentials_required', 503)
     if mode == 'production' and env('MP_ACCESS_TOKEN').startswith('TEST-'):
         raise Problem('production_credentials_required', 503)
-    for name in ('SUPABASE_URL','SUPABASE_SECRET_KEY','SUPABASE_PUBLISHABLE_KEY','MP_MERCHANT_ID','MP_APPLICATION_ID',
+    for name in ('SUPABASE_PROJECT_URL','SUPABASE_SECRET_KEY','SUPABASE_PUBLISHABLE_KEY','MP_MERCHANT_ID','MP_APPLICATION_ID',
                  'MP_WEBHOOK_SECRET','RESEND_API_KEY','RESEND_FROM','RESEND_WEBHOOK_SECRET',
                  'PDF_SECRET_KEY','GUIDE_VERSION','MASTER_PDF_PATH','MASTER_PDF_SHA256',
                  'CRON_SECRET','RATE_LIMIT_SECRET','SUPPORT_EMAIL'):
@@ -129,7 +133,7 @@ def http(method, url, *, headers=None, data=None, raw=False):
 
 class Store:
     def __init__(self):
-        self.url = env('SUPABASE_URL').rstrip('/')
+        self.url = env('SUPABASE_PROJECT_URL').rstrip('/')
         self.headers = {'apikey':env('SUPABASE_SECRET_KEY'), 'Authorization':'Bearer '+env('SUPABASE_SECRET_KEY')}
 
     def rest(self, table, method='GET', data=None, **params):
@@ -172,6 +176,13 @@ def rate(db, identity, action, limit=10, seconds=600):
 
 def mp(method, path, data=None, key=None):
     headers = {'Authorization':'Bearer '+env('MP_ACCESS_TOKEN')}
+    if method == 'POST' and path == '/v1/orders':
+        account = http('GET', 'https://api.mercadopago.com/users/me', headers=headers)
+        if str(account.get('id')) != env('MP_MERCHANT_ID') or account.get('site_id') != 'MLC':
+            raise Problem('payment_account_mismatch', 503)
+        is_test = 'test_user' in account.get('tags', [])
+        if is_test != (env('COMMERCE_ENV') == 'sandbox'):
+            raise Problem('payment_environment_mismatch', 503)
     if key:
         headers['X-Idempotency-Key']=key
     return http(method,'https://api.mercadopago.com'+path,headers=headers,data=data)
@@ -502,7 +513,7 @@ def dispatch(method, action, headers, query, raw, ip, db=None):
         except Exception:
             ready=False
         return {'enabled':ready,'price':PRICE,'currency':'CLP','environment':os.environ.get('COMMERCE_ENV','sandbox'),
-                'supabaseUrl':os.environ.get('SUPABASE_URL',''),'supabaseKey':public_auth_key()}
+                'supabaseUrl':os.environ.get('SUPABASE_PROJECT_URL') or os.environ.get('SUPABASE_URL',''),'supabaseKey':public_auth_key()}
     db=db or Store()
     if action=='operations' and method in ('GET','POST'):
         return operate(db,headers,json.loads(raw or b'{}'))

@@ -9,12 +9,12 @@ class handler(BaseHTTPRequestHandler):
         pass
 
     def do_GET(self):
-        self.handle_request()
+        self.dispatch_commerce()
 
     def do_POST(self):
-        self.handle_request()
+        self.dispatch_commerce()
 
-    def handle_request(self):
+    def dispatch_commerce(self):
         try:
             size=int(self.headers.get('content-length','0'))
             if size<0 or size>65536:

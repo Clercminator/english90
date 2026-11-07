@@ -4,9 +4,9 @@
 !vercel.json
 !dist
 !dist/**
-!api/
+!api
 !api/*.py
-!server/
+!server
 !server/*.py
 !requirements.txt
 !.python-version
