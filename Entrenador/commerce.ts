@@ -206,7 +206,7 @@ async function payment(view: HTMLElement, id: number, checks = 0): Promise<void>
 export function renderCommercial(view: HTMLElement, force?: string): boolean {
   clearTimeout(paymentTimer);
   const hash=location.hash.split('?')[0];
-  const path=force || (hash==='#/comprar'?'landing':hash==='#/cuenta'?'account':hash==='#/pago'?'payment':!hash&&__COMMERCE_LANDING__?'landing':'');
+  const path=force || (hash==='#/comprar'?'landing':hash==='#/cuenta'?'account':hash==='#/pago'?'payment':!hash&&(__COMMERCE_LANDING__||document.body.dataset.commerceLanding==='true')?'landing':'');
   const guard=__PREMIUM_GUARD__ && Date.now()>accessUntil && /^#\/(guide|plan)(\/|\?|$)/.test(location.hash);
   document.body.classList.toggle('commercial',!!path || guard);
   document.body.classList.toggle('sales-landing-view',path==='landing');

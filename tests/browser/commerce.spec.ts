@@ -1,6 +1,17 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+test('production landing entry preserves its canonical and the legacy Trainer hash routes',async({page,request})=>{
+  const response=await request.get('/landing.html');
+  expect(response.status()).toBe(200);
+  expect(await response.text()).toContain('rel="canonical" href="https://english90-landing.imrtech.xyz/"');
+  await page.goto('/landing.html');
+  await expect(page.getByRole('heading',{level:1})).toContainText('Deja de estudiar inglés sin rumbo');
+  await page.goto('/landing.html#/home');
+  await expect(page.locator('.tabs')).toBeVisible();
+  await expect(page.getByRole('link',{name:'Vocabulario',exact:true}).first()).toBeVisible();
+});
+
 test('commercial landing keeps one price, minimal valid consent form, three benefits and responsive layout', async ({page}, info) => {
   const checkout: object[]=[];
   await page.route('**/api/commerce?*', async route => {
@@ -236,7 +247,7 @@ for (const width of [320,375,390,428,768,1024,1440,1920]) test.describe(`sales r
     if(width<768) expect(product!.y).toBeGreaterThanOrEqual(copy!.y+copy!.height);
     else expect(product!.x).toBeGreaterThanOrEqual(copy!.x+copy!.width);
     const response=await page.request.get('/comprar/');
-    expect(await response.text()).toContain('rel="canonical" href="https://english90.imrtech.xyz/comprar/"');
+    expect(await response.text()).toContain('rel="canonical" href="https://english90-landing.imrtech.xyz/comprar/"');
     await page.getByRole('link',{name:'Quiero mi guía English90'}).click();
     await expect(page.getByLabel('Tu correo electrónico',{exact:true})).toBeFocused();
     await expect(page.getByLabel('Acepto los')).not.toBeChecked();

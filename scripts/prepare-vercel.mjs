@@ -3,6 +3,7 @@ import { readdir, readFile, mkdir, rm, lstat, copyFile, writeFile } from 'node:f
 import { resolve, relative, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { auditPublicBuild } from './check-public-build.mjs';
+import siteConfig from '../site.config.json' with { type: 'json' };
 
 export function vercelOutputConfig(files) {
   const pages = files.filter(name => name.endsWith('/index.html')).map(name => '/' + name.slice(0,-10));
@@ -10,6 +11,7 @@ export function vercelOutputConfig(files) {
     version: 3,
     routes: [
       { src: '/(.*)', headers: { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' }, continue: true },
+      ...(siteConfig.commerceSiteUrl && files.includes('landing.html') ? [{src:'/',has:[{type:'host',value:new URL(siteConfig.commerceSiteUrl).hostname}],dest:'/landing.html'}] : []),
       { src: '/', dest: '/index.html' },
       ...pages.flatMap(path => [
         { src: path.slice(0,-1), status: 308, headers: { Location: path } },

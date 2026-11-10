@@ -32,6 +32,16 @@
     },
     {
       "src": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "english90-landing.imrtech.xyz"
+        }
+      ],
+      "dest": "/landing.html"
+    },
+    {
+      "src": "/",
       "dest": "/index.html"
     },
     {

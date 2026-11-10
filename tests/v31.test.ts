@@ -36,24 +36,30 @@ test('Vercel staging contains only audited public bytes and routes unknown/priva
     const {files}=await prepareVercel(root);
     assert.deepEqual(files,await auditPublicBuild());
     const config=vercelOutputConfig(files);
-    function route(path:string):{status:number;dest?:string} {
+    function route(path:string,host=new URL(siteConfig.siteUrl).hostname):{status:number;dest?:string} {
       for(const rule of config.routes) {
         if('handle' in rule) {
           if(files.includes(path.slice(1))) return {status:200,dest:path};
           continue;
         }
+        if('has' in rule && rule.has.some(condition=>condition.type==='host' && condition.value!==host)) continue;
         if(!new RegExp('^(?:'+rule.src+')$').test(path) || rule.continue) continue;
         return {status:rule.status||200,dest:rule.dest||rule.headers?.Location};
       }
       throw new Error('Missing routing result');
     }
     assert.deepEqual(route('/'),{status:200,dest:'/index.html'});
+    const commerceHost=new URL(siteConfig.commerceSiteUrl!).hostname;
+    assert.deepEqual(route('/',commerceHost),{status:200,dest:'/landing.html'});
     for(const file of files.filter(f=>f.endsWith('/index.html'))) {
       const path='/'+file.slice(0,-10);
       assert.deepEqual(route(path),{status:200,dest:'/'+file});
       assert.deepEqual(route(path.slice(0,-1)),{status:308,dest:path});
     }
-    for(const path of ['/unknown','/private/source/English_90_V2_Guia_Premium.pdf','/English_90_V2_Programa.json','/admin/protect_pdf.py','/assets/main.js.map','/private/']) assert.equal(route(path).status,404);
+    for(const path of ['/unknown','/private/source/English_90_V2_Guia_Premium.pdf','/English_90_V2_Programa.json','/admin/protect_pdf.py','/assets/main.js.map','/private/']) {
+      assert.equal(route(path).status,404);
+      assert.equal(route(path,commerceHost).status,404);
+    }
     const staticDir=resolve(root,'.vercel/output/static');
     await writeFile(resolve(staticDir,'private.pdf'),'%PDF-1.7');
     await assert.rejects(()=>auditPreparedVercel(root),/Unapproved public file/);

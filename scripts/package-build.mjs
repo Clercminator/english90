@@ -12,9 +12,9 @@ const expressionCount = new Set(content.categories.flatMap(c => c.vocabulary.map
 const template = await readFile('dist/info.html','utf8');
 const baseCsp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://*.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'";
 const adCsp = "default-src 'self'; script-src 'self' https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://fundingchoicesmessages.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net; frame-src https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'";
-function meta(html, path, title, description) {
+function meta(html, path, title, description, origin = config.siteUrl) {
  html=html.replace(/<title>.*?<\/title>/,`<title>${e(title)}</title>`).replace(/<meta name="description" content="[^"]*">/,`<meta name="description" content="${e(description)}">`);
- const canonical = config.siteUrl ? `<link rel="canonical" href="${e(config.siteUrl+path)}"><meta property="og:url" content="${e(config.siteUrl+path)}"><meta property="og:image" content="${e(config.siteUrl)}/share.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="English 90. Tu inglés empieza con la práctica."><meta name="twitter:card" content="summary_large_image">` : '<meta name="robots" content="noindex,follow">';
+ const canonical = origin ? `<link rel="canonical" href="${e(origin+path)}"><meta property="og:url" content="${e(origin+path)}"><meta property="og:image" content="${e(origin)}/share.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="English 90. Tu inglés empieza con la práctica."><meta name="twitter:card" content="summary_large_image">` : '<meta name="robots" content="noindex,follow">';
  const verification=config.ads.verificationEnabled?`<meta name="google-adsense-account" content="${e(config.ads.publisherId)}">`:'';
  return html.replace('<head>',`<head><meta http-equiv="Content-Security-Policy" content="${config.ads.enabled?adCsp:baseCsp}"><meta name="referrer" content="no-referrer"><meta property="og:type" content="website"><meta property="og:locale" content="es_CL"><meta property="og:title" content="${e(title)}"><meta property="og:description" content="${e(description)}">${canonical}${verification}`);
 }
@@ -24,6 +24,10 @@ for(const page of pages){
  await writeFile(out,html);
 }
 let home=await readFile('dist/index.html','utf8');
+if(config.commerceSiteUrl) {
+ const landing=home.replace('<body>','<body data-commerce-landing="true">').replace('<!--PUBLIC_CONTENT-->','<h1>English90 Premium</h1><p>Guía de 90 días, plataforma de práctica y tests. $59.990 CLP, pago único.</p>');
+ await writeFile('dist/landing.html',meta(landing,'/','English90 · Tu plan de inglés de 90 días','Guía de 90 días con plataforma de práctica y tests online. Pago único de $59.990 CLP.',config.commerceSiteUrl));
+}
 home=home.replace('<!--PUBLIC_CONTENT-->',`<section class="hero"><div><p class="eyebrow">PRÁCTICA GRATUITA · SIN CUENTA</p><h1>Practica el inglés que necesitas.</h1><p>${expressionCount} expresiones, juegos de frases y tests gratuitos para hispanohablantes. Repasa a tu ritmo y conserva tu progreso en este dispositivo.</p><a class="primary light" href="/#/daily">Empezar a practicar</a></div></section><section class="panel active"><h2>Vocabulario, juegos y práctica con sentido</h2><p>Elige entre ${content.categories.length} situaciones prácticas. Alterna inglés y español, recuerda antes de mirar y usa lo aprendido en una frase propia. La repetición espaciada programa tus próximos repasos según tus marcas.</p><a href="/aprender/">Leer nuestras guías de práctica</a></section>`);
 await writeFile('dist/index.html',meta(home,'/','English 90 · Inglés gratis para hispanohablantes',`Practica gratis ${expressionCount} expresiones en inglés, juegos y tests. Sin registro. Progreso local y repasos a tu ritmo.`));
 await writeFile('dist/404.html',meta(template,'/404.html','Página no encontrada · English 90','Vuelve a English 90 para seguir practicando.').replace('<!--PUBLIC_CONTENT-->','<section class="panel active"><h1>Esta página no está disponible.</h1><p>Revisa la dirección o vuelve al inicio para seguir practicando.</p><a class="primary" href="/">Volver al inicio</a></section>'));
@@ -31,7 +35,7 @@ await rm('dist/info.html');
 const sales = await readFile('dist/sales.html','utf8');
 for (const path of ['/comprar/','/premium/','/cuenta/','/pago/']) {
  await mkdir(`dist${path}`,{recursive:true});
- let html=meta(sales,path,path==='/premium/'||path==='/comprar/'?'English90 · Tu plan de inglés de 90 días':'English90 · Tu cuenta y tu compra','Guía de estudio y práctica online a tu ritmo. Pago único de $59.990 CLP.');
+ let html=meta(sales,path,path==='/premium/'||path==='/comprar/'?'English90 · Tu plan de inglés de 90 días':'English90 · Tu cuenta y tu compra','Guía de estudio y práctica online a tu ritmo. Pago único de $59.990 CLP.',config.commerceSiteUrl || config.siteUrl);
  if (path==='/cuenta/'||path==='/pago/') html=html.replace('<head>','<head><meta name="robots" content="noindex,nofollow">');
  await writeFile(`dist${path}index.html`,html.replace('<!--SALES_CONTENT-->','<h1>English90 Premium</h1><p>Una guía de 90 días con práctica online para avanzar a tu ritmo. $59.990 CLP, pago único.</p>'));
 }

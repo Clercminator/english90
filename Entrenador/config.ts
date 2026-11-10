@@ -1,7 +1,7 @@
 import raw from '../site.config.json' with { type: 'json' };
 
 export interface SiteConfig {
-  siteUrl: string; proposedDomain: string; businessName: string; contactEmail: string; contactUrl?: string; legalReviewed: boolean;
+  siteUrl: string; commerceSiteUrl?: string; proposedDomain: string; businessName: string; contactEmail: string; contactUrl?: string; legalReviewed: boolean;
   checkoutUrl: string; checkoutConfirmed: boolean;
   ads: { publisherId: string; verificationEnabled: boolean; approved: boolean; enabled: boolean;
     slots: { home: string; article: string }; cmpScriptUrl: string; cmpId: number; cmpCertifiedConfirmed: boolean; consentConfigured: boolean; manualPlacementsConfirmed: boolean };
@@ -12,6 +12,7 @@ export function validHttps(value: string): boolean {
 export function validateConfig(config: SiteConfig): SiteConfig {
   const fail = (message: string) => { throw new Error(`Configuración: ${message}`); };
   if (config.siteUrl && (!validHttps(config.siteUrl) || new URL(config.siteUrl).origin !== config.siteUrl)) fail('siteUrl debe ser un origen HTTPS sin ruta.');
+  if (config.commerceSiteUrl && (!validHttps(config.commerceSiteUrl) || new URL(config.commerceSiteUrl).origin !== config.commerceSiteUrl)) fail('commerceSiteUrl debe ser un origen HTTPS sin ruta.');
   if (config.checkoutUrl && !validHttps(config.checkoutUrl)) fail('checkoutUrl debe usar HTTPS.');
   if (config.checkoutConfirmed && !config.checkoutUrl) fail('falta el destino de compra confirmado.');
   if (config.contactEmail && !/^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/.test(config.contactEmail)) fail('correo de contacto inválido.');
