@@ -16,7 +16,7 @@
     "test:commerce": "python -m unittest discover -s tests/commerce -v && node tests/commerce/database.mjs",
     "build": "npm run validate:data && npm run typecheck && vite build && node scripts/package-build.mjs",
     "preview": "node scripts/serve.mjs",
-    "test:pdf": "python -m unittest discover -s tests -p test_pdf.py",
+    "test:pdf": "python -m unittest discover -s private/editorial/tests -p \"test_*.py\"",
     "check:public": "node scripts/check-public-build.mjs",
     "package:public": "python scripts/package-release.py",
     "prepare:vercel": "node scripts/prepare-vercel.mjs",

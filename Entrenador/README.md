@@ -6,6 +6,8 @@ Trainer de TypeScript/Vite con rutas hash y progreso local. La rama comercial a�
 
 Node.js 24 o posterior. Instalar dependencias con `npm ci`. La verificación completa del mantenedor requiere conservar `private/source/English_90_V2_Programa.json` localmente: permite contrastar el vocabulario original y detectar filtraciones de prosa privada. Ese archivo y el PDF nunca se suben al repositorio público ni al hosting. El build falla si falta la fuente de esa auditoría; no omitirla para publicar.
 
+Las fuentes, herramientas editoriales, ediciones aprobadas/candidatas y entregas individuales se organizan bajo `private/`. Consulta `private/README.md` y `private/editorial/README.md` para el flujo local; nada de ese espacio se publica.
+
 ```sh
 npm run dev
 npm run build
@@ -16,7 +18,7 @@ npm run prepare:git
 npm run preview
 ```
 
-Playwright necesita sus navegadores (`npx playwright install chromium firefox webkit`). Cerrar la vista previa en el puerto 4173 antes de ejecutar los tests. Los tests PDF y las herramientas de entrega de pedidos son utilidades privadas del mantenedor, fuera del repositorio público.
+Playwright necesita sus navegadores (`npx playwright install chromium firefox webkit`). Cerrar la vista previa en el puerto 4173 antes de ejecutar los tests. Los tests PDF y las herramientas de entrega de pedidos son utilidades privadas del mantenedor, fuera del repositorio público. Instala sus dependencias desde `private/editorial/requirements.txt` y ejecuta `npm run test:pdf`.
 
 ## Práctica diaria y compatibilidad
 
