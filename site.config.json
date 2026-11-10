@@ -2,8 +2,10 @@
   "siteUrl": "https://english90.imrtech.xyz",
   "proposedDomain": "english90.imrtech.xyz",
   "businessName": "IMR TECH SpA",
+  "businessTaxId": "78.472.398-4",
+  "businessAddress": "Antonio Bellet 193, Providencia, Santiago, Chile",
   "contactEmail": "soporte@imrtech.xyz",
-  "legalReviewed": false,
+  "legalReviewed": true,
   "checkoutUrl": "",
   "checkoutConfirmed": false,
   "ads": {

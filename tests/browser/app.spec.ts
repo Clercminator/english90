@@ -322,11 +322,11 @@ test('first visit has an honest starting point and a ready public contact channe
   for (const path of ['/privacidad/', '/cookies/', '/terminos/', '/contacto/']) {
     await page.goto(path);
     await expect(page.locator('main')).not.toContainText(/pendiente de|debe habilitar|no fue suministrado/);
-    await expect(page.locator('main a[href="https://wa.me/message/JDI5GLAII5DCG1"]').first()).toBeVisible();
+    await expect(page.locator('main a[href="mailto:soporte@imrtech.xyz"]').first()).toBeVisible();
   }
   await page.goto('/contacto/');
   await expect(page.locator('main')).toContainText('IMR TECH SpA');
-  await expect(page.getByRole('link', {name: 'Escribir por WhatsApp ↗'})).toHaveAttribute('rel', 'noopener noreferrer');
+  await expect(page.getByRole('link', {name: 'Escribir por correo'})).toHaveAttribute('href', 'mailto:soporte@imrtech.xyz');
   for (const width of [320, 768, 1280]) {
     const sizedPage = await browser.newPage({viewport: {width, height: 900}});
     try {

@@ -92,6 +92,17 @@ class Commerce(unittest.TestCase):
                            ('MP_ACCESS_TOKEN','APP-live'),('COMMERCE_ENV','production')]:
             with patch.dict(os.environ,{name:value}), self.assertRaises(c.Problem): c.enabled()
 
+    def test_production_requires_the_final_master_filename(self):
+        production={'COMMERCE_ENV':'production','VERCEL_ENV':'production','LIVE_SALES_APPROVED':'true',
+                    'MP_ACCESS_TOKEN':'APP_USR-fixture'}
+        with patch.dict(os.environ,production):
+            for path in ['approved/English90_Premium_revision.pdf','sandbox/noncommercial-fixture-v1.pdf']:
+                with patch.dict(os.environ,{'MASTER_PDF_PATH':path}), self.assertRaises(c.Problem) as error:
+                    c.enabled()
+                self.assertEqual(error.exception.code,'production_master_required')
+            with patch.dict(os.environ,{'MASTER_PDF_PATH':'approved/version-sha/English90_Premium_final.pdf'}):
+                c.enabled()
+
     def test_sandbox_fixture_never_approves_production_or_other_buyers(self):
         test_env={'SANDBOX_TEST_MODE':'true','VERCEL_ENV':'preview','SANDBOX_BUYER_EMAIL':'owner@example.com',
                   'MASTER_PDF_PATH':'sandbox/noncommercial-fixture-v1.pdf','GUIDE_VERSION':'sandbox-fixture-v1',
@@ -248,6 +259,27 @@ class Commerce(unittest.TestCase):
         self.assertEqual(c.unseal(protected,'order-a'),passwords[0])
         with self.assertRaises(Exception): c.unseal(protected,'order-b')
 
+    def test_production_rejects_sandbox_order_access_and_processing(self):
+        db=DB(); db.o.update(user_id='buyer-a',status='paid',status_token_hash=c.digest('token'))
+        db.d={'storage_path':'private/file'}
+        with patch.dict(os.environ,{'COMMERCE_ENV':'production'}):
+            actions=[lambda:c.owned_delivery(db,{'id':'buyer-a'},db.o['id']),
+                     lambda:c.fulfillment(db,db.o['id']),
+                     lambda:c.payment_state(remote(db.o),db.o),
+                     lambda:c.operate(db,{'authorization':'Bearer '+ENV['CRON_SECRET']},{'order':db.o['id']}),
+                     lambda:c.dispatch('POST','status',{'origin':ENV['SITE_URL']},{},json.dumps({'order':db.o['id'],'token':'token'}).encode(),'ip',db)]
+            for action in actions:
+                with self.assertRaises(c.Problem): action()
+        self.assertFalse(any(name in ('commerce_lease','commerce_payment') for name,_ in db.calls))
+
+    def test_account_queries_only_current_environment_purchases(self):
+        db=DB()
+        with patch.dict(os.environ,{'COMMERCE_ENV':'production'}), patch.object(c,'customer',return_value={'id':'buyer-a','email':'buyer@example.com'}):
+            c.dispatch('POST','account',{'origin':ENV['SITE_URL']},{},b'{}','ip',db)
+        for table,query in db.queries:
+            self.assertEqual(query['environment' if table=='orders' else 'orders.environment'],'eq.production')
+            if table!='orders': self.assertIn('orders!inner',query['select'])
+
     def test_fulfillment_retries_without_reencrypting_or_duplicate_email(self):
         db=DB(); db.o['status']='paid'; data=io.BytesIO()
         with pikepdf.new() as pdf: pdf.add_blank_page(); pdf.save(data)
@@ -266,6 +298,50 @@ class Commerce(unittest.TestCase):
         self.assertEqual(db.d['status'],'sent'); self.assertNotIn('delivered_at',db.d)
         password=c.unseal(db.d['password_ciphertext'],db.o['id'])
         self.assertNotIn(password,json.dumps(db.d['email_payload']))
+        self.assertEqual(db.d['email_payload']['reply_to'],ENV['SUPPORT_EMAIL'])
+        self.assertIn('text',db.d['email_payload'])
+
+    def test_purchase_email_escapes_links_and_includes_plain_text_recovery(self):
+        content=c.purchase_email(activation_url='https://example.com/access?a=1&b="quoted"',
+                                 download_url='https://example.com/guide?token=fixture',
+                                 account_url=ENV['SITE_URL']+'/cuenta',support_email=ENV['SUPPORT_EMAIL'],
+                                 order_id='<example-order>',sandbox=False)
+        self.assertIn('a=1&amp;b=&quot;quoted&quot;',content['html'])
+        self.assertIn('&lt;example-order&gt;',content['html'])
+        self.assertNotIn('<example-order>',content['html'])
+        self.assertIn('https://example.com/guide?token=fixture',content['text'])
+        self.assertIn(ENV['SITE_URL']+'/cuenta',content['text'])
+        self.assertIn('24 horas',content['text'])
+        self.assertIn('No necesitas volver a pagar',content['text'])
+        for format in ('html','text'):
+            self.assertIn('gestionaremos manualmente',content[format])
+            self.assertIn('Nunca envíes contraseñas ni códigos de acceso',content[format])
+        self.assertNotIn('SANDBOX',content['html']+content['subject']+content['text'])
+        self.assertNotIn('<script',content['html'])
+        self.assertNotIn('<img',content['html'])
+        self.assertLess(len(content['html'].encode('utf-8')),30000)
+
+    def test_sandbox_email_cannot_look_like_a_live_purchase(self):
+        content=c.purchase_email(activation_url='https://example.com/access',download_url='https://example.com/guide',
+                                 account_url=ENV['SITE_URL']+'/cuenta',support_email=ENV['SUPPORT_EMAIL'],
+                                 order_id='fixture',sandbox=True)
+        self.assertTrue(content['subject'].startswith('[SANDBOX]'))
+        for format in ('html','text'):
+            self.assertIn('muestra técnica sin contenido comercial',content[format])
+            self.assertNotIn('Tu pago está confirmado',content[format])
+
+    def test_auth_templates_preserve_supabase_tokens_without_claiming_payment(self):
+        from pathlib import Path
+        from server.email_templates import sign_in_email
+        for name,confirmation in [('sign-in',False),('confirmation',True)]:
+            content=sign_in_email(activation_url='{{ .ConfirmationURL }}',account_url='{{ .SiteURL }}/cuenta/',
+                                  support_email='soporte@imrtech.xyz',confirmation=confirmation)
+            template=Path('supabase/email-templates',name+'.html').read_text(encoding='utf-8')
+            self.assertEqual(template,content['html'])
+            self.assertEqual(template.count('{{ .ConfirmationURL }}'),1)
+            self.assertIn('{{ .SiteURL }}/cuenta/',template)
+            self.assertIn('Si no hiciste esta solicitud',template)
+            self.assertNotIn('Tu pago está confirmado',template)
 
     def test_activation_link_rejects_supabase_redirect_fallback_and_external_hosts(self):
         valid='https://fixture.supabase.co/auth/v1/verify?token=fixture&redirect_to=https%3A%2F%2Fenglish90.imrtech.xyz%2Fcuenta%2F'
@@ -309,6 +385,8 @@ class Commerce(unittest.TestCase):
             c.operate(db,{'authorization':'Bearer '+ENV['CRON_SECRET']},{})
         query=next(params for table,params in db.queries if table=='guide_deliveries')
         self.assertEqual(query['orders.status'],'eq.paid')
+        self.assertEqual(query['orders.environment'],'eq.sandbox')
+        self.assertEqual(next(params for table,params in db.queries if table=='orders')['environment'],'eq.sandbox')
         self.assertIn('!inner',query['select'])
         self.assertEqual(query['email_id'],'is.null')
         self.assertIn('lease_until.lt.',query['or'])

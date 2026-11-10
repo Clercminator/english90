@@ -4,7 +4,6 @@ from datetime import datetime, timezone, timedelta
 from decimal import Decimal, InvalidOperation
 import hashlib
 import hmac
-import html
 import io
 import json
 import os
@@ -18,6 +17,7 @@ import pikepdf
 import requests
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from svix.webhooks import Webhook, WebhookVerificationError
+from server.email_templates import purchase_email
 
 SKU = 'english90-premium'
 PRICE = 59990
@@ -107,6 +107,8 @@ def enabled():
             raise Problem('sales_not_ready', 503)
     if mode == 'production' and (os.environ.get('LIVE_SALES_APPROVED') != 'true' or os.environ.get('VERCEL_ENV') != 'production'):
         raise Problem('live_sales_disabled', 503)
+    if mode == 'production' and env('MASTER_PDF_PATH').rsplit('/',1)[-1] != 'English90_Premium_final.pdf':
+        raise Problem('production_master_required',503)
     if mode == 'sandbox' and not env('MP_ACCESS_TOKEN').startswith(('TEST-', 'APP_USR-')):
         raise Problem('sandbox_credentials_required', 503)
     if mode == 'production' and env('MP_ACCESS_TOKEN').startswith('TEST-'):
@@ -289,6 +291,8 @@ def money(value):
 
 
 def payment_state(remote, order):
+    if order['environment'] != env('COMMERCE_ENV'):
+        raise Problem('payment_environment_mismatch',409)
     if (remote.get('id')!=order['mp_order_id'] or remote.get('external_reference')!=order['id'] or
         str(remote.get('user_id'))!=env('MP_MERCHANT_ID') or remote.get('currency')!='CLP' or
         remote.get('country_code')!='CHL' or remote.get('type')!='online' or
@@ -388,6 +392,9 @@ def validated_activation_link(db, activation):
 
 
 def fulfillment(db, order_id):
+    order=db.order(order_id)
+    if order['environment'] != env('COMMERCE_ENV'):
+        raise Problem('payment_environment_mismatch',409)
     lease=str(uuid4())
     rows=db.rpc('commerce_lease',p_order=order_id,p_lease=lease)
     if not rows:
@@ -419,16 +426,9 @@ def fulfillment(db, order_id):
             url=db.sign(delivery['storage_path'],86400)
             account=site()+'/cuenta'
             test = order['environment'] == 'sandbox'
-            notice = '<p><strong>PRUEBA SANDBOX: no es una compra real. El PDF es una muestra técnica sin contenido comercial.</strong></p>' if test else ''
-            message=f'''<html lang="es"><body><h1>English90 · {'Compra de prueba confirmada' if test else 'Tu compra está confirmada'}</h1>{notice}
-<p>Pago único: $59.990 CLP. Gracias por elegir una ruta de estudio a tu ritmo.</p>
-<p><a href="{html.escape(url,quote=True)}">Descargar tu guía protegida</a> (enlace válido durante 24 horas).</p>
-<p><a href="{html.escape(action_link,quote=True)}">Activar o ingresar a mi cuenta</a>. Este enlace es de un solo uso.</p>
-<p>En tu cuenta encontrarás la contraseña para abrir el PDF y podrás volver a descargarlo.
-La contraseña no se envía por correo. Si el enlace de acceso venció, solicita otro en <a href="{account}">Mi cuenta</a>.</p>
-<p>La práctica se guarda en tu navegador, sin sincronización entre dispositivos.</p>
-<p>Soporte: {html.escape(env('SUPPORT_EMAIL'))} · IMR Tech SpA</p></body></html>'''
-            payload={'from':env('RESEND_FROM'),'to':[order['customer_email']],'subject':'[SANDBOX] English90 · PDF de prueba y acceso' if test else 'Tu guía English90 y acceso a tu cuenta','html':message,
+            content=purchase_email(activation_url=action_link,download_url=url,account_url=account,
+                                   support_email=env('SUPPORT_EMAIL'),order_id=order_id,sandbox=test)
+            payload={'from':env('RESEND_FROM'),'to':[order['customer_email']],**content,'reply_to':env('SUPPORT_EMAIL'),
                      'tags':[{'name':'order_id','value':order_id}]}
             delivery=db.patch_delivery(order_id,lease,email_payload=payload,email_started_at=stamp(),status='queued')
         started=datetime.fromisoformat(delivery['email_started_at'].replace('Z','+00:00'))
@@ -463,7 +463,7 @@ def customer(db, headers):
 
 def owned_delivery(db, user, identifier):
     order=db.order(identifier)
-    if order.get('user_id')!=user['id'] or order['status']!='paid':
+    if order.get('user_id')!=user['id'] or order['status']!='paid' or order['environment']!=env('COMMERCE_ENV'):
         raise Problem('purchase_required',403)
     rows=db.rest('guide_deliveries',order_id='eq.'+order['id'])
     if not rows or not rows[0].get('storage_path'):
@@ -491,6 +491,8 @@ def operate(db, headers, body):
     if body.get('order'):
         identifier=uuid(body['order'])
         order=db.order(identifier)
+        if order['environment']!=env('COMMERCE_ENV'):
+            raise Problem('payment_environment_mismatch',409)
         if order.get('mp_order_id'):
             reconcile(db,order)
         if body.get('retry'):
@@ -508,7 +510,7 @@ def operate(db, headers, body):
         fulfillment(db,identifier)
         return {'processed':1}
     # Reconcile recent orders plus paid orders indefinitely to catch missed reversals.
-    orders=db.rest('orders',select='*',mp_order_id='not.is.null',order='updated_at.asc',limit='2')
+    orders=db.rest('orders',select='*',environment='eq.'+env('COMMERCE_ENV'),mp_order_id='not.is.null',order='updated_at.asc',limit='2')
     for order in orders:
         try:
             reconcile(db,order)
@@ -518,7 +520,7 @@ def operate(db, headers, body):
             continue
     deliveries=db.rest('guide_deliveries',select='order_id,orders!inner(status)',status='in.(pending,processing,ready,queued,failed)',
                         email_id='is.null',next_attempt_at='lte.'+stamp(),
-                        order='next_attempt_at.asc',limit='1',**{'orders.status':'eq.paid',
+                        order='next_attempt_at.asc',limit='1',**{'orders.status':'eq.paid','orders.environment':'eq.'+env('COMMERCE_ENV'),
                         'or':f'(lease_until.is.null,lease_until.lt.{stamp()})'})
     for delivery in deliveries:
         fulfillment(db,delivery['order_id'])
@@ -555,6 +557,8 @@ def dispatch(method, action, headers, query, raw, ip, db=None):
     if action=='status':
         rate(db,ip,'status',60)
         order=db.order(body.get('order'))
+        if order['environment']!=env('COMMERCE_ENV'):
+            raise Problem('forbidden',403)
         token=body.get('token','')
         if not isinstance(token,str) or not hmac.compare_digest(digest(token),order['status_token_hash']):
             raise Problem('forbidden',403)
@@ -570,9 +574,10 @@ def dispatch(method, action, headers, query, raw, ip, db=None):
     rate(db,ip,'account',60)
     user=customer(db,headers)
     if action=='account':
-        return {'email':user['email'],'orders':db.rest('orders',select='id,status,amount_clp,created_at',user_id='eq.'+user['id']),
-                'entitled':bool(db.rest('entitlements',select='id',user_id='eq.'+user['id'],status='eq.active',product_id='eq.'+SKU)),
-                'deliveries':db.rest('guide_deliveries',select='order_id,status,guide_version',user_id='eq.'+user['id'])}
+        environment='eq.'+env('COMMERCE_ENV')
+        return {'email':user['email'],'orders':db.rest('orders',select='id,status,amount_clp,created_at',user_id='eq.'+user['id'],environment=environment),
+                'entitled':bool(db.rest('entitlements',select='id,orders!inner(environment)',user_id='eq.'+user['id'],status='eq.active',product_id='eq.'+SKU,**{'orders.environment':environment})),
+                'deliveries':db.rest('guide_deliveries',select='order_id,status,guide_version,orders!inner(environment)',user_id='eq.'+user['id'],**{'orders.environment':environment})}
     if action in ('download','password'):
         rate(db,user['id'],action,10)
         delivery=owned_delivery(db,user,body.get('order'))
