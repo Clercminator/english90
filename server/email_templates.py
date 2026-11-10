@@ -100,7 +100,7 @@ IMR Tech SpA'''
 
 def sign_in_email(*, activation_url, account_url, support_email, confirmation=False):
     subject = 'Confirma tu correo · English90' if confirmation else 'Tu enlace de acceso a English90'
-    heading = 'Confirma tu correo.' if confirmation else 'Tu ruta te está esperando.'
+    heading = 'Confirma tu correo.' if confirmation else 'Ingresa a tu cuenta.'
     intro = 'Confirma esta dirección para activar tu cuenta English90.' if confirmation else 'Recibimos una solicitud para ingresar a tu cuenta English90. Usa el botón para continuar.'
     body = f'''<p style="margin:0 0 12px;color:#6500ff;font-size:12px;line-height:18px;font-weight:bold;letter-spacing:1px;">TU CUENTA ENGLISH90</p>
 <h1 class="email-heading" style="margin:0 0 18px;font-size:32px;line-height:40px;letter-spacing:-0.8px;color:#11152d;">{heading}</h1>
