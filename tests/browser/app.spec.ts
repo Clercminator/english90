@@ -313,12 +313,12 @@ test('first visit has an honest starting point and a ready public contact channe
   await page.goto('/');
   await expect(page.getByRole('link', {name: 'Retomar la última actividad', exact: true})).toHaveCount(0);
   await expect(page.getByRole('link', {name: 'Empezar a practicar', exact: true})).toBeVisible();
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://english90.imrtech.xyz/share.png');
-  const share = await request.get('/share.png');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://english90.imrtech.xyz/share-trainer-v2.png');
+  const share = await request.get('/share-trainer-v2.png');
   expect(share.headers()['content-type']).toContain('image/png');
   const png = await share.body();
   expect(png.subarray(1, 4).toString()).toBe('PNG');
-  expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
+  expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1254, 1254]);
   for (const path of ['/privacidad/', '/cookies/', '/terminos/', '/contacto/']) {
     await page.goto(path);
     await expect(page.locator('main')).not.toContainText(/pendiente de|debe habilitar|no fue suministrado/);

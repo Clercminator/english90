@@ -7,7 +7,7 @@ export async function auditPublicBuild(directory = 'dist') {
   const root = resolve(directory);
   if ((await lstat(root)).isSymbolicLink()) throw new Error('Public build root cannot be a symlink.');
   const config = JSON.parse(await readFile('site.config.json', 'utf8'));
-  const allowed = new Set(['index.html', 'landing.html', '404.html', 'robots.txt', 'sitemap.xml', 'ads.txt', 'share.svg', 'share.png', 'share-english90-v2.png', 'assets/manrope-license.txt', 'comprar/index.html', 'cuenta/index.html', 'pago/index.html', ...publicPages(config).map(p => `${p.path.slice(1)}index.html`)]);
+  const allowed = new Set(['index.html', 'landing.html', '404.html', 'robots.txt', 'sitemap.xml', 'ads.txt', 'share.svg', 'share.png', 'share-trainer-v2.png', 'share-english90-v2.png', 'assets/manrope-license.txt', 'comprar/index.html', 'cuenta/index.html', 'pago/index.html', ...publicPages(config).map(p => `${p.path.slice(1)}index.html`)]);
   const source = JSON.parse(await readFile('private/source/English_90_V2_Programa.json', 'utf8'));
   const normalize = value => value.toLowerCase().replace(/\\[nrt]/g, ' ').replace(/[^\p{L}\p{N}]/gu, '');
   const privateTexts = [
