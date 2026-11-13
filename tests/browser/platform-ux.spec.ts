@@ -94,3 +94,49 @@ test('a delayed route download cannot replace the screen after navigating away',
   await page.goto('/#/routes?mission=work-01');
   await expect(page.locator('#productionText')).toBeVisible();
 });
+
+
+test('difficulty names stay consistent across practice and preserve the selected preference',async({page})=>{
+  const names=['Básico','Intermedio','Avanzado'];
+  const controls=[
+    ['/#/home','homeDifficulty'],['/#/daily','dailyDifficulty'],['/#/cards','cardDifficulty'],
+    ['/#/challenge','difficulty'],['/#/assessments','testDifficulty'],
+    ['/#/routes?mission=work-01','routeDifficulty'],['/#/ai','aiDifficulty'],
+  ];
+  await page.goto('/#/home');await page.locator('#homeDifficulty').selectOption('gentle');
+  for(const [path,id] of controls){
+    await page.goto(path);
+    const select=page.locator(`#${id}`);
+    await expect(select.locator('option')).toHaveText(names);
+    await expect(select).toHaveValue('gentle');
+    await expect(page.locator('main')).not.toContainText('Consolidación');
+  }
+  await page.locator('#aiDifficulty').selectOption('challenge');
+  await page.reload();await expect(page.locator('#aiDifficulty')).toHaveValue('challenge');
+  await expect(page.locator('#aiDifficulty option:checked')).toHaveText('Avanzado');
+});
+
+test('compact footer keeps help, legal links and practice resources accessible',async({page,request},info)=>{
+  await page.goto('/#/home');
+  const footer=page.locator('.site-footer');
+  for(const theme of ['light','dark']){
+    await page.getByLabel('Tema del sitio').selectOption(theme);
+    expect((await footer.boundingBox())!.height).toBeLessThan(info.project.name==='webkit-mobile'?230:160);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    await expect(footer.getByRole('link',{name:'Contacto y ayuda',exact:true})).toBeVisible();
+    await expect(footer.getByRole('link',{name:'Guardar una copia',exact:true})).toBeVisible();
+    expect((await new AxeBuilder({page}).include('.site-footer').analyze()).violations).toEqual([]);
+    await footer.screenshot({path:`output/spanish-footer/footer-${theme}-${info.project.name}.png`});
+  }
+  await footer.locator('summary').focus();await page.keyboard.press('Enter');
+  await expect(footer.getByRole('link',{name:'Guías de práctica',exact:true})).toBeVisible();
+  for(const link of await footer.locator('a[href^="/"]').all()){
+    const path=(await link.getAttribute('href'))!.split('#')[0] || '/';
+    expect((await request.get(path)).status()).toBe(200);
+  }
+  await footer.getByRole('link',{name:'Guardar una copia',exact:true}).click();
+  await expect(page.locator('#export')).toBeVisible();
+  await page.goto('/aprender/');
+  await expect(page.locator('.footer-resources')).not.toHaveAttribute('open');
+  await expect(page.locator('.site-footer').getByRole('link',{name:'Contacto y ayuda',exact:true})).toBeVisible();
+});

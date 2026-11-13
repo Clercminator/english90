@@ -200,7 +200,7 @@ export function finishQuiz(state: State, quiz: Quiz, now = Date.now()): void {
   quiz.finishedAt = now;
   recordSpecializationQuiz(state, quiz);
   if (!quiz.retry && (quiz.mode === 'recall' || quiz.mode === 'completion' || quiz.mode === 'listening' || quiz.difficulty === 'challenge')) recordEvidence(state, quiz.questions, quiz.responses, now, quiz.assisted);
-  state.history.push({ id: quiz.id, label: `${quiz.missionId ? `Misión ${quiz.missionId} · ` : ''}${quiz.retry ? 'Repaso de errores' : 'Práctica'} · categoría ${quiz.week} · ${modeLabel(quiz.mode)}${quiz.difficulty === 'challenge' ? ' · Desafío' : ''}`, kind: 'game', at: now, score: quizScore(quiz), total: quiz.questions.length, selfScore: null });
+  state.history.push({ id: quiz.id, label: `${quiz.missionId ? `Misión ${quiz.missionId} · ` : ''}${quiz.retry ? 'Repaso de errores' : 'Práctica'} · categoría ${quiz.week} · ${modeLabel(quiz.mode)}${quiz.difficulty === 'challenge' ? ' · Avanzado' : ''}`, kind: 'game', at: now, score: quizScore(quiz), total: quiz.questions.length, selfScore: null });
   touch(state, new Date(now));
 }
 export const modeLabel = (mode: Mode): string => ({ translation: 'Traducción', recall: 'Escribir de memoria', completion: 'Completar', ordering: 'Ordenar', timed: 'Reto de 60 segundos', listening: 'Escuchar y escribir', reading: 'Leer y comprender' })[mode];

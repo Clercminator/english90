@@ -17,7 +17,7 @@ test('six primary sections including specializations preserve legacy records', a
   await page.goto('/');
   await expect(page.getByRole('navigation', { name: 'Navegación principal' }).getByRole('link')).toHaveCount(6);
   await expect(page.getByRole('heading', { name: 'Qué bueno verte de nuevo.', exact: false })).toBeVisible();
-  await page.getByRole('link', { name: 'Continuar última actividad', exact: true }).click();
+  await page.getByRole('link', { name: 'Retomar la última actividad', exact: true }).click();
   await expect(page).toHaveURL(/#\/progress/);
   await page.getByText('Archivo de la versión anterior', {exact:false}).click();
   await expect(page.getByText('I can introduce myself.', {exact:false})).toBeVisible();
@@ -311,7 +311,7 @@ test('suspended advertising has no controls, placeholders, cookies or provider r
 
 test('first visit has an honest starting point and a ready public contact channel', async ({ page, request, browser, baseURL }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', {name: 'Continuar última actividad', exact: true})).toHaveCount(0);
+  await expect(page.getByRole('link', {name: 'Retomar la última actividad', exact: true})).toHaveCount(0);
   await expect(page.getByRole('link', {name: 'Empezar a practicar', exact: true})).toBeVisible();
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://english90.imrtech.xyz/share.png');
   const share = await request.get('/share.png');

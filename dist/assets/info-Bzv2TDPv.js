@@ -1,0 +1,1 @@
+import"./theme-B7ruLqP0.js";import{t as e}from"./advertising-D9nWaVcz.js";var t=e();document.body.dataset.article===`true`&&t.setPlacement(`article`);

@@ -1,0 +1,1 @@
+import"./theme-B7ruLqP0.js";import{t as e}from"./commerce-btEclGXa.js";var t=document.getElementById(`view`),n=location.pathname.includes(`cuenta`)?`account`:location.pathname.includes(`pago`)?`payment`:`landing`;e(t,n);

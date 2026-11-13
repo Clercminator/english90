@@ -4,11 +4,11 @@ import { shuffle, normalize } from './core.ts';
 import { challengeSentences } from './free.ts';
 import type { Difficulty, Question } from './core.ts';
 export const extensionContent = extra;
-export const difficultyLabels: Record<Difficulty, string> = { gentle: 'Paso a paso', standard: 'Consolidación', challenge: 'Desafío' };
+export const difficultyLabels: Record<Difficulty, string> = { gentle: 'Básico', standard: 'Intermedio', challenge: 'Avanzado' };
 export const difficultyDescriptions: Record<Difficulty, string> = {
-  gentle: 'Reconocer, usar pistas y practicar textos breves.',
-  standard: 'Recordar sin opciones, construir frases y conectar información.',
-  challenge: 'Reformular, inferir, argumentar y trabajar con estructuras más complejas.',
+  gentle: 'Practica con pistas, opciones de respuesta y textos breves.',
+  standard: 'Recuerda expresiones y escribe tus propias respuestas con menos ayuda.',
+  challenge: 'Responde sin opciones, comprende textos más largos y explica tus ideas.',
 };
 export function readingQuestions(category: number, difficulty: Difficulty): Question[] {
   const reading = extra.readings.find(r => r.category === category)!;
