@@ -11,11 +11,11 @@ async function saved(page: import('@playwright/test').Page): Promise<State> {
   return page.evaluate(key => JSON.parse(localStorage.getItem(key)!), STORAGE_KEY);
 }
 
-test('five primary sections and legacy records survive the free transition', async ({ page }) => {
+test('six primary sections including specializations preserve legacy records', async ({ page }) => {
   const old = emptyState(); old.done[30] = true; old.notes[30] = 'I can introduce myself.'; old.lastRoute = '#/plan/30';
   await page.addInitScript(({key, state}) => { if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(state)); }, {key: STORAGE_KEY, state: old});
   await page.goto('/');
-  await expect(page.getByRole('navigation', { name: 'Navegación principal' }).getByRole('link')).toHaveCount(5);
+  await expect(page.getByRole('navigation', { name: 'Navegación principal' }).getByRole('link')).toHaveCount(6);
   await expect(page.getByRole('heading', { name: 'Qué bueno verte de nuevo.', exact: false })).toBeVisible();
   await page.getByRole('link', { name: 'Continuar última actividad', exact: true }).click();
   await expect(page).toHaveURL(/#\/progress/);
@@ -278,7 +278,7 @@ test('educational pages are readable without JavaScript', async ({ browser, base
   for (const path of ['/', '/aprender/recordar-vocabulario/', '/aprender/frases-para-conversar/', '/aprender/practicar-con-ia/']) {
     await page.goto(`${baseURL}${path}`);
     await expect(page.locator('main h1')).toBeVisible();
-    await expect(page.locator('main')).toHaveCSS('color','rgb(36, 59, 74)');
+    await expect(page.locator('main')).toHaveCSS('color','rgb(17, 21, 45)');
     expect((await page.locator('main').innerText()).length).toBeGreaterThan(300);
     const config = JSON.parse(readFileSync('site.config.json', 'utf8'));
     if (config.siteUrl) {

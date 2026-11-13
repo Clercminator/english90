@@ -1,3 +1,4 @@
+import { routeChoices } from './specialization-overview';
 import './theme';
 import { renderCommercial } from './commerce';
 import { difficultyLabels, difficultyDescriptions, readingQuestions, practiceTest, speakingTask, extensionContent } from './levels';
@@ -36,7 +37,7 @@ let selectedTokens: number[] = [];
 let importCandidate: State | null = null;
 
 let timer: ReturnType<typeof setInterval> | undefined;
-const labels: Record<Section, string> = { home: 'Inicio', daily: 'Práctica diaria', plan: 'Ruta anterior', cards: 'Vocabulario', challenge: 'Juegos', assessments: 'Tests', ai: 'Práctica con IA', progress: 'Mi progreso', guide: 'Practicar con mi guía', situations: 'Situaciones reales' };
+const labels: Record<Section, string> = { home: 'Inicio', daily: 'Práctica diaria', plan: 'Ruta anterior', cards: 'Vocabulario', challenge: 'Juegos', assessments: 'Tests', ai: 'Práctica con IA', progress: 'Mi progreso', guide: 'Practicar con mi guía', situations: 'Situaciones reales', routes: 'Mis rutas de inglés' };
 const ads = connectAdvertising();
 const status = (message: string) => { $('status').textContent = message; };
 const savedStatus = (message: string) => status(storageSaved ? message : 'Tu avance está solo en esta sesión. Expórtalo desde Mi progreso antes de cerrar.');
@@ -107,7 +108,7 @@ function learningMetrics(): string {
   return `<div class="stats-grid"><div class="metric"><span>Tarjetas estudiadas</span><b>${current.length}<small> / ${words.length}</small></b><small>Calificadas al menos una vez</small></div><div class="metric"><span>Repasos pendientes</span><b>${current.filter(c => c.due <= Date.now()).length}</b><small>Según tu calendario de repaso</small></div><div class="metric"><span>Recordadas la última vez</span><b>${current.filter(c => c.rating === 'known').length}</b><small>Según tu propia valoración</small></div><div class="metric"><span>Racha de práctica</span><b>${streak(state.activity)}<small> ${streak(state.activity) === 1 ? 'día' : 'días'}</small></b><small>Solo cuentan días con actividad</small></div></div>`;
 }
 function renderHome(): void {
-  const returning = hasLearning(state);
+  const returning = hasLearning(state) || Object.values(state.specialization?.productions || {}).some(levels=>Object.values(levels).some(d=>d?.text.trim()));
   const due = words.filter(w => state.cards[cardKey(w, state.preferences.direction)]?.due <= Date.now()).length;
   const pending = state.daily && state.daily.completedAt === null && state.daily.items.length > 0;
   const today = state.daily?.completedAt !== null && state.daily?.day === localDate();
@@ -116,6 +117,7 @@ function renderHome(): void {
   ${returning ? `<div class="callout"><strong>Tu siguiente paso</strong><p>${independentAccuracy(state).ready ? 'Estás recordando bien sin ayuda. Prueba construir frases y escuchar antes de leer.' : 'Tu objetivo: completar una práctica diaria y volver a las expresiones difíciles.'}</p>${state.history.length ? `<p class="hint">Última actividad: ${e(state.history.at(-1)!.label)} · ${state.history.at(-1)!.score}/${state.history.at(-1)!.total}. ${link('#/progress', 'Ver mi progreso')}</p>` : ''}${link(independentAccuracy(state).ready ? `#/challenge?week=${state.preferences.week}&mode=listening` : '#/daily', independentAccuracy(state).ready ? 'Probar escucha sin texto' : 'Continuar mi práctica')}</div>` : ''}
   ${returning ? learningMetrics() : `<ol class="learning-steps"><li><span>1</span><div><h2>Aprende expresiones</h2><p>Empieza por situaciones que te resulten útiles.</p></div></li><li><span>2</span><div><h2>Recuerda sin mirar</h2><p>Intenta la traducción y comprueba tu respuesta.</p></div></li><li><span>3</span><div><h2>Vuelve a repasarlas</h2><p>El calendario se ajusta a lo que recuerdas.</p></div></li></ol>`}
   ${panel(`<div class="section-top"><div><div class="eyebrow">LLEVA EL INGLÉS A TU DÍA</div><h2>¿Qué te gustaría practicar?</h2></div>${link('#/cards', 'Ver todo el vocabulario')}</div><div class="category-grid">${categories.filter(c => [1, 4, 6].includes(c.id)).map(c => `<a class="category-card" href="#/cards?week=${c.id}"><strong>${e(outcomes[c.id])}</strong><span>${c.vocabulary.length} tarjetas · ${e(c.title)}</span><span>Practicar →</span></a>`).join('')}</div><div class="lesson-btns">${link('#/challenge', 'Juegos de palabras y frases')}${link('#/assessments', `Tests por situación y dificultad`)}${link('#/challenge?mode=reading', 'Leer y comprender')}${link('#/challenge?mode=listening', 'Escuchar y escribir')}${link('#/situations', 'Situaciones reales')}${link('#/ai', 'Practicar conversación con IA')}</div>`)}
+  ${panel(`<div class="section-top"><div><div class="eyebrow">TU INGLÉS, TU OBJETIVO</div><h2>Trabajo, estudios o viajes</h2><p class="hint">Elige una ruta gratuita y practica con situaciones de tu objetivo.</p></div>${link('#/routes', 'Mis rutas de inglés')}</div>${routeChoices(state)}`)}
   <div class="dashboard-grid spaced">${panel(`<h2>Una forma de estudiar que funciona para ti</h2><p>Ideas sencillas para recordar vocabulario y empezar a conversar.</p>${link('/aprender/', 'Leer las guías de práctica')}`)}${panel(`<h2>¿Prefieres una ruta de estudio?</h2><p>Conoce English 90 Premium, el programa autoguiado de 90 días que complementa esta práctica gratuita.</p>${link('#/guide', 'Practicar con mi guía')}${link('/premium/', 'Conocer el programa')}`)}</div>`;
   bindDifficulty('homeDifficulty', renderHome);
 }
@@ -282,9 +284,32 @@ function gameDescription(mode: Mode, difficulty: Difficulty): string {
   if (mode === 'completion') return hard ? 'Completa frases de esta situación y las dos anteriores. Fíjate en el tiempo verbal, las preposiciones y el contexto; no todas las respuestas son una sola palabra.' : 'Completa la frase con la palabra o expresión que falta. Usa la pista entre paréntesis cuando aparezca y lee el porqué después de responder.';
   return 'Elige la traducción correcta entre expresiones de la misma situación. Después prueba escribir de memoria para recordar sin opciones.';
 }
+let specializationView: typeof import('./specialization-view') | undefined;
+let specializationLoading = false;
+function renderRoutes(): void {
+  if (!specializationView) {
+    $('view').innerHTML = panel('<p role="status">Cargando tus rutas de inglés…</p>');
+    if (!specializationLoading) {
+      specializationLoading = true;
+      void import('./specialization-view').then(module => {
+        specializationView = module;
+        specializationLoading = false;
+        if (parseRoute(location.hash, state.day).section === 'routes') render();
+      }).catch(() => {
+        specializationLoading = false;
+        if (parseRoute(location.hash, state.day).section !== 'routes') return;
+        $('view').innerHTML = panel('<p role="alert">No pudimos cargar las rutas. Comprueba tu conexión y vuelve a intentarlo.</p>' + button('retryRoutes', 'Volver a intentar'));
+        bind('retryRoutes', renderRoutes);
+      });
+    }
+    return;
+  }
+  selectedTokens = [];
+  specializationView.renderSpecializations({ state, save: () => { save(); return storageSaved; }, status: savedStatus, quiz: renderQuestion, difficulty: difficultyControl });
+}
 function renderChallenge(): void {
   const q = state.quiz;
-  const active = q && q.week === route.week && q.mode === route.mode && (!location.hash.includes('guide=1') || q.guideDay === route.day);
+  const active = q && !q.missionId && q.week === route.week && q.mode === route.mode && (!location.hash.includes('guide=1') || q.guideDay === route.day);
   // Older saved games did not store their direction. Freeze it when resumed.
   if (active && !q.direction) { q.direction = state.preferences.direction; save(); }
   const difficulty = state.preferences.difficulty || 'standard';
@@ -346,7 +371,7 @@ function renderQuestion(): void {
     $('quizArea').innerHTML = `<div class="result-card"><div class="eyebrow">${storageSaved ? 'ACTIVIDAD COMPLETADA' : 'RESULTADO DE ESTA SESIÓN'}${q.retry ? ' · REPASO DE ERRORES' : ''}</div><h2>${score} de ${q.questions.length}</h2><p>${translation ? 'Traducciones correctas.' : 'Respuestas correctas según el modelo del ejercicio.'} ${q.deadline ? 'Las preguntas sin contestar cuentan como cero.' : ''}${listening ? ` Escucha sin texto: ${score} aciertos. ${q.assisted?.length || 0} respuestas con apoyo escrito, sin puntuación.` : ''}</p><p>${missed ? `${missed} ${missed === 1 ? 'respuesta para reforzar' : 'respuestas para reforzar'}. Intenta recordarlas de nuevo antes de mirar la solución.` : '¡Ronda completa! Prueba otra situación o un ritmo más exigente.'}</p>${missed ? button('retryMistakes', `Repasar ${missed} ${missed === 1 ? 'error' : 'errores'}`) : ''}${q.deadline && missed ? '<p class="hint">El repaso inicia un nuevo reloj de 60 segundos.</p>' : ''}<p class="hint">Cada ronda guarda su propio resultado. El repaso no cambia la nota anterior.</p></div><details><summary>Ver respuestas y explicaciones</summary>${q.questions.map((item, i) => `<div class="review-item"><span class="review-label">${q.assisted?.includes(i) ? 'Con apoyo escrito' : questionCorrect(item, q.responses[i]) ? '✓ Recordada' : '↻ Por reforzar'}</span><p><strong>${e(item.prompt)}</strong></p><p>Tu respuesta: ${e(q.responses[i] || 'Sin responder')}</p><p>Respuesta de referencia: <strong>${e(item.answer)}</strong></p><p class="hint">${e(item.explanation)}</p></div>`).join('')}</details>`;
     if (missed) bind('retryMistakes', () => {
       const retry = retryQuiz(q); if (!retry) return;
-      state.quiz = retry; selectedTokens = []; save(); renderChallenge(); focusQuestion();
+      state.quiz = retry; selectedTokens = []; save(); if (q.missionId) renderRoutes(); else renderChallenge(); focusQuestion();
     });
     return;
   }
@@ -507,7 +532,8 @@ function render(write = true): void {
   if (timer) clearInterval(timer);
   route = parseRoute(location.hash, state.day);
   ads.setPlacement(route.section === 'home' ? 'home' : null);
-  if (route.section !== 'home' && route.section !== 'progress' && route.section !== 'plan' && route.section !== 'daily') state.lastRoute = `#/${route.section}/${route.day}?week=${route.week}&mode=${route.mode}${location.hash.includes('checkpoint=1') ? '&checkpoint=1' : ''}${location.hash.includes('guide=1') ? '&guide=1' : ''}`;
+  if (route.section === 'routes') state.lastRoute = location.hash;
+  if (route.section !== 'routes' && route.section !== 'home' && route.section !== 'progress' && route.section !== 'plan' && route.section !== 'daily') state.lastRoute = `#/${route.section}/${route.day}?week=${route.week}&mode=${route.mode}${location.hash.includes('checkpoint=1') ? '&checkpoint=1' : ''}${location.hash.includes('guide=1') ? '&guide=1' : ''}`;
   if (write) save();
   document.title = `English 90 · ${labels[route.section]}${route.section === 'plan' ? ` · Día ${route.day}` : ''}`;
   document.querySelectorAll<HTMLAnchorElement>('[data-section]').forEach(a => {
@@ -516,7 +542,7 @@ function render(write = true): void {
 
     if (a.dataset.section === 'cards') a.href = `#/cards?week=${state.preferences.week}`;
   });
-  const renderers = { home: renderHome, daily: renderDaily, plan: renderPlan, cards: renderCards, challenge: renderChallenge, assessments: renderAssessments, ai: renderAI, progress: renderProgress, guide: renderGuide, situations: renderSituations };
+  const renderers = { home: renderHome, daily: renderDaily, plan: renderPlan, cards: renderCards, challenge: renderChallenge, assessments: renderAssessments, ai: renderAI, progress: renderProgress, guide: renderGuide, situations: renderSituations, routes: renderRoutes };
   renderers[route.section]();
   suppressWrite = false;
   if (timer) clearInterval(timer);

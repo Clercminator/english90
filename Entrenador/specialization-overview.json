@@ -1,0 +1,59 @@
+[
+  {
+    "id": "work",
+    "title": "Trabajo",
+    "firstTitle": "Presentarte profesionalmente",
+    "missions": [
+      "work-01",
+      "work-02",
+      "work-03",
+      "work-04",
+      "work-05",
+      "work-06",
+      "work-07",
+      "work-08",
+      "work-09",
+      "work-10",
+      "work-11",
+      "work-12"
+    ]
+  },
+  {
+    "id": "study",
+    "title": "Estudios",
+    "firstTitle": "Explicar tus objetivos académicos",
+    "missions": [
+      "study-01",
+      "study-02",
+      "study-03",
+      "study-04",
+      "study-05",
+      "study-06",
+      "study-07",
+      "study-08",
+      "study-09",
+      "study-10",
+      "study-11",
+      "study-12"
+    ]
+  },
+  {
+    "id": "travel",
+    "title": "Viajes",
+    "firstTitle": "Primer contacto durante un viaje",
+    "missions": [
+      "travel-01",
+      "travel-02",
+      "travel-03",
+      "travel-04",
+      "travel-05",
+      "travel-06",
+      "travel-07",
+      "travel-08",
+      "travel-09",
+      "travel-10",
+      "travel-11",
+      "travel-12"
+    ]
+  }
+]

@@ -9,11 +9,22 @@ export async function auditPublicBuild(directory = 'dist') {
   const config = JSON.parse(await readFile('site.config.json', 'utf8'));
   const allowed = new Set(['index.html', 'landing.html', '404.html', 'robots.txt', 'sitemap.xml', 'ads.txt', 'share.svg', 'share.png', 'share-english90-v2.png', 'assets/manrope-license.txt', 'comprar/index.html', 'cuenta/index.html', 'pago/index.html', ...publicPages(config).map(p => `${p.path.slice(1)}index.html`)]);
   const source = JSON.parse(await readFile('private/source/English_90_V2_Programa.json', 'utf8'));
-  const normalize = value => value.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+  const normalize = value => value.toLowerCase().replace(/\\[nrt]/g, ' ').replace(/[^\p{L}\p{N}]/gu, '');
   const privateTexts = [
     ...source.days.flatMap(d => [d.practice_prompt, d.day_goal_evidence, d.task].filter(Boolean)),
     ...source.weeks.map(w => w.reading),
   ].filter(t => t.length > 70).map(normalize);
+  // Editorial inputs remain private. Only the explicit CORE projection is public.
+  // Older workspaces can still audit the fundamental edition without this source.
+  let specialization;
+  try { specialization = JSON.parse(await readFile('private/editorial/content/specializations/manifest.json', 'utf8')); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  if (specialization) {
+    privateTexts.push(...[
+      ...specialization.missions.flatMap(m => [m.dialogue, m.task, m.change, m.evidence]),
+      ...['11', '12'].flatMap(key => specialization.sections[key].split(/\n\s*\n/)),
+    ].filter(t => t.length > 70).map(normalize));
+  }
   const paths = [];
   async function scan(dir) {
     for (const entry of await readdir(dir, { withFileTypes: true })) {

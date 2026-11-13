@@ -11,7 +11,7 @@ function read(): Theme {
 function apply(): void {
   const dark = preference === 'dark' || (preference === 'system' && system.matches);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#101b24' : '#142b41');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#11152D' : '#11152D');
   const select = document.getElementById('themeChoice') as HTMLSelectElement | null;
   if (select) { select.value = preference; syncSelect(select); }
 }

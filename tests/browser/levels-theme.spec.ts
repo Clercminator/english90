@@ -12,14 +12,14 @@ test('theme persists on learning and public pages and system choice responds to 
     await page.goto(path); await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
     if(path==='/premium/') { await expect(page.locator('.sales-page')).toBeVisible(); continue; }
     await expect(page.getByLabel('Tema del sitio')).toHaveValue('dark');
-    await expect(page.locator('.theme-choice')).toHaveCSS('color','rgb(174, 189, 200)');
+    await expect(page.locator('.theme-choice')).toHaveCSS('color','rgb(196, 190, 210)');
   }
   await page.getByLabel('Tema del sitio').selectOption('system');
   await expect(page.locator('html')).toHaveAttribute('data-theme','light');
   await page.emulateMedia({colorScheme:'dark'}); await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
   await page.getByLabel('Tema del sitio').selectOption('light');
   await page.reload(); await expect(page.locator('html')).toHaveAttribute('data-theme','light');
-  await expect(page.locator('.theme-choice')).toHaveCSS('color','rgb(84, 103, 117)');
+  await expect(page.locator('.theme-choice')).toHaveCSS('color','rgb(96, 104, 127)');
 });
 
 test('difficulty-specific test drafts are retained and challenge mixes grammar with contextual reading',async({page})=>{

@@ -1,0 +1,369 @@
+{
+  "schemaVersion": 1,
+  "audience": "free-public",
+  "sourceSha256": "190fae0d2761ea4e772541fd9653ea9a93a0cffba0aa2e865e11f84e629416e4",
+  "missions": [
+    {
+      "context": "Participas en una reunión virtual. Una persona nueva quiere saber en qué equipo trabajas y qué haces habitualmente.",
+      "produce": "Preséntate en inglés utilizando tres frases. Explica tu área, una responsabilidad y formula una pregunta sobre la otra persona.",
+      "challenge": "La otra persona no conoce tu ocupación. Explícala con palabras más sencillas.",
+      "notes": [],
+      "id": "work-01",
+      "examples": []
+    },
+    {
+      "context": "Un compañero quiere organizar una reunión de quince minutos. Tú estás disponible mañana por la mañana.",
+      "produce": "Escribe una pregunta para consultar su disponibilidad, una propuesta de horario y una respuesta de confirmación.",
+      "challenge": "La persona propone una hora en la que no puedes asistir. Ofrece otra alternativa.",
+      "notes": [],
+      "id": "work-02",
+      "examples": []
+    },
+    {
+      "context": "Tu supervisor solicita una actualización. Estás preparando un informe y todavía esperas información de otra persona.",
+      "produce": "Explica qué estás haciendo, qué está pendiente y qué información necesitas.",
+      "challenge": "El supervisor pregunta si puedes terminar hoy. Responde sin prometer una fecha que no puedes garantizar.",
+      "notes": [],
+      "id": "work-03",
+      "examples": []
+    },
+    {
+      "context": "Necesitas una versión actualizada de un documento para continuar con tu trabajo.",
+      "produce": "Redacta tres frases corteses: explica qué necesitas, pregunta cuándo estará disponible y agradece la ayuda.",
+      "challenge": "La persona solamente dispone de una versión anterior. Solicita una alternativa útil.",
+      "notes": [],
+      "id": "work-04",
+      "examples": []
+    },
+    {
+      "context": "Ayer hubo un problema con un sistema de trabajo. Tu equipo lo revisó y posteriormente pudo continuar.",
+      "produce": "Describe en inglés qué ocurrió primero, qué hizo el equipo y cuál fue el resultado.",
+      "challenge": "Un compañero pide aclarar qué actividad quedó pendiente.",
+      "notes": [],
+      "id": "work-05",
+      "examples": []
+    },
+    {
+      "context": "Un visitante llega a tu oficina y necesita encontrar una sala de reuniones.",
+      "produce": "Escribe una pregunta para identificar qué sala busca y dos indicaciones sencillas para orientarlo.",
+      "challenge": "Descubres que la sala se encuentra ocupada. Explica dónde puede solicitar ayuda.",
+      "notes": [],
+      "id": "work-06",
+      "examples": []
+    },
+    {
+      "context": "Un cliente necesita recibir un documento la próxima semana. Debes confirmar el plan de entrega.",
+      "produce": "Explica cuándo planeas terminar, qué información confirmarás y cómo comunicarás una actualización.",
+      "challenge": "Aparece una dependencia que podría causar un retraso. Comunícala y propón una fecha alternativa.",
+      "notes": [],
+      "id": "work-07",
+      "examples": []
+    },
+    {
+      "context": "Estás completando una tarea, pero una instrucción importante no está clara.",
+      "produce": "Explica la dificultad, solicita una aclaración y propone una forma de continuar.",
+      "challenge": "La persona responsable no está disponible. Formula una nueva solicitud a otro integrante del equipo.",
+      "notes": [],
+      "id": "work-08",
+      "examples": []
+    },
+    {
+      "context": "Tu equipo compara dos servicios. El primero cuesta menos, pero tarda más. El segundo es más rápido, pero cuesta más.",
+      "produce": "Compara las opciones y recomienda una explicando tu criterio.",
+      "challenge": "Otro compañero no está de acuerdo. Responde respetuosamente y formula una pregunta para comprender su preocupación.",
+      "notes": [],
+      "id": "work-09",
+      "examples": []
+    },
+    {
+      "context": "Durante una conversación profesional, alguien te pregunta por una actividad importante que realizaste anteriormente.",
+      "produce": "Describe una experiencia verdadera, una acción que realizaste y algo que aprendiste.",
+      "challenge": "Te piden explicar cuándo sucedió y cuál fue tu contribución específica.",
+      "notes": [
+        "Puedes utilizar una situación ficticia identificada como práctica. No inventes logros para presentarlos como reales."
+      ],
+      "id": "work-10",
+      "examples": []
+    },
+    {
+      "context": "Tienes una conversación con tu supervisor sobre tus posibilidades de asumir nuevas responsabilidades.",
+      "produce": "Explica qué te interesa, describe una responsabilidad actual y pregunta qué habilidades necesitas fortalecer.",
+      "challenge": "El supervisor solicita un ejemplo concreto de tu trabajo. Utiliza una experiencia real o identifica expresamente un ejemplo ficticio.",
+      "notes": [],
+      "id": "work-11",
+      "examples": []
+    },
+    {
+      "context": "Participas en una entrevista para un puesto que requiere coordinación y resolución de problemas.",
+      "produce": "Describe brevemente tu experiencia, una contribución y cómo abordarías un problema nuevo.",
+      "challenge": "El entrevistador pregunta qué harías si el equipo no estuviera de acuerdo con tu propuesta.",
+      "notes": [],
+      "id": "work-12",
+      "examples": [
+        {
+          "pattern": "My main contribution was...",
+          "en": "My main contribution was improving the reporting process.",
+          "es": "Mi principal contribución fue mejorar el proceso de elaboración de informes."
+        },
+        {
+          "pattern": "I would approach the problem by...",
+          "en": "I would approach the problem by reviewing the priorities with my team.",
+          "es": "Abordaría el problema revisando las prioridades con mi equipo."
+        }
+      ]
+    },
+    {
+      "context": "Participas en una feria virtual de universidades. Un representante te pregunta qué deseas estudiar.",
+      "produce": "Explica el área que te interesa, por qué quieres estudiarla y formula una pregunta sobre el programa.",
+      "challenge": "El representante no comprende el nombre de tu área de interés. Explícalo de otra manera.",
+      "notes": [],
+      "id": "study-01",
+      "examples": []
+    },
+    {
+      "context": "Un compañero nuevo necesita conocer tu horario y saber cuándo pueden estudiar juntos.",
+      "produce": "Explica a qué hora comienza una clase, cuándo estudias habitualmente y pregunta por su disponibilidad.",
+      "challenge": "Una de las clases cambia de horario. Actualiza tu respuesta.",
+      "notes": [],
+      "id": "study-02",
+      "examples": []
+    },
+    {
+      "context": "Trabajas en un proyecto grupal. Un compañero quiere conocer el progreso de tu parte.",
+      "produce": "Describe qué estás preparando, qué has revisado y qué ayuda necesitas.",
+      "challenge": "El compañero no comprende una instrucción. Solicita que la explique de otra manera.",
+      "notes": [],
+      "id": "study-03",
+      "examples": []
+    },
+    {
+      "context": "Encontraste una habitación anunciada para estudiantes. El precio aparece publicado, pero no se aclaran los servicios incluidos.",
+      "produce": "Pregunta por el alquiler, los servicios básicos y el depósito.",
+      "challenge": "El propietario informa que debes pagar servicios adicionales. Solicita el costo total antes de decidir.",
+      "notes": [],
+      "id": "study-04",
+      "examples": []
+    },
+    {
+      "context": "Una institución quiere conocer tus estudios anteriores y alguna actividad académica relevante.",
+      "produce": "Describe qué estudiaste, una actividad que completaste y algo que aprendiste.",
+      "challenge": "Te solicitan una fecha o un ejemplo específico.",
+      "notes": [],
+      "id": "study-05",
+      "examples": []
+    },
+    {
+      "context": "Es tu primera semana en una universidad. Necesitas encontrar la biblioteca y el área de atención a estudiantes.",
+      "produce": "Formula dos preguntas para encontrar los servicios y una para consultar los horarios.",
+      "challenge": "Una oficina está cerrada. Pregunta dónde puedes recibir ayuda alternativa.",
+      "notes": [
+        "*Student services office* es una denominación más descriptiva para una oficina que ofrece asistencia a estudiantes. Las universidades pueden utilizar nombres diferentes, como *student support*, *student affairs* o *student services*."
+      ],
+      "id": "study-06",
+      "examples": []
+    },
+    {
+      "context": "Estás organizando una postulación que debe enviarse próximamente. Todavía necesitas confirmar un documento.",
+      "produce": "Explica qué vas a enviar, cuándo planeas hacerlo y qué te falta confirmar.",
+      "challenge": "El documento pendiente tarda más de lo esperado. Pregunta qué opciones tienes.",
+      "notes": [],
+      "id": "study-07",
+      "examples": []
+    },
+    {
+      "context": "Una oficina de admisiones te solicita aclarar qué información necesitas.",
+      "produce": "Formula tres preguntas sobre documentos, requisitos y próximos pasos.",
+      "challenge": "La persona indica que una de las preguntas corresponde a otro departamento. Solicita sus datos de contacto.",
+      "notes": [],
+      "id": "study-08",
+      "examples": []
+    },
+    {
+      "context": "Compara dos programas ficticios: uno tiene clases presenciales y un horario fijo; el otro tiene horarios flexibles y algunas clases online.",
+      "produce": "Describe dos diferencias y explica cuál elegirías.",
+      "challenge": "Tu programa preferido tiene un requisito adicional. Explica si cambiaría tu decisión.",
+      "notes": [],
+      "id": "study-09",
+      "examples": [
+        {
+          "pattern": "I prefer this option because...",
+          "en": "I prefer this option because it offers evening classes.",
+          "es": "Prefiero esta opción porque ofrece clases por la tarde-noche."
+        }
+      ]
+    },
+    {
+      "context": "Una universidad solicita un certificado que pediste hace una semana, pero todavía no has recibido.",
+      "produce": "Explica qué documento falta, cuándo lo solicitaste y qué acción realizarás.",
+      "challenge": "La universidad solicita una actualización para mañana. Responde con una propuesta realista.",
+      "notes": [],
+      "id": "study-10",
+      "examples": []
+    },
+    {
+      "context": "En clase se debate si estudiar online puede resultar conveniente para estudiantes que trabajan.",
+      "produce": "Expresa tu opinión, presenta una razón y reconoce una posible limitación.",
+      "challenge": "Otro estudiante presenta una opinión diferente. Respóndele con respeto y haz una pregunta de seguimiento.",
+      "notes": [
+        "La encuesta mencionada es ficticia y se utiliza exclusivamente como ejercicio de lenguaje académico. No representa una investigación real."
+      ],
+      "id": "study-11",
+      "examples": [
+        {
+          "pattern": "The evidence suggests...",
+          "en": "The evidence suggests that most respondents in our fictional survey prefer shorter lessons.",
+          "es": "La evidencia sugiere que la mayoría de los participantes de nuestra encuesta ficticia prefiere clases más cortas."
+        }
+      ]
+    },
+    {
+      "context": "Debes explicar brevemente un proyecto de clase. Puedes utilizar un ejercicio ficticio identificado como tal.",
+      "produce": "Presenta la pregunta principal, una observación, una limitación y una conclusión.",
+      "challenge": "El profesor pide aclarar por qué tu observación no permite sacar una conclusión definitiva.",
+      "notes": [
+        "Los ejemplos académicos ficticios deben identificarse claramente como tales y no presentarse como resultados científicos reales."
+      ],
+      "id": "study-12",
+      "examples": [
+        {
+          "pattern": "Our research question is...",
+          "en": "Our research question is whether daily reminders help students practise regularly.",
+          "es": "Nuestra pregunta de investigación es si los recordatorios diarios ayudan a los estudiantes a practicar con regularidad."
+        },
+        {
+          "pattern": "We found that...",
+          "en": "We found that six of ten participants in our fictional survey preferred morning lessons.",
+          "es": "Encontramos que seis de diez participantes de nuestra encuesta ficticia preferían las clases por la mañana."
+        },
+        {
+          "pattern": "One limitation is...",
+          "en": "One limitation is that our fictional survey includes only ten responses.",
+          "es": "Una limitación es que nuestra encuesta ficticia incluye solamente diez respuestas."
+        },
+        {
+          "pattern": "To conclude, we recommend...",
+          "en": "To conclude, we recommend studying the question with a larger group.",
+          "es": "Para concluir, recomendamos estudiar la pregunta con un grupo más grande."
+        }
+      ]
+    },
+    {
+      "context": "Llegas a la recepción de un alojamiento. Una persona te pregunta tu nombre y si tienes reserva.",
+      "produce": "Saluda, preséntate y explica por qué estás allí.",
+      "challenge": "La persona no encuentra tu reserva. Repite la información de manera clara y solicita ayuda.",
+      "notes": [],
+      "id": "travel-01",
+      "examples": []
+    },
+    {
+      "context": "Estás organizando una excursión en transporte público y necesitas confirmar cuándo sale.",
+      "produce": "Pregunta por el horario de salida, confirma el día y explica cuándo necesitas llegar.",
+      "challenge": "La salida se retrasa. Pregunta por una alternativa.",
+      "notes": [],
+      "id": "travel-02",
+      "examples": []
+    },
+    {
+      "context": "La pantalla del aeropuerto indica que tu puerta de embarque cambió de la 12 a la 18.",
+      "produce": "Explica dónde estás, qué información viste y pregunta cómo llegar a la nueva puerta.",
+      "challenge": "El personal indica que debes trasladarte a otro sector de la terminal. Pide indicaciones.",
+      "notes": [],
+      "id": "travel-03",
+      "examples": []
+    },
+    {
+      "context": "Estás en un restaurante y el menú no especifica todos los ingredientes.",
+      "produce": "Pide un plato de manera cortés y formula dos preguntas sobre sus ingredientes.",
+      "challenge": "El personal no puede confirmar si contiene un ingrediente que necesitas evitar. Explica que no puedes decidir sin una confirmación fiable.",
+      "notes": [
+        "Ante una alergia alimentaria grave, no dependas únicamente de frases aprendidas, traducciones automáticas ni respuestas no verificadas. Solicita información fiable sobre ingredientes y contaminación cruzada al establecimiento. Si no pueden confirmarla, evita asumir que el alimento es seguro."
+      ],
+      "id": "travel-04",
+      "examples": [],
+      "foodClarification": "Es útil como pregunta general, pero no debe presentarse como una comprobación suficiente ante todas las alergias.\n\n**Peanuts** significa maní o cacahuates.\n\n**Tree nuts** se refiere a frutos secos de árbol, como nueces y almendras.\n\nPara consultar específicamente ambos grupos:\n\n**Does this contain peanuts or tree nuts?**\n\n¿Esto contiene maní/cacahuates o frutos secos como nueces y almendras?\n\nPara consultar posible contacto cruzado:\n\n**Is there a risk of cross-contact?**\n\n¿Existe riesgo de contaminación cruzada?\n\nNo interpretar una respuesta imprecisa como confirmación de seguridad alimentaria."
+    },
+    {
+      "context": "Ayer un transporte llegó tarde y tuviste que modificar una actividad turística.",
+      "produce": "Explica qué ocurrió, qué hiciste después y cómo terminó la situación.",
+      "challenge": "Un amigo pregunta por qué cambiaste tus planes.",
+      "notes": [],
+      "id": "travel-05",
+      "examples": []
+    },
+    {
+      "context": "Quieres visitar un museo, pero el transporte que pensabas utilizar no está disponible.",
+      "produce": "Pregunta cómo llegar al museo, dónde debes cambiar de transporte y si existe otra ruta.",
+      "challenge": "La ruta alternativa requiere caminar. Pregunta cuánto hay que caminar.",
+      "notes": [],
+      "id": "travel-06",
+      "examples": []
+    },
+    {
+      "context": "Tienes una reserva de alojamiento, pero necesitas llegar un día después de lo previsto.",
+      "produce": "Solicita el cambio, pregunta por cargos adicionales y pide confirmar la nueva fecha.",
+      "challenge": "La habitación original no está disponible. Pregunta qué alternativas existen.",
+      "notes": [],
+      "id": "travel-07",
+      "examples": []
+    },
+    {
+      "context": "Llegaste a tu alojamiento y notaste que falta una pertenencia que utilizaste durante el traslado.",
+      "produce": "Explica qué falta, dónde la viste por última vez y solicita orientación.",
+      "challenge": "El personal necesita una descripción más precisa del objeto.",
+      "notes": [],
+      "id": "travel-08",
+      "examples": []
+    },
+    {
+      "context": "Tienes dos opciones de alojamiento: una es más económica, pero está lejos del centro; la otra es más costosa y está mejor ubicada.",
+      "produce": "Compara las dos opciones y explica cuál prefieres.",
+      "challenge": "Descubres que una opción no incluye desayuno. Pregunta por el costo adicional.",
+      "notes": [],
+      "id": "travel-09",
+      "examples": []
+    },
+    {
+      "context": "Tu maleta todavía no llega. Ya reportaste el problema al personal del aeropuerto.",
+      "produce": "Explica el estado del equipaje, cuándo hiciste el reporte y solicita una actualización.",
+      "challenge": "La persona necesita tu número de reporte. Practica cómo proporcionarlo sin utilizar datos personales reales.",
+      "notes": [],
+      "id": "travel-10",
+      "examples": []
+    },
+    {
+      "context": "La habitación que recibiste tiene un problema que afecta tu estadía.",
+      "produce": "Explica el problema respetuosamente y solicita una solución concreta.",
+      "challenge": "La primera alternativa ofrecida no satisface tus necesidades. Explica por qué y solicita otra.",
+      "notes": [],
+      "id": "travel-11",
+      "examples": []
+    },
+    {
+      "context": "Estás realizando un viaje internacional ficticio. Necesitas comunicar tu llegada, confirmar alojamiento y organizar un traslado.",
+      "produce": "Crea cuatro intervenciones conectadas que incluyan información del viaje, una solicitud y una confirmación.",
+      "challenge": "Pierdes una conexión de transporte y debes modificar tu horario de llegada. Explica qué sucedió y solicita una alternativa.",
+      "notes": [],
+      "id": "travel-12",
+      "examples": []
+    }
+  ],
+  "selfReview": {
+    "title": "Comprueba tu respuesta",
+    "questions": [
+      "¿Comuniqué la información principal que pedía la situación?",
+      "¿Utilicé al menos una estructura de la misión correctamente?",
+      "¿Pude formular una respuesta propia sin copiar la frase modelo?"
+    ],
+    "options": [
+      "Lo logré sin ayuda.",
+      "Lo logré con pistas.",
+      "Necesito practicar nuevamente."
+    ],
+    "adaptQuestion": "¿Pude adaptar mi respuesta cuando cambió la situación?"
+  },
+  "difficulty": {
+    "gentle": "Reconocer expresiones, completar estructuras básicas y recuperar vocabulario con pistas.",
+    "standard": "Crear una respuesta original al apartado Produce, sin mostrar la frase completa antes del intento.",
+    "challenge": "Resolver la situación, responder a la condición nueva y justificar o aclarar la respuesta cuando corresponda."
+  }
+}

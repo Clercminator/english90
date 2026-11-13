@@ -8,6 +8,9 @@ supabase/.temp/
 !.env.example
 /English_90_Trainer_Production.zip
 private/
+/output/pdf/dsss/
+/output/pdf/dsss-cierre/
+/output/pdf/dsss-v1/
 release/
 
 archive/*
@@ -17,3 +20,7 @@ archive/commercial-v3.1/*
 __pycache__/
 *.py[cod]
 .vercel
+
+/output/platform-ux/
+
+/output/

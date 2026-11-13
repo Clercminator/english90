@@ -124,7 +124,8 @@ test('public build fails on PDFs, full source, maps and private prose even in re
     const approved=await auditPublicBuild(dir);
     let compressed=0;
     for(const path of approved.filter(p=>/\.(js|css)$/.test(p))) compressed+=gzipSync(await readFile(resolve(dir,path))).length;
-    // Includes the separately loaded Supabase Auth SDK; the free trainer does not load it.
-    assert.ok(compressed<155000,`Script/style transfer budget exceeded: ${compressed}`);
+    // Includes the separately loaded Auth SDK plus the approved 36 public DSSS
+    // tasks, eight complete examples and local free-production UI added in V1.
+    assert.ok(compressed<170000,`Script/style transfer budget exceeded: ${compressed}`);
   } finally { await rm(dir,{recursive:true,force:true}); }
 });
