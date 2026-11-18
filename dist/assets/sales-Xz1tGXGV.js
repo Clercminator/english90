@@ -1,0 +1,1 @@
+import{n as e}from"./commerce-22PHyGSa.js";import"./theme-CdahvxWd.js";var t=document.getElementById(`view`),n=location.pathname.includes(`cuenta`)?`account`:location.pathname.includes(`pago`)?`payment`:`landing`;e(t,n);

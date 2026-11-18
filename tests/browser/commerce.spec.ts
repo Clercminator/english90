@@ -57,6 +57,92 @@ test('forged success URL cannot grant purchase and account recovery stays availa
   await expect(page.getByLabel('Correo electrónico',{exact:true})).toBeVisible();
 });
 
+test('checkout opens a new tab and verifies payment when that tab returns', async ({ page, context }) => {
+  const provider = 'https://www.mercadopago.cl/checkout/v1/redirect?order_id=fixture';
+  let checkoutToken: string | undefined;
+  await context.route('**/api/commerce?*', async route => {
+    const action = new URL(route.request().url()).searchParams.get('action');
+    if (action === 'checkout') {
+      checkoutToken = route.request().postDataJSON().token;
+      await route.fulfill({ json: { url: provider, order: 'fixture' } });
+    } else if (action === 'status') {
+      expect(route.request().postDataJSON()).toEqual({ order: 'fixture', token: checkoutToken });
+      await route.fulfill({ json: { status: 'paid', delivery: 'sent' } });
+    } else {
+      await route.fulfill({ json: { enabled: true, environment: 'production', supabaseUrl: '', supabaseKey: '' } });
+    }
+  });
+  await page.goto('/comprar/');
+  const purchaseURL = page.url();
+  await context.route(provider, route => route.fulfill({ body: 'Mercado Pago fixture' }));
+  await page.getByLabel('Tu correo electrónico', { exact: true }).fill('buyer@example.com');
+  await page.getByLabel('Acepto los').check();
+  await page.getByRole('button', { name: 'Quiero English90' }).click();
+  const [paymentTab] = await Promise.all([
+    context.waitForEvent('page'),
+    page.getByRole('button', { name: 'Confirmar correo e ir a Mercado Pago' }).click(),
+  ]);
+  await expect(paymentTab).toHaveURL(provider);
+  expect(await paymentTab.evaluate(() => window.opener)).toBeNull();
+  await paymentTab.goto(new URL('/pago/?order=fixture', purchaseURL).href);
+  await expect(paymentTab.getByRole('heading', { name: '¡Gracias por elegir English90!' })).toBeVisible();
+  await expect(paymentTab.getByRole('link', { name: 'Acceder a mi guía y contraseña' })).toHaveAttribute('target', '_blank');
+  await expect(page).toHaveURL(purchaseURL);
+});
+
+test('the guide opens in its own tab and the password stays beside the download', async ({ page, context }, info) => {
+  const storage = 'https://fixture.supabase.co';
+  const pdf = storage + '/storage/v1/object/sign/english90-buyers/guide.pdf?token=fixture';
+  await page.addInitScript(() => {
+    localStorage.setItem('sb-fixture-auth-token', JSON.stringify({
+      access_token: 'test-access', refresh_token: 'test-refresh', expires_at: Math.floor(Date.now() / 1000) + 3600,
+      user: { id: 'fixture', email: 'buyer@example.com' },
+    }));
+  });
+  let downloadRequests = 0;
+  await context.route('**/api/commerce?*', route => {
+    const action = new URL(route.request().url()).searchParams.get('action');
+    if (action === 'download') {
+      downloadRequests++;
+      expect(route.request().postDataJSON()).toEqual({ order: 'fixture' });
+      return route.fulfill({ json: { url: pdf } });
+    }
+    if (action === 'password') return route.fulfill({ json: { password: 'fixture-password' } });
+    if (action === 'account') return route.fulfill({ json: {
+      email: 'buyer@example.com', entitled: true,
+      orders: [{ id: 'fixture', status: 'paid', amount_clp: 59990 }],
+      deliveries: [{ order_id: 'fixture', status: 'sent' }],
+    } });
+    return route.fulfill({ json: { enabled: true, environment: 'production', supabaseUrl: storage, supabaseKey: 'test-key' } });
+  });
+  await context.route(pdf, route => route.fulfill({ contentType: 'text/plain', body: 'Protected guide fixture' }));
+  await page.goto('/cuenta/');
+  const accountURL = page.url();
+  const guide = page.getByRole('article').filter({ hasText: 'Tu guía English90 Premium' });
+  const download = guide.getByRole('button', { name: 'Descargar guía (PDF)' });
+  await expect(download).toBeVisible();
+  await expect(guide.getByRole('img', { name: 'Portada de la guía English90 Premium' })).toBeVisible();
+  await expect(guide).toHaveCSS('display', 'grid');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await page.evaluate(() => document.fonts.ready);
+  await page.screenshot({ path: `tmp/english90-account-${info.project.name}.png`, fullPage: true });
+
+  const [pdfTab] = await Promise.all([context.waitForEvent('page'), download.click()]);
+  await expect(pdfTab).toHaveURL(pdf);
+  expect(await pdfTab.evaluate(() => window.opener)).toBeNull();
+  await expect(page).toHaveURL(accountURL);
+  await guide.getByRole('button', { name: 'Ver contraseña del PDF' }).click();
+  await expect(guide.getByText('fixture-password')).toBeVisible();
+  await guide.getByRole('button', { name: 'Ocultar contraseña' }).click();
+  await expect(guide.getByText('fixture-password')).toHaveCount(0);
+
+  await page.evaluate(() => { window.open = () => null; });
+  await download.click();
+  await expect(guide.getByRole('status')).toContainText('Permite las ventanas emergentes');
+  expect(downloadRequests).toBe(1);
+});
+
 test('payment return renders backend status rather than provider URL parameters',async({page})=>{
   await page.addInitScript(()=>sessionStorage.setItem('english90-order',JSON.stringify({order:'fixture',token:'fixture-token'})));
   await page.route('**/api/commerce?*',route=>route.fulfill({json:{status:'pending',delivery:'pending'}}));

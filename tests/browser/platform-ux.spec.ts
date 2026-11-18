@@ -103,7 +103,7 @@ test('difficulty names stay consistent across practice and preserve the selected
     ['/#/challenge','difficulty'],['/#/assessments','testDifficulty'],
     ['/#/routes?mission=work-01','routeDifficulty'],['/#/ai','aiDifficulty'],
   ];
-  await page.goto('/#/home');await page.locator('#homeDifficulty').selectOption('gentle');
+  await page.goto('/#/home');await page.locator('#homeSettings summary').click();await page.locator('#homeDifficulty').selectOption('gentle');
   for(const [path,id] of controls){
     await page.goto(path);
     const select=page.locator(`#${id}`);

@@ -78,10 +78,10 @@ test('daily beginner choices remain resumable and do not become written-recall c
 });
 
 test('vocabulary and conversation controls select genuinely different practice demands',async({page})=>{
-  await page.goto('/#/home');await page.locator('#homeDifficulty').selectOption('gentle');
+  await page.goto('/#/home');await page.locator('#homeSettings summary').click();await page.locator('#homeDifficulty').selectOption('gentle');
   await page.goto('/#/cards');
   await expect(page.locator('#cardPractice')).toHaveValue('reveal');
-  await page.goto('/#/home');await page.locator('#homeDifficulty').selectOption('challenge');
+  await page.goto('/#/home');await page.locator('#homeSettings summary').click();await page.locator('#homeDifficulty').selectOption('challenge');
   await page.goto('/#/cards');await expect(page.locator('#cardPractice')).toHaveValue('recall');
   expect((await page.locator('.flash-word').innerText()).split(/\s+/).length).toBeGreaterThan(1);
   await page.goto('/#/ai?week=11');await expect(page.locator('#aiPrompt')).toContainText('responder a objeciones');

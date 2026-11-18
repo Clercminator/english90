@@ -9,6 +9,11 @@ test('daily practice reveals, grades, resumes, recaps and completes without dupl
   await expect(page.getByRole('link', {name: 'Empezar a practicar', exact: true})).toBeVisible();
   await page.getByRole('link', {name: 'Empezar a practicar', exact: true}).click();
   await page.getByRole('button', {name: 'Comenzar sesión', exact: true}).click();
+  await expect(page.locator('#dailyReveal')).toBeFocused();
+  await expect(page.getByRole('navigation', {name: 'Navegación principal'})).toBeHidden();
+  await page.getByRole('link', {name: 'Salir y continuar después'}).click();
+  await expect(page.locator('.practice-next')).toContainText('0 de 13 completadas');
+  await page.getByRole('link', {name: 'Continuar mi sesión', exact: true}).click();
   await expect(page.locator('#dailyRatings')).toBeHidden();
   await page.getByRole('button', {name: 'Mostrar respuesta'}).click();
   expect(await page.evaluate(key => Object.keys(JSON.parse(localStorage.getItem(key)!).cards).length, STORAGE_KEY)).toBe(0);
@@ -17,7 +22,7 @@ test('daily practice reveals, grades, resumes, recaps and completes without dupl
   const first = await page.evaluate(key => JSON.parse(localStorage.getItem(key)!).cards, STORAGE_KEY);
   await page.getByRole('link', {name: 'Salir y continuar después'}).click();
   await expect(page.getByRole('heading', {name: 'Qué bueno verte de nuevo.'})).toBeVisible();
-  await page.getByRole('link', {name: 'Practicar hoy', exact: true}).click();
+  await page.getByRole('link', {name: 'Continuar mi sesión', exact: true}).click();
   await page.reload();
   await expect(page.locator('.session-progress')).toContainText('1 de 10');
   for (let i=1; i<10; i++) {
@@ -25,14 +30,21 @@ test('daily practice reveals, grades, resumes, recaps and completes without dupl
     await page.getByRole('button', {name: 'La conozco · 3 días'}).click();
   }
   for (let i=0; i<3; i++) {
+    await expect(page.locator('.daily-progress progress')).toHaveAttribute('value', String(10+i));
+    await expect(page.locator('.daily-progress progress')).toHaveAttribute('max', '13');
     const answer = await page.evaluate(key => { const p = JSON.parse(localStorage.getItem(key)!).daily.practice; return p.questions[p.index].answer; }, STORAGE_KEY);
     await page.locator('#dailyAnswer').fill(answer);
     await page.locator('#dailyAnswerForm button').click();
     await expect(page.locator('#nextDailyAnswer')).toBeVisible();
-    if (i===1) await page.reload();
+    await expect(page.locator('.daily-exercise')).toHaveClass(/celebrate/);
+    if (i===1) {
+      await page.reload();
+      await expect(page.locator('.daily-exercise')).not.toHaveClass(/celebrate/);
+      await expect(page.locator('.answer-feedback')).toContainText('¡Correcto!');
+    }
     await page.locator('#nextDailyAnswer').click();
   }
-  await expect(page.getByRole('heading', {name: 'Un último repaso.'})).toBeVisible();
+  await expect(page.getByRole('heading', {name: 'Terminaste los ejercicios.'})).toBeVisible();
   await page.getByRole('button', {name: 'Terminar sesión'}).click();
   await expect(page.getByRole('heading', {name: 'Hoy practicaste tu inglés.'})).toBeVisible();
   await page.reload();
@@ -41,6 +53,9 @@ test('daily practice reveals, grades, resumes, recaps and completes without dupl
   expect(state.history.filter((r: {id: string}) => r.id.startsWith('daily-') && !r.id.endsWith('-written'))).toHaveLength(1);
   expect(Object.values(state.cards).every(c => (c as {reviews: number}).reviews === 1)).toBe(true);
   expect(state.cards[Object.keys(first)[0]]).toEqual(Object.values(first)[0]);
+  await page.getByRole('link', {name: 'Volver al inicio'}).click();
+  await expect(page.locator('.practice-next')).toContainText('Objetivo de hoy cumplido');
+  await page.getByRole('link', {name: 'Ver resumen de hoy'}).click();
   await page.getByRole('link', {name: 'Practicar conversación con IA'}).click();
   await expect(page.locator('#aiPrompt')).toContainText('hello (hola)');
   await expect(page.locator('#aiPrompt')).toContainText('una sola pregunta');

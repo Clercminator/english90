@@ -5,9 +5,7 @@ import trainerPreview from './assets/trainer-desktop.webp';
 import mountains from './assets/mountain-journey.webp';
 import mountainsMobile from './assets/mountain-journey-mobile.webp';
 import { siteConfig } from './config';
-
-declare const __COMMERCE_LANDING__: boolean;
-declare const __PREMIUM_GUARD__: boolean;
+import { commercialPath, requiresPremiumAccess } from './commerce-route';
 type Config = { enabled: boolean; price: number; environment: string; supabaseUrl: string; supabaseKey: string };
 type Purchase = { id: string; status: string; amount_clp: number; created_at: string };
 type Account = { email: string; entitled: boolean; orders: Purchase[]; deliveries: { order_id: string; status: string }[] };
@@ -21,6 +19,21 @@ const trackedPurchases = new Set<string>();
 const escape = (value: unknown) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const find = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const support = siteConfig.contactEmail ? `mailto:${siteConfig.contactEmail}` : '/contacto/';
+const newTab = 'target="_blank" rel="noopener noreferrer"';
+const newTabLabel = '<span class="commerce-visually-hidden"> (abre una pestaña nueva)</span>';
+const blockedTabMessage = 'Permite las ventanas emergentes de English90 y vuelve a intentarlo.';
+
+function openPendingTab(title: string, message: string): Window | null {
+  // Reserve the tab during the click so it stays available after the request.
+  const tab = window.open('', '_blank');
+  if (!tab) return null;
+  tab.opener = null;
+  tab.document.documentElement.lang = 'es';
+  tab.document.title = title;
+  tab.document.body.textContent = message;
+  return tab;
+}
+
 function deliveryHelp(identifier?: string): string {
   return `<section class="delivery-help" aria-labelledby="deliveryHelpTitle"><h2 id="deliveryHelpTitle">¿Pagaste y no recibiste tu guía?</h2><p>Si Mercado Pago confirmó tu pago, un problema técnico de entrega no anula tu compra. No vuelvas a pagar.</p><ol><li>Revisa Spam o Promociones y el correo que usaste al comprar.</li><li>Entra a <a href="/cuenta/">Mi cuenta</a> con ese mismo correo y solicita otro enlace de acceso.</li><li>Si no puedes acceder, escribe a <a href="${escape(support)}">${escape(siteConfig.contactEmail || 'soporte')}</a> o <a href="https://wa.me/message/JDI5GLAII5DCG1" target="_blank" rel="noopener noreferrer">WhatsApp para resolver la entrega</a>. Indica el correo de compra, explica brevemente qué ocurrió y comparte el comprobante de Mercado Pago con el identificador de la operación.</li></ol>${identifier?`<p class="order-reference">Referencia del pedido: ${escape(identifier)}</p>`:''}<p>Oculta saldos, datos de tarjeta y movimientos ajenos a esta compra en el comprobante. Nunca envíes contraseñas ni códigos de acceso.</p><p>Revisaremos el pago y, una vez verificado, gestionaremos manualmente la entrega de tu guía sin que tengas que volver a pagar. Sentimos las molestias que pueda causar un fallo técnico.</p></section>`;
 }
@@ -50,7 +63,7 @@ async function configure(): Promise<Config> {
 
 const brand = `<a class="sales-brand" href="/comprar/" aria-label="English90 · Inicio">English<span>90</span><svg viewBox="0 0 150 12" aria-hidden="true"><path d="M3 5 Q52 15 100 5 T147 5"/></svg></a>`;
 const whatsapp = `<a class="sales-whatsapp" href="https://wa.me/message/JDI5GLAII5DCG1" target="_blank" rel="noopener noreferrer" aria-label="Resolver dudas por WhatsApp (abre una nueva pestaña)" title="Resolver dudas por WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.91 11.91 0 0 0 12.05 0C5.45 0 .08 5.37.07 11.97c0 2.11.55 4.17 1.6 5.99L0 24l6.2-1.63a11.97 11.97 0 0 0 5.84 1.49h.01c6.6 0 11.97-5.37 11.98-11.97a11.9 11.9 0 0 0-3.51-8.41ZM12.05 21.84a9.94 9.94 0 0 1-5.06-1.38l-.36-.22-3.68.97.98-3.59-.24-.37a9.9 9.9 0 0 1-1.52-5.28c0-5.48 4.46-9.94 9.95-9.94a9.87 9.87 0 0 1 7.03 2.92 9.88 9.88 0 0 1 2.91 7.04c0 5.48-4.46 9.94-10.01 9.85Zm5.46-7.45c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.8-1.49-1.78-1.66-2.08-.18-.3-.02-.46.13-.61.13-.14.3-.35.45-.53.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51h-.58c-.2 0-.52.07-.8.37-.27.3-1.05 1.03-1.05 2.51 0 1.48 1.08 2.91 1.23 3.11.15.2 2.12 3.24 5.14 4.54.72.31 1.28.49 1.72.63.72.23 1.37.2 1.89.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.08-.13-.28-.2-.58-.35Z"/></svg></a>`;
-const footer = `<footer class="sales-footer">${brand}<p>Un producto de <strong>IMR Tech SpA</strong></p><div><a href="/terminos/">Términos y Condiciones</a><a href="/privacidad/">Política de Privacidad</a><a href="/entrega-y-reembolsos/">Entrega y Reembolsos</a><a href="${escape(support)}">Soporte</a>${whatsapp}</div></footer>`;
+const footer = `<footer class="sales-footer">${brand}<p>Un producto de <strong>IMR Tech SpA</strong></p><div><a href="/terminos/" ${newTab}>Términos y Condiciones${newTabLabel}</a><a href="/privacidad/" ${newTab}>Política de Privacidad${newTabLabel}</a><a href="/entrega-y-reembolsos/" ${newTab}>Entrega y Reembolsos${newTabLabel}</a><a href="${escape(support)}">Soporte</a>${whatsapp}</div></footer>`;
 const lineIcon = (name: string) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${({
   calendar:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4m8-4v4M4 11h16M8 15h1m6 0h1m-8 3h1"/>',
   route:'<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5L16 8Z"/>',
@@ -59,6 +72,8 @@ const lineIcon = (name: string) => `<svg viewBox="0 0 24 24" fill="none" stroke=
   lock:'<rect x="6" y="10" width="12" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/>',
   check:'<path d="m5 12 4 4L19 6"/>',
   arrow:'<path d="M4 12h16m-6-6 6 6-6 6"/>',
+  external:'<path d="M13 5h6v6m0-6-9 9m9 0v5H5V5h5"/>',
+  download:'<path d="M12 3v12m-4-4 4 4 4-4M5 16v5h14v-5"/>',
 } as Record<string,string>)[name]}</svg>`;
 const icon = (name: string) => `<span class="sales-icon">${lineIcon(name)}</span>`;
 
@@ -80,11 +95,11 @@ export function landingMarkup(): string {
         <p class="sales-payment-note">Precio final · Pago único · Sin suscripción</p></div>
       <form id="purchaseForm" class="sales-form"><label class="sales-email-label" for="buyerEmail">Tu correo electrónico</label>
         <div class="sales-email-field">${lineIcon('mail')}<input id="buyerEmail" type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="Tu correo electrónico" maxlength="254" required></div>
-        <label class="sales-consent"><input id="buyerConsent" type="checkbox" required><span>Acepto los <a href="/terminos/" target="_blank" rel="noopener">Términos y Condiciones</a> y la <a href="/privacidad/" target="_blank" rel="noopener">Política de Privacidad</a>.</span></label>
+        <label class="sales-consent"><input id="buyerConsent" type="checkbox" required><span>Acepto los <a href="/terminos/" ${newTab}>Términos y Condiciones${newTabLabel}</a> y la <a href="/privacidad/" ${newTab}>Política de Privacidad${newTabLabel}</a>.</span></label>
         <button class="sales-cta" type="submit">Quiero English90 por $59.990 ${lineIcon('arrow')}</button>
-        <div id="emailConfirmation" class="sales-email-confirmation" role="group" aria-label="Confirma tu correo" hidden><p>Enviaremos tu guía y acceso a:</p><strong id="confirmedEmail"></strong><p>Revisa que esté bien escrito antes de continuar.</p><button id="confirmEmail" class="sales-cta" type="button">Confirmar correo e ir a Mercado Pago ${lineIcon('arrow')}</button><button id="correctEmail" class="sales-correct-email" type="button">Corregir correo</button></div>
+        <div id="emailConfirmation" class="sales-email-confirmation" role="group" aria-label="Confirma tu correo" hidden><p>Enviaremos tu guía y acceso a:</p><strong id="confirmedEmail"></strong><p>Revisa que esté bien escrito antes de continuar. Mercado Pago se abrirá en una pestaña nueva.</p><button id="confirmEmail" class="sales-cta" type="button">Confirmar correo e ir a Mercado Pago ${lineIcon('external')}</button><button id="correctEmail" class="sales-correct-email" type="button">Corregir correo</button></div>
         <p class="sales-email-help">La contraseña del PDF estará en tu cuenta. Recibirás por email el enlace de acceso.</p>
-        <p class="sales-recovery-note">¿Ya pagaste y no recibiste la guía? <a href="/entrega-y-reembolsos/#ayuda-entrega">Consulta los pasos para recuperar tu compra.</a></p>
+        <p class="sales-recovery-note">¿Ya pagaste y no recibiste la guía? <a href="/entrega-y-reembolsos/#ayuda-entrega" ${newTab}>Consulta los pasos para recuperar tu compra.${newTabLabel}</a></p>
         <p class="sales-secure">${lineIcon('lock')} Pago a través de Mercado Pago Checkout Pro</p><p id="checkoutMessage" role="status" aria-live="polite"></p>
       </form>
     </section>
@@ -107,7 +122,7 @@ function bindLanding(): void {
   find('confirmEmail').onclick=()=>{confirmedEmail=find<HTMLInputElement>('buyerEmail').value.trim().toLowerCase();form.requestSubmit();};
   form.onsubmit = async ev => {
     ev.preventDefault();
-    if (!form.reportValidity()) return;
+    if (checkoutButton.disabled || !form.reportValidity()) return;
     const buyer = find<HTMLInputElement>('buyerEmail').value.trim().toLowerCase();
     if (confirmedEmail !== buyer) {
       find('confirmedEmail').textContent=buyer;
@@ -116,11 +131,15 @@ function bindLanding(): void {
       find('confirmEmail').focus();
       return;
     }
-    const button = checkoutButton;
-    find('emailConfirmation').hidden=true;
-    button.hidden=false;
-    button.disabled = true;
     const message = find('checkoutMessage');
+    const tab = openPendingTab('English90 · Mercado Pago', 'Preparando tu pago…');
+    if (!tab) {
+      message.textContent = blockedTabMessage;
+      return;
+    }
+    find('emailConfirmation').hidden=true;
+    checkoutButton.hidden=false;
+    checkoutButton.disabled = true;
     message.textContent = 'Preparando tu pago…'; event('cta_click');
     try {
       const settings = await configure();
@@ -130,20 +149,51 @@ function bindLanding(): void {
       if (!attempt || attempt.email!==buyer) { attempt={key:crypto.randomUUID(),token:cryptoToken(),email:buyer}; sessionStorage.setItem('english90-checkout',JSON.stringify(attempt)); }
       const attribution=Object.fromEntries([...new URLSearchParams(location.search)].filter(([k]) => /^utm_(source|medium|campaign|content|term)$/.test(k)));
       const result=await api<{url:string;order:string}>('checkout',{email:buyer,consent:find<HTMLInputElement>('buyerConsent').checked,key:attempt.key,token:attempt.token,attribution});
-      sessionStorage.setItem('english90-order',JSON.stringify({order:result.order,token:attempt.token}));
       const url=new URL(result.url);
       if (url.protocol!=='https:' || url.hostname!=='www.mercadopago.cl') throw new Error('No pudimos validar el destino de pago.');
-      event('checkout_started'); location.assign(url.href);
+      const order = JSON.stringify({order:result.order,token:attempt.token});
+      sessionStorage.setItem('english90-order', order);
+      if (tab.closed) throw new Error('La pestaña de Mercado Pago se cerró. Vuelve a intentarlo.');
+      // Mercado Pago redirects this tab back to /pago, which reads its own session storage.
+      tab.sessionStorage.setItem('english90-order', order);
+      tab.location.replace(url.href);
+      event('checkout_started');
+      message.textContent = 'Continúa tu pago en la pestaña de Mercado Pago.';
     } catch (error) {
+      tab.close();
       if(error instanceof ApiError && error.code==='checkout_already_completed') { sessionStorage.removeItem('english90-checkout'); message.textContent='Este intento ya terminó. Consulta tu cuenta si pagaste; para iniciar otra compra, vuelve a pulsar el botón.'; }
       else message.textContent=error instanceof Error?error.message:'No pudimos iniciar la compra.';
-      button.disabled=false;
+    } finally {
+      checkoutButton.disabled=false;
     }
   };
   void configure().then(c => { if (c.environment==='sandbox') find('checkoutMessage').textContent=c.enabled?'PRUEBA SANDBOX: sin cobro real. Entrega un PDF técnico de prueba; solo admite el correo autorizado.':'Entorno de pruebas. El checkout aún no está habilitado.'; else if (!c.enabled) find('checkoutMessage').textContent='Venta en preparación. El cobro aún no está habilitado.'; }).catch(() => { find('checkoutMessage').textContent='Venta en preparación. El servicio de compra aún no está conectado.'; });
 }
 
 function shell(content: string): string { return `<div class="sales-page sales-account"><header class="sales-header">${brand}<a href="/cuenta/">Mi cuenta</a></header><section class="account-panel">${content}</section>${footer}</div>`; }
+
+function purchaseMarkup(order: Purchase, data: Account, index: number): string {
+  const paid = order.status === 'paid';
+  const amount = order.amount_clp === 0 ? 'Sin costo' : '$' + order.amount_clp.toLocaleString('es-CL') + ' CLP';
+  const delivery = data.deliveries.find(d => d.order_id === order.id)?.status || 'pending';
+  return `<article class="account-order${paid ? ' account-order-guide' : ''}">
+    ${paid ? `<div class="account-cover"><img src="${cover}" alt="Portada de la guía English90 Premium" width="595" height="842"></div>` : ''}
+    <div class="account-order-content">
+      <p class="account-order-status">${escape(labels[order.status] || order.status)}</p>
+      <h2>${paid ? 'Tu guía English90 Premium' : 'English90 Premium'}</h2>
+      <p class="account-order-meta">${amount} · Entrega: ${escape(labels[delivery] || delivery)}</p>
+      ${paid ? `<p class="account-guide-instructions">Abre el PDF en otra pestaña y usa la contraseña de este pedido para desbloquearlo.</p>
+        <div class="account-order-actions">
+          <button class="sales-cta" data-download="${escape(order.id)}">${lineIcon('download')} Descargar guía (PDF)</button>
+          <button class="account-secondary" data-password="${escape(order.id)}" aria-expanded="false" aria-controls="pdfSecret-${index}">${lineIcon('lock')} <span>Ver contraseña del PDF</span></button>
+        </div>
+        <div id="pdfSecret-${index}" class="account-secret" hidden><p>Contraseña del PDF</p><code></code></div>
+        <p class="account-order-message" role="status"></p>` : ''}
+      <p class="order-reference">Pedido ${escape(order.id)}</p>
+    </div>
+  </article>`;
+}
+
 async function account(view: HTMLElement, id: number): Promise<void> {
   view.innerHTML=shell('<h1>Tu cuenta English90</h1><p role="status">Consultando tu cuenta…</p>');
   try {
@@ -157,16 +207,58 @@ async function account(view: HTMLElement, id: number): Promise<void> {
       }; return;
     }
     const data=await api<Account>('account',{}); if (id!==renderId) return;
-    view.innerHTML=shell(`<p class="sales-kicker">MI CUENTA</p><h1>Tu próximo paso empieza aquí.</h1><p>${escape(data.email)}</p>${data.entitled?'<a class="sales-cta" href="/#/guide">Ir a mi práctica →</a>':'<p>No hay una compra vigente vinculada a esta cuenta. Si acabas de pagar, espera unos minutos y actualiza.</p>'}<div class="account-purchases">${data.orders.map(o=>`<article class="account-order"><h2>English90 Premium</h2><p>$59.990 CLP · ${escape(labels[o.status]||o.status)}</p><p>Entrega: ${escape(labels[data.deliveries.find(d=>d.order_id===o.id)?.status||'pending'])}</p><p class="order-reference">Pedido ${escape(o.id)}</p>${o.status==='paid'?`<button class="outline" data-download="${escape(o.id)}">Descargar guía</button> <button class="outline" data-password="${escape(o.id)}">Ver contraseña del PDF</button>`:''}</article>`).join('')}</div><p id="accountMessage" role="status"></p><p id="pdfSecret" class="pdf-secret" hidden></p><button id="hideSecret" class="outline" hidden>Ocultar contraseña</button><div class="account-actions"><button id="refreshAccount" class="outline">Actualizar estado</button><button id="logout" class="outline">Cerrar sesión</button></div><p>Tu progreso de práctica se conserva en este navegador. La cuenta guarda tus compras y acceso a la guía.</p>${deliveryHelp()}`);
+    view.innerHTML=shell(`<div class="account-heading"><div><h1>Tu cuenta English90</h1><p class="account-email">${escape(data.email)}</p></div><button id="logout" class="account-text-button">Cerrar sesión</button></div>
+      ${data.entitled ? '' : '<p>No hay una compra vigente vinculada a esta cuenta. Si acabas de pagar, espera unos minutos y actualiza.</p>'}
+      ${data.orders.length ? `<div class="account-purchases">${data.orders.map((order, index) => purchaseMarkup(order, data, index)).join('')}</div>` : ''}
+      <div class="account-actions">${data.entitled ? `<a class="account-secondary" href="/#/guide" ${newTab}>Ir a mi práctica ${lineIcon('external')}${newTabLabel}</a>` : ''}<button id="refreshAccount" class="account-text-button">Actualizar estado</button></div>
+      <details class="account-help"><summary>Ayuda con tu pedido</summary>${deliveryHelp()}</details>`);
     find('refreshAccount').onclick=()=>void account(view,id);
     find('logout').onclick=async()=>{ accessUntil=0; await auth?.auth.signOut(); void account(view,id); };
-    find('hideSecret').onclick=()=>{ find('pdfSecret').textContent=''; find('pdfSecret').hidden=true; find('hideSecret').hidden=true; };
-    view.querySelectorAll<HTMLButtonElement>('[data-download],[data-password]').forEach(button=>{ button.onclick=async()=>{ button.disabled=true;
-      try {
-        if (button.dataset.download) { const result=await api<{url:string}>('download',{order:button.dataset.download}); location.assign(result.url); }
-        else { const result=await api<{password:string}>('password',{order:button.dataset.password}); find('pdfSecret').textContent=result.password; find('pdfSecret').hidden=false; find('hideSecret').hidden=false; }
-      } catch(error) { find('accountMessage').textContent=(error as Error).message; } finally { button.disabled=false; }
-    }; });
+    view.querySelectorAll<HTMLElement>('.account-order-guide').forEach(card => {
+      const download = card.querySelector<HTMLButtonElement>('[data-download]')!;
+      const password = card.querySelector<HTMLButtonElement>('[data-password]')!;
+      const message = card.querySelector<HTMLElement>('.account-order-message')!;
+      const secret = card.querySelector<HTMLElement>('.account-secret')!;
+      const value = secret.querySelector('code')!;
+      const passwordLabel = password.querySelector('span')!;
+      download.onclick = async () => {
+        const tab = openPendingTab('English90 · Guía PDF', 'Preparando tu guía…');
+        if (!tab) { message.textContent = blockedTabMessage; return; }
+        download.disabled = true;
+        message.textContent = 'Preparando tu guía…';
+        try {
+          const result = await api<{url:string}>('download', {order:download.dataset.download});
+          if (!card.isConnected) { tab.close(); return; }
+          if (tab.closed) throw new Error('La pestaña del PDF se cerró. Vuelve a intentarlo.');
+          const url = new URL(result.url);
+          if (url.origin !== new URL(config!.supabaseUrl).origin || url.protocol !== 'https:') throw new Error('No pudimos validar el enlace de descarga.');
+          tab.location.replace(url.href);
+          message.textContent = 'La guía se abrió en otra pestaña.';
+        } catch (error) {
+          tab.close();
+          message.textContent = (error as Error).message;
+        } finally { download.disabled = false; }
+      };
+      password.onclick = async () => {
+        message.textContent = '';
+        if (!secret.hidden) {
+          value.textContent = '';
+          secret.hidden = true;
+          password.setAttribute('aria-expanded', 'false');
+          passwordLabel.textContent = 'Ver contraseña del PDF';
+          return;
+        }
+        password.disabled = true;
+        try {
+          const result = await api<{password:string}>('password', {order:password.dataset.password});
+          value.textContent = result.password;
+          secret.hidden = false;
+          password.setAttribute('aria-expanded', 'true');
+          passwordLabel.textContent = 'Ocultar contraseña';
+        } catch (error) { message.textContent = (error as Error).message; }
+        finally { password.disabled = false; }
+      };
+    });
   } catch(error) { if(id===renderId) view.innerHTML=shell(`<h1>No pudimos consultar tu cuenta</h1><p role="alert">${escape((error as Error).message)}</p><a href="/cuenta/">Volver a intentar</a>${deliveryHelp()}`); }
 }
 
@@ -194,7 +286,7 @@ async function payment(view: HTMLElement, id: number, checks = 0): Promise<void>
     const state=result.status+'/'+result.delivery+'/'+automatic;
     if(view.dataset.paymentState!==state || !checks) {
       const restoreFocus=document.activeElement?.id==='checkPayment';
-      view.innerHTML=shell(`${paid?`<div class="payment-welcome" aria-hidden="true">${lineIcon('check')}</div>`:''}<h1>${escape(headline)}</h1><p>${escape(detail)}</p>${delivery}<div class="account-actions"><a class="sales-cta" href="/cuenta/">${paid?'Acceder a mi guía y contraseña':'Ir a mi cuenta'}</a><button id="checkPayment" class="outline">Comprobar de nuevo</button></div><p><a href="${escape(support)}">Contactar con soporte</a></p><p id="returnMessage" role="status" aria-live="polite">${automatic?'Actualizamos el estado automáticamente durante un minuto.':waiting?'Puedes comprobar de nuevo o recuperar el acceso desde tu cuenta.':''}</p>${deliveryHelp(identifier)}`);
+      view.innerHTML=shell(`${paid?`<div class="payment-welcome" aria-hidden="true">${lineIcon('check')}</div>`:''}<h1>${escape(headline)}</h1><p>${escape(detail)}</p>${delivery}<div class="account-actions"><a class="sales-cta" href="/cuenta/" ${paid ? newTab : ''}>${paid ? 'Acceder a mi guía y contraseña' + lineIcon('external') + newTabLabel : 'Ir a mi cuenta'}</a><button id="checkPayment" class="account-secondary">Comprobar de nuevo</button></div><p><a href="${escape(support)}">Contactar con soporte</a></p><p id="returnMessage" role="status" aria-live="polite">${automatic?'Actualizamos el estado automáticamente durante un minuto.':waiting?'Puedes comprobar de nuevo o recuperar el acceso desde tu cuenta.':''}</p>${deliveryHelp(identifier)}`);
       view.dataset.paymentState=state;
       find('checkPayment').onclick=()=>void payment(view,id);
       if(restoreFocus)find('checkPayment').focus({preventScroll:true});
@@ -205,13 +297,13 @@ async function payment(view: HTMLElement, id: number, checks = 0): Promise<void>
 
 export function renderCommercial(view: HTMLElement, force?: string): boolean {
   clearTimeout(paymentTimer);
-  const hash=location.hash.split('?')[0];
-  const path=force || (hash==='#/comprar'?'landing':hash==='#/cuenta'?'account':hash==='#/pago'?'payment':!hash&&(__COMMERCE_LANDING__||document.body.dataset.commerceLanding==='true')?'landing':'');
-  const guard=__PREMIUM_GUARD__ && Date.now()>accessUntil && /^#\/(guide|plan)(\/|\?|$)/.test(location.hash);
+  const path=force || commercialPath();
+  const guard=Date.now()>accessUntil && requiresPremiumAccess();
   document.body.classList.toggle('commercial',!!path || guard);
   document.body.classList.toggle('sales-landing-view',path==='landing');
   const id=++renderId;
   if(!path && !guard) return false;
+  if(path!=='landing') void import('./account.css');
   document.title='English90 · '+(path==='landing'?'Tu plan de inglés de 90 días':path==='payment'?'Estado de tu pago':'Mi cuenta');
   if(path==='landing') { view.innerHTML=landingMarkup(); bindLanding(); }
   else if(path==='payment') void payment(view,id);

@@ -57,7 +57,7 @@ def purchase_email(*, activation_url, download_url, account_url, support_email, 
 <p style="margin:10px 0 28px;font-size:12px;line-height:20px;color:#62627b;">El enlace de acceso es personal, de un solo uso y tiene vencimiento. No lo compartas.</p>
 <h2 style="margin:0 0 10px;font-size:19px;line-height:28px;color:#11152d;">2. Descarga y abre tu guía</h2>
 <p style="margin:0 0 14px;font-size:15px;line-height:25px;color:#353a54;">Guarda el archivo en tu dispositivo y ábrelo con la contraseña que aparece en tu cuenta. Por seguridad, la contraseña del PDF no se envía por correo.</p>
-<p style="margin:0 0 8px;font-size:15px;line-height:25px;"><a href="{escape(download_url, quote=True)}" style="display:inline-block;padding:10px 0;color:#5600dc;font-weight:bold;text-decoration:underline;">Descargar mi guía protegida</a></p>
+<p style="margin:0 0 8px;font-size:15px;line-height:25px;"><a href="{escape(download_url, quote=True)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:10px 0;color:#5600dc;font-weight:bold;text-decoration:underline;">Descargar mi guía protegida</a></p>
 <p style="margin:0 0 28px;font-size:12px;line-height:20px;color:#62627b;">Este enlace de descarga es válido durante 24 horas. Después podrás volver a descargar la guía desde tu cuenta.</p>
 <h2 style="margin:0 0 10px;font-size:19px;line-height:28px;color:#11152d;">3. Empieza con un paso pequeño</h2>
 <p style="margin:0 0 24px;font-size:15px;line-height:25px;color:#353a54;">Abre la sección de inicio de la guía y sigue tu ruta de estudio. Complementa lo aprendido con la plataforma gratuita de práctica y tests. Tu progreso de práctica se guarda en el navegador que uses, sin sincronización entre dispositivos.</p>

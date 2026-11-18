@@ -1,0 +1,136 @@
+.sales-account {
+  --account-ink: #11152d;
+  --account-muted: #525773;
+  --account-accent: #6500ff;
+  --account-line: #e4dff0;
+  --account-tint: #f6f1ff;
+  max-width: 1032px;
+  padding-inline: clamp(16px, 4vw, 40px);
+  color: var(--account-ink);
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+.sales-account .sales-header { margin-bottom: clamp(24px, 5vw, 48px); }
+.sales-account a { color: #5600dc; text-underline-offset: 3px; }
+.sales-account .sales-brand { color: var(--account-ink); }
+.sales-account :is(.sales-brand span, .sales-kicker) { color: var(--account-accent); }
+.sales-account .sales-brand svg { stroke: var(--account-accent); }
+.sales-account .sales-header > a:last-child { font-size: 14px; font-weight: 800; }
+.sales-account :is(a, button, summary, input):focus-visible {
+  outline: 3px solid var(--account-accent); outline-offset: 3px;
+}
+.sales-account .account-panel {
+  min-height: 0;
+  margin-bottom: 36px;
+  padding: clamp(18px, 4.2vw, 42px);
+  border: 1px solid var(--account-line);
+  border-radius: 24px;
+  box-shadow: 0 16px 48px #29204e0d;
+}
+.sales-account .account-panel h1 {
+  margin: 0 0 8px;
+  font: 800 clamp(26px, 4vw, 40px)/1.18 'Manrope', system-ui, sans-serif;
+  letter-spacing: -.045em;
+}
+.sales-account .account-panel > p { color: var(--account-muted); line-height: 1.65; }
+.sales-account .sales-form input[type=email] { border-color: #b9b8d1; color: var(--account-ink); }
+.sales-account .sales-cta {
+  background: linear-gradient(105deg, #7b18ff, #6500ff);
+  color: #fff;
+  box-shadow: 0 7px 20px #6500ff20;
+}
+.sales-account .sales-cta:hover { background: #5600dc; }
+.sales-account .sales-footer { border-color: var(--account-line); }
+.sales-account .sales-footer p { color: var(--account-muted); }
+.account-heading { display: flex; gap: 8px 20px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+.account-email { color: var(--account-muted); margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.account-purchases { display: grid; gap: 16px; margin-top: 26px; }
+.sales-account .account-order {
+  display: grid;
+  gap: clamp(16px, 3.5vw, 32px);
+  padding: clamp(14px, 3vw, 24px);
+  margin: 0;
+  border: 1px solid var(--account-line);
+  border-radius: 18px;
+}
+.sales-account .account-order-guide {
+  grid-template-columns: minmax(110px, 180px) minmax(0, 1fr);
+  background: linear-gradient(135deg, #f6f1ff, #fff 70%);
+  align-items: center;
+}
+.account-cover {
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  border-radius: 12px;
+  background: #ece1ff;
+}
+.account-cover img {
+  display: block;
+  width: min(100%, 118px);
+  height: auto;
+  border-radius: 2px;
+  box-shadow: 3px 7px 17px #2b145d36;
+}
+.account-order .account-order-status {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ece1ff;
+  color: #4d00b8;
+  font-size: 12px;
+  font-weight: 800;
+}
+.account-order-content h2 {
+  margin: 0;
+  font-size: clamp(20px, 3.5vw, 27px);
+  line-height: 1.25;
+  letter-spacing: -.035em;
+}
+.account-order-meta, .account-guide-instructions { color: var(--account-muted); line-height: 1.6; }
+.account-order-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.sales-account :is(.sales-cta, .account-secondary) {
+  min-height: 46px;
+  padding: 9px 16px;
+  gap: 8px;
+  font: 800 14px/1.4 'Manrope', system-ui, sans-serif;
+}
+.sales-account :is(.sales-cta, .account-secondary) svg { width: 18px; height: 18px; flex-shrink: 0; }
+.sales-account .account-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d6c4fb;
+  border-radius: 999px;
+  background: #fff;
+  color: #5600dc;
+  text-align: center;
+  text-decoration: none;
+}
+.sales-account .account-secondary:hover { background: var(--account-tint); }
+.sales-account .account-secondary:disabled { opacity: .65; }
+.account-text-button {
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: #5600dc;
+  font: 800 13px/1.5 'Manrope', system-ui, sans-serif;
+  text-underline-offset: 3px;
+}
+.account-text-button:hover { text-decoration: underline; }
+.account-secret { margin: 14px 0 0; padding: 12px 14px; border-radius: 10px; background: var(--account-tint); }
+.account-secret p { margin: 0 0 4px; font-size: 12px; font-weight: 800; color: var(--account-muted); }
+.account-secret code { color: var(--account-ink); font-size: 17px; overflow-wrap: anywhere; user-select: all; }
+.account-order-message { color: var(--account-muted); line-height: 1.5; }
+.account-order-message:empty { margin: 0; }
+.account-order-content .order-reference { margin: 12px 0 0; color: var(--account-muted); }
+.account-help { border-top: 1px solid var(--account-line); margin-top: 24px; }
+.account-help summary { width: fit-content; padding: 14px 0; font-weight: 800; color: #5600dc; cursor: pointer; }
+.account-help .delivery-help { margin-top: 0; }
+@media (max-width: 560px) {
+  .sales-account .account-order-guide { grid-template-columns: minmax(0, 1fr); }
+  .account-cover { padding: 14px; }
+  .account-cover img { width: 86px; }
+  .account-order-actions > button { width: 100%; }
+}

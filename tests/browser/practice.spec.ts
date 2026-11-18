@@ -3,8 +3,9 @@ import AxeBuilder from '@axe-core/playwright';
 import { STORAGE_KEY } from '../../Entrenador/core';
 import type { State } from '../../Entrenador/core';
 
-test('written vocabulary checks answers, animates only success and leaves scheduling to the learner', async ({ page }) => {
+test('written vocabulary celebrates correct answers and leaves scheduling to the learner', async ({ page }) => {
   await page.goto('/#/cards?week=1');
+  await page.locator('#cardSettings summary').click();
   await page.locator('#direction').selectOption('es-en');
   await page.locator('#cardPractice').selectOption('recall');
   await expect(page.locator('#cardAnswer')).toBeFocused();
@@ -21,6 +22,7 @@ test('written vocabulary checks answers, animates only success and leaves schedu
   await page.locator('#cardAnswer').fill('not a translation');
   await page.getByRole('button', { name: 'Comprobar mi respuesta' }).click();
   await expect(page.locator('#cardFeedback')).not.toHaveClass('celebrate');
+  await expect(page.locator('#cardFeedback')).toHaveClass('review-arrived');
   await expect(page.locator('#cardFeedback')).toContainText('Todavía no');
   await page.getByText(/Explorar las .* expresiones/).click();
   await page.locator('#wordSearch').fill('buenos dias');
@@ -86,7 +88,7 @@ test('challenge removes options, mixes sentence categories and keeps active sett
   await expect(page.locator('[data-option]')).toHaveCount(0);
   q = await page.evaluate(key => (JSON.parse(localStorage.getItem(key)!) as State).quiz!, STORAGE_KEY);
   expect(q.direction).toBe('es-en');
-  await page.goto('/#/cards'); await page.locator('#direction').selectOption('en-es');
+  await page.goto('/#/cards'); await page.locator('#cardSettings summary').click(); await page.locator('#direction').selectOption('en-es');
   await page.goto('/#/challenge?week=1&mode=translation');
   await expect(page.getByLabel('Tu traducción en inglés', { exact: true })).toBeVisible();
   await page.reload();
@@ -138,8 +140,19 @@ test('success feedback is accessible, fits a narrow phone and respects reduced m
   if (testInfo.project.name === 'chromium-desktop') await page.screenshot({ path: 'tmp/practice-mobile.png', fullPage: true });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   expect(await page.locator('.success-mark svg').evaluate(el => getComputedStyle(el).animationName)).toBe('none');
-  if (testInfo.project.name === 'chromium-desktop') await page.setViewportSize({ width: 1280, height: 960 });
-  if (testInfo.project.name === 'chromium-desktop') await page.screenshot({ path: 'tmp/practice-desktop.png', fullPage: true });
+  if (testInfo.project.name === 'chromium-desktop') {
+    await page.setViewportSize({ width: 1280, height: 960 });
+    await page.screenshot({ path: 'tmp/practice-desktop.png', fullPage: true });
+  }
+  await page.reload();
+  await expect(page.locator('.answer-feedback')).toContainText('¡Correcto!');
+  await expect(page.locator('#quizArea')).not.toHaveClass(/celebrate/);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.locator('#nextQuestion').click();
+  await page.locator('#skipQuestion').click();
+  await expect(page.locator('.answer-feedback.needs-review')).toContainText('La dejamos para el repaso');
+  await expect(page.locator('#quizArea')).toHaveClass(/review-arrived/);
+  await expect(page.locator('.answer-feedback .success-mark')).toHaveCount(0);
 });
 
 });

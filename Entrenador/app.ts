@@ -1,13 +1,13 @@
 import { siteConfig } from './config';
 import { routeChoices } from './specialization-overview';
 import './theme';
-import { renderCommercial } from './commerce';
+import { commercialPath, requiresPremiumAccess } from './commerce-route';
 import { difficultyLabels, difficultyDescriptions, readingQuestions, practiceTest, speakingTask, extensionContent } from './levels';
 import { createDaily, rateDaily, completeDaily, hasLearning, addDailyPractice } from './daily';
 import { audioAvailable, speakEnglish, stopAudio } from './audio';
 import { independentAccuracy, prioritize, milestones, recordEvidence } from './learning';
 import { guideDays, guideDay, situations } from './guide';
-import { publicContent, practiceSentences, categories, publicVocabulary, sentenceQuestions, wordExamples, categoryProgress, publicResume, uniqueTerms, outcomes, conversationPrompt, challengeSentences } from './free';
+import { publicContent, practiceSentences, categories, publicVocabulary, sentenceQuestions, wordExamples, categoryProgress, publicResume, outcomes, conversationPrompt, challengeSentences } from './free';
 import { connectAdvertising } from './advertising';
 import {
   STORAGE_KEY, LEGACY_KEY, localDate, vocabulary, cardKey, dueWords, schedule, emptyState, emptyAssessment,
@@ -36,6 +36,8 @@ let dailySaving = false;
 let extraPractice = false;
 let selectedTokens: number[] = [];
 let importCandidate: State | null = null;
+let commerce: typeof import('./commerce') | undefined;
+let loadingCommerce = false;
 
 let timer: ReturnType<typeof setInterval> | undefined;
 const labels: Record<Section, string> = { home: 'Inicio', daily: 'Práctica diaria', plan: 'Ruta anterior', cards: 'Vocabulario', challenge: 'Juegos', assessments: 'Tests', ai: 'Práctica con IA', progress: 'Mi progreso', guide: 'Practicar con mi guía', situations: 'Situaciones reales', routes: 'Mis rutas de inglés' };
@@ -87,18 +89,48 @@ if (typeof speechSynthesis !== 'undefined') speechSynthesis.addEventListener('vo
   document.querySelectorAll<HTMLButtonElement>('[data-speak], [data-audio-needed]').forEach(el => { el.disabled = !audioAvailable(); });
   document.querySelectorAll('.audio-status').forEach(el => { el.textContent = audioAvailable() ? 'Audio en inglés disponible. Pulsa Escuchar.' : 'No hay voz local en inglés. Puedes continuar leyendo.'; });
 });
+function dailyProgress(completed: number, total: number, label: string, section: string): string {
+  return `<div class="session-progress daily-progress"><span>${label}</span><span>${section}</span><progress value="${completed}" max="${total}" aria-label="Actividades de la sesión completadas"></progress></div>`;
+}
+function dailyExercise(progress: string, content: string): string {
+  return `<section class="panel daily-exercise">
+    <div class="daily-toolbar"><span>Práctica diaria</span>${link('#/home', 'Salir y continuar después', 'quiet-link')}</div>
+    ${progress}${content}
+  </section>`;
+}
 function renderDailyPractice(): void {
   const session = state.daily!, practice = session.practice!, index = practice.index;
   const item = practice.questions[index], response = practice.responses[index], answered = response !== null;
   const correct = questionCorrect(item, response);
-  $('view').innerHTML = panel(`${heading(`USA LO QUE RECUERDAS · ${difficultyLabels[session.difficulty || 'standard']}`,  item.context ? 'Lee y comprende' : item.options ? 'Reconoce la respuesta' : ['Completa la expresión', 'Construye una frase', 'Escribe de memoria'][index], 'Una respuesta de referencia; pueden existir otras formas válidas.')}<div class="session-progress"><span>${index + 1} de 3 ejercicios</span><progress value="${index}" max="3" aria-label="Ejercicios escritos completados"></progress></div>${item.context ? `<div class="reading-passage" lang="en">${e(item.context)}</div>` : ''}<h2 lang="${item.context || index === 0 ? 'en' : 'es'}">${e(item.prompt)}</h2>${!answered ? item.options ? `<div class="options">${item.options.map((option,i) => `<button class="answer" data-daily-option="${i}" lang="en">${e(option)}</button>`).join('')}</div>${button('skipDailyAnswer', 'No lo sé · repasar después', 'quiet-link')}` : `<form id="dailyAnswerForm"><label for="dailyAnswer">Tu respuesta en inglés</label><input id="dailyAnswer" maxlength="500" autocomplete="off" autocapitalize="off" spellcheck="false" required><button class="primary" type="submit">Comprobar respuesta</button></form>${button('skipDailyAnswer', 'No lo sé · repasar después', 'quiet-link')}` : `<div class="feedback ${correct ? 'is-correct' : 'needs-review'}" role="status"><strong>${correct ? '✓ ¡Correcto!' : 'Vamos a reforzar esta expresión.'}</strong><p lang="en">${e(item.answer)}</p><p>${e(item.explanation)}</p></div>${button('nextDailyAnswer', 'Continuar')}`}<div class="lesson-btns">${link('#/home', 'Salir y continuar después')}</div>`);
-  const answer = (value: string) => { void updateDaily(() => {
-    const current = state.daily?.practice;
-    if (state.daily?.id === session.id && current?.index === index && current.responses[index] === null) current.responses[index] = value;
-  }).then(() => document.getElementById('nextDailyAnswer')?.focus()); };
+  const title = item.context ? 'Lee y comprende' : item.options ? 'Elige la respuesta' : ['Completa la expresión', 'Construye una frase', 'Escribe de memoria'][index];
+  const progress = dailyProgress(session.items.length + practice.responses.filter(value => value !== null).length, session.items.length + practice.questions.length, `${index + 1} de ${practice.questions.length} ejercicios`, 'Aplica lo aprendido');
+  const input = item.options
+    ? `<div class="options">${item.options.map((option, i) => `<button class="answer" data-daily-option="${i}" lang="en">${e(option)}</button>`).join('')}</div>`
+    : '<form id="dailyAnswerForm"><label for="dailyAnswer">Tu respuesta en inglés</label><input id="dailyAnswer" maxlength="500" autocomplete="off" autocapitalize="off" spellcheck="false" required><button class="primary" type="submit">Comprobar respuesta</button></form>';
+  const feedback = answered ? answerFeedback(correct, correct ? '¡Correcto!' : response ? 'Para reforzar' : 'La dejamos para el repaso.', `
+    ${!correct && response ? `<p>Tu respuesta: <span lang="en">${e(response)}</span></p>` : ''}
+    <p>Respuesta de referencia: <strong lang="en">${e(item.answer)}</strong></p><p>${e(item.explanation)}</p>`) : '';
+  $('view').innerHTML = dailyExercise(progress, `<h1>${title}</h1>
+    ${item.context ? `<div class="reading-passage" lang="en">${e(item.context)}</div>` : ''}
+    <h2 class="daily-prompt" lang="${item.context || index === 0 ? 'en' : 'es'}">${e(item.prompt)}</h2>
+    ${answered ? `<div class="practice-answer-footer">${feedback}${button('nextDailyAnswer', index === practice.questions.length - 1 ? 'Ver resumen' : 'Continuar')}</div>` : `${input}${button('skipDailyAnswer', 'No lo sé · repasar después', 'quiet-link')}`}`);
+  const answer = (value: string) => {
+    let accepted = false;
+    void updateDaily(() => {
+      const current = state.daily?.practice;
+      if (state.daily?.id === session.id && current?.index === index && current.responses[index] === null) {
+        current.responses[index] = value;
+        accepted = true;
+      }
+    }).then(() => {
+      const exercise = document.querySelector<HTMLElement>('.daily-exercise');
+      if (accepted && exercise) animateFeedback(exercise, questionCorrect(item, value));
+      document.getElementById('nextDailyAnswer')?.focus();
+    });
+  };
   if (!answered) {
     document.querySelectorAll<HTMLButtonElement>('[data-daily-option]').forEach(b => { b.onclick = () => answer(item.options![Number(b.dataset.dailyOption)]); });
-    if (!item.options) $('dailyAnswerForm').onsubmit = ev => { ev.preventDefault(); answer($<HTMLInputElement>('dailyAnswer').value.trim()); };
+    if (!item.options) $('dailyAnswerForm').onsubmit = ev => { ev.preventDefault(); const value = $<HTMLInputElement>('dailyAnswer').value.trim(); if (value) answer(value); };
     bind('skipDailyAnswer', () => answer(''));
   } else bind('nextDailyAnswer', () => { void updateDaily(() => {
     if (state.daily?.id === session.id && state.daily.practice?.index === index) state.daily.practice.index++;
@@ -109,18 +141,48 @@ function learningMetrics(): string {
   return `<div class="stats-grid"><div class="metric"><span>Tarjetas estudiadas</span><b>${current.length}<small> / ${words.length}</small></b><small>Calificadas al menos una vez</small></div><div class="metric"><span>Repasos pendientes</span><b>${current.filter(c => c.due <= Date.now()).length}</b><small>Según tu calendario de repaso</small></div><div class="metric"><span>Recordadas la última vez</span><b>${current.filter(c => c.rating === 'known').length}</b><small>Según tu propia valoración</small></div><div class="metric"><span>Racha de práctica</span><b>${streak(state.activity)}<small> ${streak(state.activity) === 1 ? 'día' : 'días'}</small></b><small>Solo cuentan días con actividad</small></div></div>`;
 }
 function renderHome(): void {
-  const returning = hasLearning(state) || Object.values(state.specialization?.productions || {}).some(levels=>Object.values(levels).some(d=>d?.text.trim()));
+  const session = state.daily;
+  const pending = !!session?.items.length && session.completedAt === null;
+  const finishedToday = !!session && session.completedAt !== null && session.day === localDate();
+  const returning = pending || hasLearning(state) || Object.values(state.specialization?.productions || {}).some(levels => Object.values(levels).some(d => d?.text.trim()));
   const due = words.filter(w => state.cards[cardKey(w, state.preferences.direction)]?.due <= Date.now()).length;
-  const pending = state.daily && state.daily.completedAt === null && state.daily.items.length > 0;
-  const today = state.daily?.completedAt !== null && state.daily?.day === localDate();
-  $('view').innerHTML = `<section class="hero"><div><div class="eyebrow">${returning ? 'TU INGLÉS, PASO A PASO' : 'PRÁCTICA GRATUITA · SIN CUENTA'}</div><h1>${returning ? 'Qué bueno verte de nuevo.' : 'Inglés práctico para<br>situaciones de todos los días.'}</h1><p>${returning ? `${due ? `Tienes ${due} tarjetas pendientes de repaso.` : 'Tu calendario de repaso está al día.'} ${pending ? 'Tu sesión está guardada: continúa desde donde la dejaste.' : today ? 'Ya completaste tu sesión de hoy. Puedes repasar lo aprendido o explorar otra actividad.' : 'Te proponemos una sesión breve para seguir avanzando.'}` : `Aprende expresiones para presentarte, pedir comida o moverte por una ciudad. Practica con ${uniqueTerms} expresiones en ${categories.length} situaciones, a tu ritmo.`}</p><div class="lesson-btns">${link('#/daily', returning ? 'Practicar hoy' : 'Empezar a practicar', 'primary light')}</div>${returning ? `<p class="hero-secondary">${link(pending ? '#/daily' : publicResume(state.lastRoute), 'Retomar la última actividad', 'text-link')}</p>` : '<p class="hero-secondary">Practica unos minutos, a tu ritmo.</p>'}</div><div class="journey-mark" aria-hidden="true">E90<span>APRENDE. PRACTICA. CONVERSA.</span></div></section>
-  ${difficultyControl('homeDifficulty')}
-  ${returning ? `<div class="callout"><strong>Tu siguiente paso</strong><p>${independentAccuracy(state).ready ? 'Estás recordando bien sin ayuda. Prueba a construir frases y a escuchar antes de leer.' : 'Tu objetivo: completar una práctica diaria y volver a las expresiones difíciles.'}</p>${state.history.length ? `<p class="hint">Última actividad: ${e(state.history.at(-1)!.label)} · ${state.history.at(-1)!.score}/${state.history.at(-1)!.total}. ${link('#/progress', 'Ver mi progreso')}</p>` : ''}${link(independentAccuracy(state).ready ? `#/challenge?week=${state.preferences.week}&mode=listening` : '#/daily', independentAccuracy(state).ready ? 'Probar escucha sin texto' : 'Continuar mi práctica')}</div>` : ''}
-  ${returning ? learningMetrics() : `<ol class="learning-steps"><li><span>1</span><div><h2>Aprende expresiones</h2><p>Empieza por situaciones que te resulten útiles.</p></div></li><li><span>2</span><div><h2>Recuerda sin mirar</h2><p>Intenta la traducción y comprueba tu respuesta.</p></div></li><li><span>3</span><div><h2>Vuelve a repasarlas</h2><p>El calendario se ajusta a lo que recuerdas.</p></div></li></ol>`}
-  ${panel(`<div class="section-top"><div><div class="eyebrow">LLEVA EL INGLÉS A TU DÍA</div><h2>¿Qué te gustaría practicar?</h2></div>${link('#/cards', 'Ver todo el vocabulario')}</div><div class="category-grid">${categories.filter(c => [1, 4, 6].includes(c.id)).map(c => `<a class="category-card" href="#/cards?week=${c.id}"><strong>${e(outcomes[c.id])}</strong><span>${c.vocabulary.length} tarjetas · ${e(c.title)}</span><span>Practicar →</span></a>`).join('')}</div><div class="lesson-btns">${link('#/challenge', 'Juegos de palabras y frases')}${link('#/assessments', `Tests por situación y dificultad`)}${link('#/challenge?mode=reading', 'Leer y comprender')}${link('#/challenge?mode=listening', 'Escuchar y escribir')}${link('#/situations', 'Situaciones reales')}${link('#/ai', 'Practicar conversación con IA')}</div>`)}
-  ${panel(`<div class="section-top"><div><div class="eyebrow">TU INGLÉS, TU OBJETIVO</div><h2>Trabajo, estudios o viajes</h2><p class="hint">Elige una ruta gratuita y practica con situaciones de tu objetivo.</p></div>${link('#/routes', 'Mis rutas de inglés')}</div>${routeChoices(state)}`)}
-  <div class="dashboard-grid spaced">${panel(`<h2>Ideas para estudiar a tu ritmo</h2><p>Ideas sencillas para recordar vocabulario y empezar a conversar.</p>${link('/aprender/', 'Leer las guías de práctica')}`)}${panel(`<h2>Sigue un programa de 90 días</h2><p>Conoce English 90 Premium, el programa de estudio de 90 días que complementa esta práctica gratuita.</p><div class="lesson-btns">${link('#/guide', 'Practicar con mi guía')}${link(siteConfig.commerceSiteUrl || '/premium/', 'Conocer el programa', 'primary')}</div>`)}</div>`;
-  bindDifficulty('homeDifficulty', renderHome);
+  const streakDays = streak(state.activity);
+  const resumeLabel = pending ? 'Continuar mi sesión' : finishedToday ? 'Ver resumen de hoy' : returning ? 'Practicar hoy' : 'Empezar a practicar';
+  const sessionTitle = pending ? 'Tu sesión te espera' : finishedToday ? 'Objetivo de hoy cumplido' : 'Tu práctica de hoy';
+  const sessionDescription = pending ? 'Retoma donde lo dejaste.' : finishedToday ? 'Revisa lo que recordaste y lo que puedes reforzar.' : 'Repasa expresiones y úsalas en ejercicios cortos.';
+  const completed = pending ? session.items.filter(item => item.rating !== null).length + (session.practice?.responses.filter(value => value !== null).length ?? 0) : 0;
+  const total = pending ? session.items.length + (session.practice?.questions.length ?? 0) : 0;
+  $('view').innerHTML = `<section class="practice-home" aria-labelledby="practiceHomeTitle">
+    <div class="practice-welcome">
+      <p class="eyebrow">ENGLISH 90 TRAINER</p>
+      <h1 id="practiceHomeTitle">${returning ? 'Qué bueno verte de nuevo.' : 'Practica inglés, un día a la vez.'}</h1>
+      <p>${returning ? 'Continúa con tu práctica o elige una actividad según lo que quieras mejorar.' : 'Empieza con expresiones de la vida real. En cada sesión recordarás vocabulario y lo pondrás en práctica.'}</p>
+      ${returning ? `<a class="practice-stats" href="#/progress"><span><strong>${dayLabel(streakDays)}</strong> de racha</span><span><strong>${due}</strong> por repasar</span></a>` : ''}
+    </div>
+    <section class="practice-next" aria-labelledby="practiceNextTitle">
+      <h2 id="practiceNextTitle">${sessionTitle}</h2><p>${sessionDescription}</p>
+      ${pending ? `<div class="practice-next-progress"><progress value="${completed}" max="${total}" aria-label="Actividades de la sesión completadas"></progress><span>${completed} de ${total} completadas</span></div>` : finishedToday ? '' : '<p class="practice-time">Unos 10 minutos</p>'}
+      ${link('#/daily', resumeLabel, 'primary')}
+    </section>
+  </section>
+  <div class="practice-home-tools">
+    ${returning && !pending ? link(publicResume(state.lastRoute), 'Retomar la última actividad', 'quiet-link') : ''}
+    <details id="homeSettings"><summary>Dificultad de práctica</summary>${difficultyControl('homeDifficulty')}</details>
+  </div>
+  <section class="practice-discover" aria-labelledby="practiceDiscoverTitle">
+    <h2 id="practiceDiscoverTitle">Elige qué practicar</h2>
+    <div class="practice-shortcuts">
+      <a href="#/cards?week=${state.preferences.week}" class="category-card"><strong>Vocabulario</strong><span>Recuerda expresiones de la vida real.</span><span aria-hidden="true">→</span></a>
+      <a href="#/challenge" class="category-card"><strong>Juegos</strong><span>Construye frases, escucha o practica lectura.</span><span aria-hidden="true">→</span></a>
+      <a href="#/assessments" class="category-card"><strong>Tests</strong><span>Comprueba qué recuerdas por situación.</span><span aria-hidden="true">→</span></a>
+    </div>
+    <details class="practice-explore"><summary>Explorar situaciones y más recursos</summary>
+      <div class="category-grid">${categories.filter(c => [1, 4, 6].includes(c.id)).map(c => `<a class="category-card" href="#/cards?week=${c.id}"><strong>${e(outcomes[c.id])}</strong><span>${e(c.title)}</span></a>`).join('')}</div>
+      <div class="lesson-btns">${link('#/challenge?mode=reading', 'Leer y comprender')}${link('#/challenge?mode=listening', 'Escuchar y escribir')}${link('#/situations', 'Situaciones reales')}${link('#/ai', 'Practicar conversación con IA')}${link('/aprender/', 'Guías de práctica')}${link('#/guide', 'Practicar con mi guía')}${link(siteConfig.commerceSiteUrl || '/premium/', 'Conocer el programa de 90 días')}</div>
+    </details>
+  </section>
+  ${panel(`<div class="section-top"><div><h2>Trabajo, estudios o viajes</h2><p class="hint">Practica con situaciones de tu objetivo.</p></div>${link('#/routes', 'Mis rutas de inglés')}</div>${routeChoices(state)}`)}`;
+  bindDifficulty('homeDifficulty', () => { renderHome(); $<HTMLDetailsElement>('homeSettings').open = true; });
 }
 
 // Lock daily changes across tabs where supported, and refresh before committing a grade.
@@ -150,25 +212,55 @@ function renderDaily(): void {
   const needsStart = !session || (!session.items.length) || (session.completedAt !== null && session.day !== localDate());
   if (needsStart) {
     const preview = createDaily(state, words);
-    $('view').innerHTML = panel(`${heading('UN RATO PARA TU INGLÉS', 'Tu práctica de hoy', 'Reserva unos 10 minutos, sin límite de tiempo. Puedes salir y retomar cuando quieras.')}${difficultyControl('dailyDifficulty')}<div class="daily-plan"><h2>${preview.items.length ? `${preview.items.length} tarjetas y 3 ejercicios a tu dificultad` : 'Tus repasos están al día'}</h2><p>${preview.items.length ? `${preview.items.filter(i => i.kind === 'review').length} repasos pendientes · ${preview.items.filter(i => i.kind === 'reinforce').length} tarjetas por reforzar · ${preview.items.filter(i => i.kind === 'new').length} nuevas.` : 'Ya estudiaste todas las tarjetas de esta dirección y no hay repasos pendientes. Vuelve cuando toque tu próximo repaso o prueba otra actividad.'}</p><p class="hint">Las tarjetas por reforzar son práctica adicional antes de su fecha de repaso. Tú decides cómo calificarlas.</p>${preview.items.length ? button('startDaily', 'Comenzar sesión') : link('#/cards', 'Ir al vocabulario', 'primary')}</div><div class="lesson-btns">${link('#/home', 'Volver al inicio')}${link('#/challenge', 'Elegir un juego')}</div>`);
-    bindDifficulty('dailyDifficulty', renderDaily);
-    if (preview.items.length) bind('startDaily', () => { void updateDaily(() => {
+    const count = preview.items.length;
+    const reviews = preview.items.filter(item => item.kind === 'review').length;
+    const difficulty = difficultyLabels[state.preferences.difficulty || 'standard'];
+    $('view').innerHTML = `<section class="panel daily-overview">
+      ${heading('PRÁCTICA DIARIA', 'Tu práctica de hoy', count ? 'Una sesión de unos 10 minutos. Puedes salir y retomar en cualquier momento.' : '')}
+      <div class="daily-plan">
+        <h2>${count ? 'Lo que harás' : 'Tus repasos están al día'}</h2>
+        ${count ? `<ol class="daily-plan-steps"><li><strong>Repasa ${count} ${count === 1 ? 'expresión' : 'expresiones'}</strong><span>${reviews ? `${reviews} ${reviews === 1 ? 'repaso pendiente' : 'repasos pendientes'} según tu calendario.` : 'Recuerda la traducción y comprueba la respuesta.'}</span></li><li><strong>Usa lo aprendido</strong><span>Resuelve ejercicios cortos y revisa tus respuestas.</span></li></ol>` : '<p>Vuelve cuando toque tu próximo repaso o elige otra actividad.</p>'}
+        ${count ? button('startDaily', 'Comenzar sesión') : link('#/cards', 'Ir al vocabulario', 'primary')}
+      </div>
+      <details id="dailySettings"><summary>Dificultad de esta sesión · ${difficulty}</summary>${difficultyControl('dailyDifficulty')}</details>
+      <div class="daily-overview-links">${link('#/home', 'Volver al inicio', 'quiet-link')}${!count ? link('#/challenge', 'Elegir un juego', 'quiet-link') : ''}</div>
+    </section>`;
+    bindDifficulty('dailyDifficulty', () => { renderDaily(); $<HTMLDetailsElement>('dailySettings').open = true; });
+    if (count) bind('startDaily', () => { void updateDaily(() => {
       if (!state.daily || !state.daily.items.length || state.daily.completedAt !== null) state.daily = createDaily(state, words);
       addDailyPractice(state, words);
-    }); });
+    }).then(() => document.getElementById('dailyReveal')?.focus()); });
     return;
   }
   const finished = session.items.filter(i => i.rating !== null).length;
   const item = session.items.find(i => i.rating === null);
   const word = item && words.find(w => w.id === item.wordId);
-  const progress = `<div class="session-progress"><span>${finished} de ${session.items.length} tarjetas repasadas · ${difficultyLabels[session.difficulty || 'standard']}</span><progress value="${finished}" max="${session.items.length}" aria-label="Progreso de la sesión"></progress></div>`;
+  const total = session.items.length + (session.practice?.questions.length ?? 0);
+  const progress = dailyProgress(finished, total, `${finished} de ${session.items.length} tarjetas repasadas`, session.practice ? 'Repasa expresiones' : difficultyLabels[session.difficulty || 'standard']);
   if (!item) {
-    if (session.practice && session.practice.index < 3) { renderDailyPractice(); return; }
-    const selected = session.items.map(i => ({item: i, word: words.find(w => w.id === i.wordId)})).filter(v => v.word);
+    if (session.practice && session.practice.index < session.practice.questions.length) { renderDailyPractice(); return; }
+    const selected = session.items.map(i => ({ item: i, word: words.find(w => w.id === i.wordId) })).filter(v => v.word);
     const category = selected[0]?.word?.weeks[0] || state.preferences.week;
-    $('view').innerHTML = panel(`${heading(session.completedAt === null ? 'DALE UN USO A LO QUE APRENDISTE' : 'SESIÓN COMPLETADA', session.completedAt === null ? 'Un último repaso.' : 'Hoy practicaste tu inglés.')}${progress}<p>Marcaste ${session.items.filter(i => i.rating === 'known').length} tarjetas como recordadas y ${session.items.filter(i => i.rating !== 'known').length} para reforzar. Cada una conserva su próximo repaso.</p>${session.practice ? `<h2>Tus respuestas de práctica</h2><p>${session.practice.questions.filter((q, i) => questionCorrect(q, session.practice!.responses[i])).length} de 3 respuestas de referencia correctas al primer intento.</p>${session.practice.questions.map((q,i) => `<details><summary>${questionCorrect(q,session.practice!.responses[i]) ? '✓ Correcta' : '↻ Para reforzar'} · ${e(q.prompt)}</summary><p lang="en">${e(q.answer)}</p><p>${e(q.explanation)}</p>${!questionCorrect(q,session.practice!.responses[i]) ? `<label>Inténtalo otra vez sin mirar<input data-retry="${i}" autocomplete="off" maxlength="500"></label><button type="button" class="outline" data-check-retry="${i}">Comprobar repaso</button><p role="status" data-retry-status="${i}"></p>` : ''}</details>`).join('')}<p class="hint">Repetir ahora ayuda a practicar; no aumenta el resultado ni cambia el calendario.</p>` : ''}<h2>Elige dos expresiones y úsalas en una frase</h2><p>Inténtalo en voz alta antes de mirar la traducción. Esta recapitulación no cambia tus calificaciones.</p><div class="recap-list">${selected.map(({item: i, word: w}) => `<details><summary><span lang="en">${e(w!.en)}</span> <small>${i.rating === 'known' ? 'Recordada' : 'Por reforzar'}</small></summary><p>${e(w!.es)}</p></details>`).join('')}</div><div class="lesson-btns">${session.completedAt === null ? button('completeDaily', 'Terminar sesión') : link('#/progress', 'Ver mi progreso', 'primary')}${link(`#/situations?week=${category}`, 'Escucha y repite')}${link(`#/ai?week=${category}&daily=1`, 'Practicar conversación con IA')}${link('#/home', 'Volver al inicio')}</div>${session.completedAt !== null ? '<p class="hint">Tu práctica gratuita sigue disponible. Si buscas una ruta de estudio, <a href="/premium/">conoce English 90 Premium</a>.</p>' : ''}`);
+    const done = session.completedAt !== null;
+    const known = session.items.filter(i => i.rating === 'known').length;
+    const practice = session.practice;
+    const correct = practice?.questions.filter((q, i) => questionCorrect(q, practice.responses[i])).length;
+    $('view').innerHTML = `<section class="panel daily-overview daily-recap">
+      ${heading(done ? 'SESIÓN COMPLETADA' : 'RESUMEN DE LA SESIÓN', done ? 'Hoy practicaste tu inglés.' : 'Terminaste los ejercicios.')}
+      <div class="daily-results"><div><strong>${known}</strong><span>Tarjetas recordadas</span></div><div><strong>${session.items.length - known}</strong><span>Tarjetas por reforzar</span></div>${practice ? `<div><strong>${correct}/${practice.questions.length}</strong><span>Ejercicios correctos</span></div>` : ''}</div>
+      <div class="lesson-btns daily-recap-actions">${done ? link('#/progress', 'Ver mi progreso', 'primary') : button('completeDaily', 'Terminar sesión')}${done ? link('#/home', 'Volver al inicio', 'outline') : ''}</div>
+      ${practice ? `<h2>Tus respuestas de práctica</h2>${practice.questions.map((q, i) => {
+        const matched = questionCorrect(q, practice.responses[i]);
+        return `<details><summary>${matched ? '✓ Correcta' : '↻ Para reforzar'} · ${e(q.prompt)}</summary><p lang="en">${e(q.answer)}</p><p>${e(q.explanation)}</p>${!matched ? `<label>Inténtalo otra vez sin mirar<input data-retry="${i}" autocomplete="off" maxlength="500"></label><button type="button" class="outline" data-check-retry="${i}">Comprobar repaso</button><p role="status" data-retry-status="${i}"></p>` : ''}</details>`;
+      }).join('')}` : ''}
+      <details class="recap-list"><summary>Repasar las expresiones de la sesión</summary><p>Elige dos y úsalas en una frase antes de mirar la traducción.</p>${selected.map(({ item: i, word: w }) => `<details><summary><span lang="en">${e(w!.en)}</span> <small>${i.rating === 'known' ? 'Recordada' : 'Por reforzar'}</small></summary><p>${e(w!.es)}</p></details>`).join('')}</details>
+      <div class="daily-overview-links">${link(`#/situations?week=${category}`, 'Escucha y repite', 'quiet-link')}${link(`#/ai?week=${category}&daily=1`, 'Practicar conversación con IA', 'quiet-link')}${!done ? link('#/home', 'Salir y continuar después', 'quiet-link') : ''}</div>
+    </section>`;
     document.querySelectorAll<HTMLButtonElement>('[data-check-retry]').forEach(b => { b.onclick = () => { const i = Number(b.dataset.checkRetry); const input = document.querySelector<HTMLInputElement>(`[data-retry="${i}"]`)!; document.querySelector(`[data-retry-status="${i}"]`)!.textContent = questionCorrect(session.practice!.questions[i], input.value) ? 'Correcto. Vuelve a recordarla otro día.' : `Respuesta de referencia: ${session.practice!.questions[i].answer}`; }; });
-    if (session.completedAt === null) bind('completeDaily', () => { void updateDaily(() => { if (state.daily?.id === session.id) completeDaily(state); }).then(() => savedStatus('Sesión completada. Tu progreso está guardado.')); });
+    if (session.completedAt === null) bind('completeDaily', () => { void updateDaily(() => { if (state.daily?.id === session.id) completeDaily(state); }).then(() => {
+      savedStatus('Sesión completada. Tu progreso está guardado.');
+      document.querySelector<HTMLElement>('.daily-recap .primary')?.focus();
+    }); });
     return;
   }
   if (!word) {
@@ -177,8 +269,24 @@ function renderDaily(): void {
   }
   const direction = session.direction;
   const kind = {review: 'REPASO PENDIENTE', reinforce: 'PRÁCTICA PARA REFORZAR', new: 'EXPRESIÓN NUEVA'}[item.kind];
-  $('view').innerHTML = panel(`${heading('PRÁCTICA DIARIA', 'Una expresión a la vez.')} ${progress}<div class="flash daily-flash"><span class="card-kicker">${kind} · ${direction === 'en-es' ? 'INGLÉS → ESPAÑOL' : 'ESPAÑOL → INGLÉS'}</span><h2 class="flash-word" lang="${direction === 'en-es' ? 'en' : 'es'}">${e(direction === 'en-es' ? word.en : word.es)}</h2><p id="dailyMeaning" class="flash-meaning">Intenta recordar la traducción.</p>${button('dailyReveal', 'Mostrar respuesta')}</div><div id="dailyRatings" class="card-buttons" hidden>${button('dailyForgotten', 'La olvidé · 10 minutos', 'outline')}${button('dailyDifficult', 'Difícil · mañana', 'outline')}${button('dailyKnown', `La conozco · ${schedule(state.cards[cardKey(word, direction)], 'known').interval} días`, 'outline')}</div><p class="hint">Califica lo que recordaste sin ayuda. Mirar la respuesta no marca la tarjeta como aprendida.</p><div class="lesson-btns">${link('#/home', 'Salir y continuar después')}</div><details><summary>Reorganizar esta sesión</summary><p>Conservaremos las tarjetas ya calificadas. Se elegirán otras pendientes sin volver a registrar esos repasos.</p>${button('restartDaily', 'Reorganizar pendientes', 'outline')}</details>`);
-  bind('dailyReveal', () => { status(''); revealed = true; $('dailyMeaning').textContent = direction === 'en-es' ? word.es : word.en; $('dailyMeaning').lang = direction === 'en-es' ? 'es' : 'en'; $('dailyRatings').hidden = false; $('dailyReveal').hidden = true; $('dailyForgotten').focus(); });
+  const prompt = direction === 'en-es' ? word.en : word.es;
+  const answer = direction === 'en-es' ? word.es : word.en;
+  $('view').innerHTML = dailyExercise(progress, `<h1>Recuerda la traducción</h1>
+    <div class="flash daily-flash"><span class="card-kicker">${kind} · ${direction === 'en-es' ? 'INGLÉS → ESPAÑOL' : 'ESPAÑOL → INGLÉS'}</span>
+      <h2 class="flash-word" lang="${direction === 'en-es' ? 'en' : 'es'}">${e(prompt)}</h2>
+      <p id="dailyMeaning" class="flash-meaning" lang="${direction === 'en-es' ? 'es' : 'en'}" hidden>${e(answer)}</p>
+      ${button('dailyReveal', 'Mostrar respuesta')}
+    </div>
+    <div id="dailyRatings" class="daily-ratings" hidden>
+      <p>¿Cuánto recordaste antes de mirar?</p><div class="card-buttons">
+        ${button('dailyForgotten', 'La olvidé · 10 minutos', 'outline')}${button('dailyDifficult', 'Difícil · mañana', 'outline')}${button('dailyKnown', `La conozco · ${schedule(state.cards[cardKey(word, direction)], 'known').interval} días`, 'outline')}
+      </div>
+    </div>
+    <details class="daily-restart"><summary>Reorganizar esta sesión</summary><p>Conservaremos las tarjetas ya calificadas.</p>${button('restartDaily', 'Reorganizar pendientes', 'outline')}</details>`);
+  bind('dailyReveal', () => {
+    status(''); revealed = true; $('dailyMeaning').hidden = false;
+    $('dailyRatings').hidden = false; $('dailyReveal').hidden = true; $('dailyForgotten').focus();
+  });
   for (const [id, rating] of [['dailyForgotten', 'forgotten'], ['dailyDifficult', 'difficult'], ['dailyKnown', 'known']] as const) bind(id, () => {
     if (!revealed) return; revealed = false;
     void updateDaily(() => { rateDaily(state, words, session.id, word.id, rating as Rating); }).then(() => { savedStatus('Repaso guardado.'); document.querySelector<HTMLElement>('#dailyReveal, #dailyAnswer, [data-daily-option], #completeDaily')?.focus(); });
@@ -210,8 +318,14 @@ function renderSituations(): void {
 function celebrationMark(): string {
   return '<span class="success-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18"/><path d="m11 20 6 6 12-13"/></svg><i></i><i></i><i></i><i></i></span>';
 }
-function celebrate(container: HTMLElement): void {
-  container.classList.add('celebrate');
+function answerFeedback(correct: boolean, title: string, body: string, announce = true): string {
+  return `<div class="feedback answer-feedback ${correct ? 'is-correct' : 'needs-review'}"${announce ? ' role="status"' : ''}>
+    ${correct ? celebrationMark() : '<span class="review-mark" aria-hidden="true">↻</span>'}
+    <div class="feedback-copy"><strong class="feedback-title">${e(title)}</strong>${body}</div>
+  </div>`;
+}
+function animateFeedback(container: HTMLElement, correct: boolean): void {
+  container.classList.add(correct ? 'celebrate' : 'review-arrived');
 }
 function renderCards(): void {
   const direction = state.preferences.direction;
@@ -229,16 +343,22 @@ function renderCards(): void {
   const pendingReview = due.filter(w => state.cards[cardKey(w, direction)]).length;
   const nextReview = pool.map(w => state.cards[cardKey(w, direction)]?.due).filter((n): n is number => n !== undefined).sort((a, b) => a - b)[0];
   const reviewed = pool.filter(w => state.cards[cardKey(w, direction)]).length;
-  $('view').innerHTML = panel(`${heading('RECUERDA ANTES DE MIRAR', 'Haz tuyo el vocabulario.', 'Primero recuerda, después comprueba y finalmente decide cuándo repasar.')}${difficultyControl('cardDifficulty')}
-    <div class="controls"><label class="field">Situación<select id="cardWeek">${weekOptions(route.week)}</select></label><label class="field">Dirección<select id="direction"><option value="en-es" ${direction === 'en-es' ? 'selected' : ''}>Inglés → Español</option><option value="es-en" ${direction === 'es-en' ? 'selected' : ''}>Español → Inglés</option></select></label><label class="field">Forma de practicar<select id="cardPractice"><option value="reveal" ${!writing ? 'selected' : ''}>Recordar y revelar</option><option value="recall" ${writing ? 'selected' : ''}>Escribir antes de mirar</option></select></label></div>
+  const settings = () => { renderCards(); $<HTMLDetailsElement>('cardSettings').open = true; };
+  $('view').innerHTML = `<section class="panel practice-tool">${heading('VOCABULARIO', 'Haz tuyo el vocabulario.')}
+    <div class="card-controls">
+      <label class="field">Situación<select id="cardWeek">${weekOptions(route.week)}</select></label>
+      <details id="cardSettings"><summary>Ajustes de tarjetas</summary>
+        <div class="controls">${difficultyControl('cardDifficulty')}<label class="field">Dirección<select id="direction"><option value="en-es" ${direction === 'en-es' ? 'selected' : ''}>Inglés → Español</option><option value="es-en" ${direction === 'es-en' ? 'selected' : ''}>Español → Inglés</option></select></label><label class="field">Forma de practicar<select id="cardPractice"><option value="reveal" ${!writing ? 'selected' : ''}>Recordar y revelar</option><option value="recall" ${writing ? 'selected' : ''}>Escribir antes de mirar</option></select></label></div>
+      </details>
+    </div>
     <div class="session-progress"><span>${reviewed} de ${pool.length} tarjetas estudiadas</span><progress value="${reviewed}" max="${pool.length}" aria-label="Tarjetas estudiadas en esta dirección"></progress></div><p class="hint">${pendingReview} repasos pendientes · ${due.length - pendingReview} tarjetas nuevas. Cada dirección tiene su propio calendario.</p>
-    ${card ? `<div class="flash"><span class="card-kicker">${direction === 'en-es' ? 'INGLÉS → ESPAÑOL' : 'ESPAÑOL → INGLÉS'} · ${writing ? 'ESCRIBE DE MEMORIA' : 'RECUERDA'}</span><h2 class="flash-word" lang="${direction === 'en-es' ? 'en' : 'es'}">${e(direction === 'en-es' ? card.en : card.es)}</h2><p id="flashMeaning" class="flash-meaning">${writing ? 'Escribe la traducción sin mirar. Después podrás calificar tu recuerdo.' : 'Intenta recordar la traducción antes de verla.'}</p>${writing ? `<form id="cardRecallForm" class="recall-form"><label for="cardAnswer">Tu traducción en ${direction === 'en-es' ? 'español' : 'inglés'}</label><input id="cardAnswer" maxlength="500" autocomplete="off" autocapitalize="off" spellcheck="false" required><button class="primary" type="submit">Comprobar mi respuesta</button></form>` : ''}${button('reveal', 'Mostrar respuesta', writing ? 'quiet-link' : 'primary')}<div id="cardFeedback" role="status"></div></div><div id="cardContext" hidden></div><div id="ratings" class="card-buttons" hidden>${button('forgotten', 'La olvidé · 10 minutos', 'outline')}${button('difficult', 'Difícil · mañana', 'outline')}${button('known', `La conozco · ${schedule(state.cards[cardKey(card, direction)], 'known').interval} días`, 'outline')}</div><p class="hint">El calendario cambia solo cuando calificas la tarjeta. Elige según lo que recordaste sin ayuda.</p>` : `<div class="empty-state"><div class="eyebrow">POR HOY, AL DÍA</div><h2>Un descanso también ayuda.</h2><p>Próximo repaso: ${nextReview ? dateText(nextReview) : 'sin tarjetas programadas'}.</p>${button('extraPractice', 'Practicar más', 'outline')}</div>`}
+    ${card ? `<div class="flash"><span class="card-kicker">${direction === 'en-es' ? 'INGLÉS → ESPAÑOL' : 'ESPAÑOL → INGLÉS'} · ${writing ? 'ESCRIBE DE MEMORIA' : 'RECUERDA'}</span><h2 class="flash-word" lang="${direction === 'en-es' ? 'en' : 'es'}">${e(direction === 'en-es' ? card.en : card.es)}</h2><p id="flashMeaning" class="flash-meaning">${writing ? 'Escribe la traducción sin mirar. Después podrás calificar tu recuerdo.' : 'Intenta recordar la traducción antes de verla.'}</p>${writing ? `<form id="cardRecallForm" class="recall-form"><label for="cardAnswer">Tu traducción en ${direction === 'en-es' ? 'español' : 'inglés'}</label><input id="cardAnswer" maxlength="500" autocomplete="off" autocapitalize="off" spellcheck="false" required><button class="primary" type="submit">Comprobar mi respuesta</button></form>` : ''}${button('reveal', 'Mostrar respuesta', writing ? 'quiet-link' : 'primary')}<div id="cardFeedback" role="status"></div></div><div id="ratings" class="card-buttons" hidden>${button('forgotten', 'La olvidé · 10 minutos', 'outline')}${button('difficult', 'Difícil · mañana', 'outline')}${button('known', `La conozco · ${schedule(state.cards[cardKey(card, direction)], 'known').interval} días`, 'outline')}</div><p class="hint">Califica lo que recordaste antes de mirar.</p><div id="cardContext" hidden></div>` : `<div class="empty-state"><div class="eyebrow">POR HOY, AL DÍA</div><h2>Un descanso también ayuda.</h2><p>Próximo repaso: ${nextReview ? dateText(nextReview) : 'sin tarjetas programadas'}.</p>${button('extraPractice', 'Practicar más', 'outline')}</div>`}
     <div class="lesson-btns">${link(`#/challenge?week=${route.week}&mode=recall`, 'Probar un juego de memoria')}${link(`#/ai?week=${route.week}`, 'Practicar conversación con IA')}</div>
     <details class="spaced"><summary>Explorar las ${pool.length} expresiones de esta situación</summary><label for="wordSearch">Buscar en inglés o español</label><input id="wordSearch" type="search" placeholder="Escribe una palabra o expresión"><p id="wordCount" class="hint" role="status"></p><dl id="wordLibrary" class="word-list vocabulary-library"></dl></details>
-    <details><summary>Cómo se programan los repasos</summary><p>Olvidada: vuelve en 10 minutos. Difícil: al día siguiente. Conocida: empieza en 3 días y amplía el intervalo de forma gradual hasta 90 días.</p><p>Una palabra puede tener varios significados. Las comprobaciones usan las traducciones del vocabulario; también puede haber otras opciones válidas.</p></details>`);
-  bindDifficulty('cardDifficulty', renderCards);
+    <details><summary>Cómo se programan los repasos</summary><p>Olvidada: vuelve en 10 minutos. Difícil: al día siguiente. Conocida: empieza en 3 días y amplía el intervalo de forma gradual hasta 90 días.</p><p>Una palabra puede tener varios significados. Las comprobaciones usan las traducciones del vocabulario; también puede haber otras opciones válidas.</p></details></section>`;
+  bindDifficulty('cardDifficulty', settings);
   $('cardWeek').onchange = ev => { extraPractice = false; state.preferences.week = Number((ev.target as HTMLSelectElement).value); go(`#/cards?week=${state.preferences.week}`); };
-  $('direction').onchange = ev => { state.preferences.direction = (ev.target as HTMLSelectElement).value as Direction; extraPractice = false; save(); renderCards(); };
+  $('direction').onchange = ev => { state.preferences.direction = (ev.target as HTMLSelectElement).value as Direction; extraPractice = false; save(); settings(); $('direction').focus(); };
   $('cardPractice').onchange = ev => { state.preferences.cardPractice = (ev.target as HTMLSelectElement).value as 'reveal' | 'recall'; save(); renderCards(); document.querySelector<HTMLElement>('#cardAnswer, #reveal')?.focus(); };
   const renderLibrary = () => {
     const plain = (value: string) => value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
@@ -258,8 +378,8 @@ function renderCards(): void {
       const question = recallQuestions([card], words, direction)[0];
       const correct = questionCorrect(question, answer);
       recordEvidence(state, [question], [answer]); save();
-      $('cardFeedback').innerHTML = `<div class="feedback ${correct ? 'is-correct' : 'needs-review'}">${correct ? celebrationMark() : ''}<strong>${correct ? '✓ ¡Correcto! Lo recordaste sin opciones.' : 'Todavía no coincide con la traducción de la tarjeta.'}</strong><p>Escribiste: ${e(answer)}</p>${!correct ? '<p>Compara las dos expresiones y vuelve a decirla antes de continuar.</p>' : ''}</div>`;
-      if (correct) celebrate($('cardFeedback'));
+      $('cardFeedback').innerHTML = answerFeedback(correct, correct ? '¡Correcto! Lo recordaste sin opciones.' : 'Todavía no coincide con la traducción de la tarjeta.', `<p>Escribiste: ${e(answer)}</p>${!correct ? '<p>Vuelve a decir la expresión antes de continuar.</p>' : ''}`, false);
+      animateFeedback($('cardFeedback'), correct);
     }
     const examples = wordExamples(card);
     $('cardContext').innerHTML = `<div class="word-context"><div class="eyebrow">${examples.length ? 'EN UNA FRASE' : 'PONLO EN PRÁCTICA'}</div>${examples.map(s => `<p lang="en" class="context-sentence">${e(s.en)}</p><p>${e(s.es)}</p>`).join('')}<p class="hint">${e(categories.find(c => c.id === route.week)!.tip)}</p><p>Di una frase propia con <strong lang="en">${e(card.en)}</strong>. Cambia una persona, un lugar o un detalle para hacerla tuya.</p></div>`;
@@ -316,12 +436,15 @@ function renderChallenge(): void {
   const difficulty = state.preferences.difficulty || 'standard';
   const forcedEnglish = route.mode === 'recall' || difficulty === 'challenge';
   const direction = forcedEnglish ? 'es-en' : state.preferences.direction;
-  $('view').innerHTML = panel(`${heading('PRÁCTICA EN CONTEXTO', 'Pon tu inglés en juego.', 'Reconoce, recuerda y construye. Cada error te da una oportunidad de practicar otra vez.')}
-    ${!active ? '<div class="practice-path" aria-label="Formas de practicar"><span><b>01</b> Reconoce la expresión</span><span><b>02</b> Escríbela de memoria</span><span><b>03</b> Úsala en una frase</span></div>' : ''}
-    <details id="gameSettings" class="game-settings" ${!active || q.finishedAt !== null ? 'open' : ''}><summary>${active ? `${e(categories.find(c => c.id === q.week)!.title)} · ${modeLabel(q.mode)} · ${difficultyLabels[q.difficulty || 'standard']}<small>Cambiar actividad o dificultad</small>` : 'Elige tu actividad'}</summary>
+  const running = active && q.finishedAt === null;
+  const settings = `<details id="gameSettings" class="game-settings" ${!active || q.finishedAt !== null ? 'open' : ''}><summary>${active ? `${e(categories.find(c => c.id === q.week)!.title)} · ${modeLabel(q.mode)} · ${difficultyLabels[q.difficulty || 'standard']}<small>Cambiar actividad o dificultad</small>` : 'Elige tu actividad'}</summary>
     <div class="controls"><label class="field">Situación<select id="quizWeek">${weekOptions(route.week)}</select></label><label class="field">Actividad<select id="quizMode">${(['translation', 'recall', 'completion', 'ordering', 'timed', 'listening', 'reading'] as Mode[]).map(m => `<option value="${m}" ${m === route.mode ? 'selected' : ''}>${modeLabel(m)}</option>`).join('')}</select></label><label class="field">Dificultad<select id="difficulty"><option value="gentle" ${difficulty === 'gentle' ? 'selected' : ''}>${difficultyLabels.gentle}</option><option value="standard" ${difficulty === 'standard' ? 'selected' : ''}>${difficultyLabels.standard}</option><option value="challenge" ${difficulty === 'challenge' ? 'selected' : ''}>${difficultyLabels.challenge}</option></select></label></div>
     ${route.mode === 'translation' || route.mode === 'timed' || route.mode === 'recall' ? `<label class="field difficulty-field">Dirección de traducción<select id="quizDirection" ${forcedEnglish ? 'disabled' : ''}><option value="en-es" ${direction === 'en-es' ? 'selected' : ''}>Inglés → Español</option><option value="es-en" ${direction === 'es-en' ? 'selected' : ''}>Español → Inglés</option></select></label>` : ''}
-    <p class="hint">${active && q.finishedAt === null ? 'Los cambios se aplican al próximo intento. La actividad actual mantiene su dificultad y dirección.' : 'Elige una situación, una actividad y la dificultad. Tu resultado se guarda al terminar.'}</p></details><div id="quizArea"></div><div class="lesson-btns">${button('newQuiz', active ? 'Reiniciar actividad' : 'Comenzar actividad', active && q.finishedAt === null ? 'outline' : 'primary')}</div><div id="restartConfirm" hidden class="warning"><p>Reiniciar descarta este intento sin terminar. Los resultados anteriores se conservan.</p>${button('confirmRestart', 'Descartar intento y comenzar')}${button('cancelRestart', 'Seguir con este intento', 'outline')}</div>`);
+    <p class="hint">${active && q.finishedAt === null ? 'Los cambios se aplican al próximo intento. La actividad actual mantiene su dificultad y dirección.' : 'Elige una situación, una actividad y la dificultad. Tu resultado se guarda al terminar.'}</p></details>`;
+  const startAction = `<div class="lesson-btns game-start">${button('newQuiz', active ? 'Reiniciar actividad' : 'Comenzar actividad', active ? 'outline' : 'primary')}</div><div id="restartConfirm" hidden class="warning"><p>Reiniciar descarta este intento sin terminar. Los resultados anteriores se conservan.</p>${button('confirmRestart', 'Descartar intento y comenzar')}${button('cancelRestart', 'Seguir con este intento', 'outline')}</div>`;
+  $('view').innerHTML = `<section class="panel practice-tool game-screen">${heading('JUEGOS', running ? modeLabel(q.mode) : 'Pon tu inglés en juego.')}
+    <div id="quizArea"></div>${startAction}${settings}
+  </section>`;
   const change = () => { selectedTokens = []; go(`#/challenge/${route.day}?week=${$<HTMLSelectElement>('quizWeek').value}&mode=${$<HTMLSelectElement>('quizMode').value}`); };
   $('quizWeek').onchange = change; $('quizMode').onchange = change;
   $('difficulty').onchange = ev => { selectDifficulty((ev.target as HTMLSelectElement).value as Difficulty); save(); renderChallenge(); $<HTMLDetailsElement>('gameSettings').open = true; $('difficulty').focus(); };
@@ -359,7 +482,7 @@ function startQuiz(): void {
   $('quizArea').scrollIntoView({ block: 'nearest' });
 }
 function renderQuestion(): void {
-  $('quizArea').classList.remove('celebrate');
+  $('quizArea').classList.remove('celebrate', 'review-arrived');
   stopAudio();
   const q = state.quiz!;
   const direction = q.direction || state.preferences.direction;
@@ -369,7 +492,7 @@ function renderQuestion(): void {
   if (q.deadline !== null && Date.now() >= q.deadline && q.finishedAt === null) { finishQuiz(state, q); save(); }
   if (q.finishedAt !== null) {
     const score = quizScore(q); const missed = q.questions.length - score;
-    $('quizArea').innerHTML = `<div class="result-card"><div class="eyebrow">${storageSaved ? 'ACTIVIDAD COMPLETADA' : 'RESULTADO DE ESTA SESIÓN'}${q.retry ? ' · REPASO DE ERRORES' : ''}</div><h2>${score} de ${q.questions.length}</h2><p>${translation ? 'Traducciones correctas.' : 'Respuestas correctas según el modelo del ejercicio.'} ${q.deadline ? 'Las preguntas sin contestar cuentan como cero.' : ''}${listening ? ` Escucha sin texto: ${score} aciertos. ${q.assisted?.length || 0} respuestas con apoyo escrito, sin puntuación.` : ''}</p><p>${missed ? `${missed} ${missed === 1 ? 'respuesta para reforzar' : 'respuestas para reforzar'}. Intenta recordarlas de nuevo antes de mirar la solución.` : '¡Ronda completa! Prueba otra situación o un ritmo más exigente.'}</p>${missed ? button('retryMistakes', `Repasar ${missed} ${missed === 1 ? 'error' : 'errores'}`) : ''}${q.deadline && missed ? '<p class="hint">El repaso inicia un nuevo reloj de 60 segundos.</p>' : ''}<p class="hint">Cada ronda guarda su propio resultado. El repaso no cambia la nota anterior.</p></div><details><summary>Ver respuestas y explicaciones</summary>${q.questions.map((item, i) => `<div class="review-item"><span class="review-label">${q.assisted?.includes(i) ? 'Con apoyo escrito' : questionCorrect(item, q.responses[i]) ? '✓ Recordada' : '↻ Por reforzar'}</span><p><strong>${e(item.prompt)}</strong></p><p>Tu respuesta: ${e(q.responses[i] || 'Sin responder')}</p><p>Respuesta de referencia: <strong>${e(item.answer)}</strong></p><p class="hint">${e(item.explanation)}</p></div>`).join('')}</details>`;
+    $('quizArea').innerHTML = `<div class="result-card answer-result">${celebrationMark()}<div class="eyebrow">${storageSaved ? 'ACTIVIDAD COMPLETADA' : 'RESULTADO DE ESTA SESIÓN'}${q.retry ? ' · REPASO DE ERRORES' : ''}</div><h2 id="quizResult" tabindex="-1">${score} de ${q.questions.length}</h2><p>${translation ? 'Traducciones correctas.' : 'Respuestas correctas según el modelo del ejercicio.'} ${q.deadline ? 'Las preguntas sin contestar cuentan como cero.' : ''}${listening ? ` Escucha sin texto: ${score} aciertos. ${q.assisted?.length || 0} respuestas con apoyo escrito, sin puntuación.` : ''}</p><p>${missed ? `${missed} ${missed === 1 ? 'respuesta para reforzar' : 'respuestas para reforzar'}. Intenta recordarlas de nuevo antes de mirar la solución.` : '¡Ronda completa! Prueba otra situación o un ritmo más exigente.'}</p>${missed ? button('retryMistakes', `Repasar ${missed} ${missed === 1 ? 'error' : 'errores'}`) : ''}${q.deadline && missed ? '<p class="hint">El repaso inicia un nuevo reloj de 60 segundos.</p>' : ''}<p class="hint">Cada ronda guarda su propio resultado. El repaso no cambia la nota anterior.</p></div><details><summary>Ver respuestas y explicaciones</summary>${q.questions.map((item, i) => `<div class="review-item"><span class="review-label">${q.assisted?.includes(i) ? 'Con apoyo escrito' : questionCorrect(item, q.responses[i]) ? '✓ Recordada' : '↻ Por reforzar'}</span><p><strong>${e(item.prompt)}</strong></p><p>Tu respuesta: ${e(q.responses[i] || 'Sin responder')}</p><p>Respuesta de referencia: <strong>${e(item.answer)}</strong></p><p class="hint">${e(item.explanation)}</p></div>`).join('')}</details>`;
     if (missed) bind('retryMistakes', () => {
       const retry = retryQuiz(q); if (!retry) return;
       state.quiz = retry; selectedTokens = []; save(); if (q.missionId) renderRoutes(); else renderChallenge(); focusQuestion();
@@ -380,11 +503,11 @@ function renderQuestion(): void {
   const correct = questionCorrect(item, response); const combo = quizStreak(q);
   const needsReading = listening && (state.preferences.learningAudio === false || !audioAvailable()) && !q.assisted?.includes(q.index);
   const typed = !item.options && (q.mode !== 'ordering' || hard);
-  const feedback = answered ? `<div class="feedback ${correct ? 'is-correct' : 'needs-review'}" role="status">${correct ? celebrationMark() : ''}<strong>${correct ? '✓ ¡Correcto!' : response === '' ? 'La dejamos para el repaso.' : 'Todavía no. Compara y vuelve a intentarlo en el repaso.'}</strong>${correct && combo >= 2 ? `<span class="combo-message">${combo} aciertos seguidos${combo >= 5 ? ' · ¡Vas muy bien!' : ''}</span>` : ''}<p>Respuesta de referencia: <span lang="${translation && direction === 'en-es' ? 'es' : 'en'}">${e(item.answer)}</span></p><p>${e(item.explanation)}</p>${typed ? '<p class="hint">Usamos respuestas de referencia. Puede haber otras formas válidas; compáralas con el ejemplo.</p>' : ''}</div>` : '';
+  const feedback = answered ? answerFeedback(correct, correct ? '¡Correcto!' : response === '' ? 'La dejamos para el repaso.' : 'Para reforzar', `${correct && combo >= 2 ? `<span class="combo-message">${combo} aciertos seguidos${combo >= 5 ? ' · ¡Vas muy bien!' : ''}</span>` : ''}<p>Respuesta de referencia: <span lang="${translation && direction === 'en-es' ? 'es' : 'en'}">${e(item.answer)}</span></p><p>${e(item.explanation)}</p>${typed ? '<p class="hint">Usamos respuestas de referencia. Puede haber otras formas válidas; compáralas con el ejemplo.</p>' : ''}`) : '';
   const inputLabel = listening ? 'La frase que escuchaste en inglés' : q.mode === 'completion' ? 'Palabra o expresión que falta' : q.mode === 'ordering' ? 'La frase completa en inglés' : `Tu traducción en ${direction === 'en-es' ? 'español' : 'inglés'}`;
   $('quizArea').innerHTML = `<div class="question-box"><div class="question-meta"><span class="eyebrow">PREGUNTA ${q.index + 1} DE ${q.questions.length}</span>${q.deadline ? '<strong id="timer" role="timer" aria-label="Segundos restantes"></strong>' : ''}</div><div class="game-progress"><progress value="${q.responses.filter(r => r !== null).length}" max="${q.questions.length}" aria-label="Preguntas respondidas"></progress><span>${quizScore(q)} ${quizScore(q) === 1 ? 'acierto' : 'aciertos'}${combo >= 2 ? ` · ${combo} seguidos` : ''}</span></div><p class="hint">${q.retry ? 'Repaso de errores · ' : ''}${hard ? 'Desafío · ' : ''}${q.mode === 'reading' ? 'Lee el texto y elige la respuesta mejor respaldada.' : listening ? 'Escucha antes de leer.' : translation ? direction === 'en-es' ? 'Inglés → Español' : 'Español → Inglés' : q.mode === 'ordering' ? hard ? 'Escribe la frase sin banco de palabras.' : 'Toca las palabras en orden.' : 'Completa el espacio; puede faltar más de una palabra.'}${hard && !translation ? ' · Situaciones combinadas' : ''}</p>${item.context ? `<div class="reading-passage" lang="en">${e(item.context)}</div>` : ''}<h2 lang="${listening || q.mode === 'ordering' || (translation && direction === 'es-en') ? 'es' : 'en'}">${e(item.prompt)}</h2>${listening ? `${audioControls(item.answer)}${!answered && !q.assisted?.includes(q.index) ? button('revealListening', 'Ver texto y practicar leyendo', 'outline') : ''}${q.assisted?.includes(q.index) ? `<p lang="en">${e(item.answer)}</p><p class="hint">Lectura asistida: no suma un acierto de escucha.</p>` : ''}` : ''}
     ${item.options ? `<div class="options">${item.options.map((o, i) => `<button class="answer ${answered && matches(o, item.answer) ? 'correct' : answered && matches(o, response) ? 'incorrect' : ''}" lang="${q.mode === 'reading' || direction !== 'en-es' ? 'en' : 'es'}" data-option="${i}" ${answered ? 'disabled' : ''}><span class="option-number" aria-hidden="true">${i + 1}</span><span>${e(o)}</span>${answered && matches(o, item.answer) ? '<span class="option-result">✓ Correcta</span>' : answered && matches(o, response) ? '<span class="option-result">Tu respuesta</span>' : ''}</button>`).join('')}</div>` : typed ? `<form id="answerForm"><label for="answerInput">${inputLabel}</label><input id="answerInput" maxlength="500" autocomplete="off" autocapitalize="off" spellcheck="false" ${answered || needsReading ? 'disabled' : ''} ${needsReading ? 'data-audio-needed' : ''} value="${e(response || '')}" required>${!answered ? `<button id="checkAnswer" class="primary" type="submit" ${needsReading ? 'disabled data-audio-needed' : ''}>Comprobar respuesta</button>` : ''}</form>` : `<p class="hint">Toca una palabra elegida para quitarla. Usa todas las palabras.</p><div class="token-answer" id="tokenAnswer" aria-label="Tu frase"></div><div class="tokens" id="tokens"></div>${!answered ? `<div class="lesson-btns">${button('checkOrder', 'Comprobar orden')}${button('undoToken', 'Deshacer', 'outline')}${button('clearTokens', 'Empezar frase de nuevo', 'outline')}</div>` : ''}`}
-    ${!answered ? button('skipQuestion', 'No lo sé · repasar después', 'quiet-link skip-question') : ''}${feedback}${answered ? button('nextQuestion', q.index + 1 === q.questions.length ? 'Ver resultado' : 'Siguiente pregunta →') : ''}</div>`;
+    ${answered ? `<div class="practice-answer-footer">${feedback}${button('nextQuestion', q.index + 1 === q.questions.length ? 'Ver resultado' : 'Siguiente pregunta →')}</div>` : button('skipQuestion', 'No lo sé · repasar después', 'quiet-link skip-question')}</div>`;
   document.querySelectorAll<HTMLButtonElement>('[data-option]').forEach(b => { b.onclick = () => submitAnswer(item.options![Number(b.dataset.option)]); });
   if (typed && !answered) $('answerForm').onsubmit = ev => { ev.preventDefault(); submitAnswer($<HTMLInputElement>('answerInput').value); };
   if (q.mode === 'ordering' && !hard) {
@@ -398,9 +521,14 @@ function renderQuestion(): void {
   if (listening && !answered && !q.assisted?.includes(q.index)) bind('revealListening', () => { (q.assisted ||= []).push(q.index); save(); renderQuestion(); focusQuestion(); });
   if (!answered) bind('skipQuestion', () => submitAnswer('', true));
   if (answered) bind('nextQuestion', () => {
-    if (q.index + 1 >= q.questions.length) { finishQuiz(state, q); save(); }
+    const last = q.index + 1 >= q.questions.length;
+    if (last) { finishQuiz(state, q); save(); }
     else { q.index++; selectedTokens = []; save(); }
-    renderQuestion(); focusQuestion();
+    renderQuestion();
+    if (last) {
+      animateFeedback($('quizArea'), true);
+      $('quizResult').focus();
+    } else focusQuestion();
   });
   updateTimer();
 }
@@ -416,7 +544,7 @@ function submitAnswer(value: string, skip = false): void {
   if ((!value.trim() && !skip) || !state.quiz) return;
   const accepted = answerQuiz(state.quiz, value); if (accepted) save();
   renderQuestion();
-  if (accepted && questionCorrect(state.quiz.questions[state.quiz.index], value)) celebrate($('quizArea'));
+  if (accepted && state.quiz.finishedAt === null) animateFeedback($('quizArea'), questionCorrect(state.quiz.questions[state.quiz.index], value));
   document.getElementById('nextQuestion')?.focus();
 }
 
@@ -448,8 +576,8 @@ function renderAssessments(): void {
   const writing = extensionContent.readings.find(r => r.category === route.week)!.writing;
   $('view').innerHTML = panel(`${heading('COMPRUEBA LO QUE RECUERDAS', 'Tests de práctica gratuitos', 'Doce situaciones, tres dificultades. Cada ronda incluye cuatro preguntas; las tareas abiertas se revisan por separado.')}<div class="controls"><label class="field assessment-picker">Elegir test<select id="assessmentWeek">${weekOptions(route.week)}</select></label>${difficultyControl('testDifficulty')}</div>
   <div class="callout"><p>${difficulty === 'gentle' ? 'Elige respuestas con apoyo de opciones.' : difficulty === 'challenge' ? 'Combina estructuras complejas con lectura e inferencias. Usa solo la información del texto.' : 'Completa frases sin opciones y revisa la estructura.'} Tu borrador se conserva por situación y dificultad. Cambiar de dificultad no borra los otros intentos.</p></div>
-  ${submitted ? `<div class="result-card"><div class="eyebrow">${storageSaved ? 'TU RESULTADO' : 'RESULTADO DE ESTA SESIÓN'}</div><h2>${assessmentScore(items,a.answers)} / 4</h2><p>${missed.length ? `Revisa ${missed.length} respuestas y sus explicaciones antes de probar otra ronda.` : 'Resolviste esta ronda. Ahora expresa una idea propia sin mirar.'}</p><div class="lesson-btns">${link(`#/cards?week=${route.week}`, 'Repasar esta categoría')}${button('retryAssessment','Iniciar otro intento','outline')}</div></div>` : '<p class="hint">Tu borrador se guarda en este navegador. Puedes volver más tarde.</p>'}
-  <form id="assessmentForm"><fieldset ${submitted ? 'disabled' : ''}><legend>Resuelve estas cuatro preguntas</legend>${items.map((q,i) => `<div class="exercise">${q.context ? `<div class="reading-passage" lang="en">${e(q.context)}</div>` : ''}<label for="assessmentAnswer${i}"><span>${i+1}.</span> <span lang="en">${e(q.prompt)}</span></label>${q.options ? `<select id="assessmentAnswer${i}" data-index="${i}" required><option value="">Elige una respuesta</option>${q.options.map(o=>`<option value="${e(o)}" ${a.answers[i] === o ? 'selected' : ''}>${e(o)}</option>`).join('')}</select>` : `<input id="assessmentAnswer${i}" data-index="${i}" value="${e(a.answers[i])}" maxlength="500" autocomplete="off" spellcheck="false" required>`}${submitted ? `<div class="feedback ${questionCorrect(q,a.answers[i]) ? 'is-correct' : 'needs-review'}"><strong>${questionCorrect(q,a.answers[i]) ? '✓ ¡Correcto!' : 'Revisa esta respuesta.'}</strong><p>Respuesta esperada: ${e(q.answer)}</p><p>${e(q.explanation)}</p></div>` : ''}</div>`).join('')}</fieldset>${!submitted ? '<button type="submit" class="primary">Corregir y guardar test</button>' : ''}</form>
+  ${submitted ? `<div class="result-card answer-result">${celebrationMark()}<div class="eyebrow">${storageSaved ? 'TEST COMPLETADO' : 'RESULTADO DE ESTA SESIÓN'}</div><h2 id="testResult" tabindex="-1">${assessmentScore(items,a.answers)} / 4</h2><p>${missed.length ? `Revisa ${missed.length} respuestas y sus explicaciones antes de probar otra ronda.` : 'Resolviste esta ronda. Ahora expresa una idea propia sin mirar.'}</p><div class="lesson-btns">${link(`#/cards?week=${route.week}`, 'Repasar esta categoría')}${button('retryAssessment','Iniciar otro intento','outline')}</div></div>` : '<p class="hint">Tu borrador se guarda en este navegador. Puedes volver más tarde.</p>'}
+  <form id="assessmentForm"><fieldset ${submitted ? 'disabled' : ''}><legend>Resuelve estas cuatro preguntas</legend>${items.map((q,i) => `<div class="exercise">${q.context ? `<div class="reading-passage" lang="en">${e(q.context)}</div>` : ''}<label for="assessmentAnswer${i}"><span>${i+1}.</span> <span lang="en">${e(q.prompt)}</span></label>${q.options ? `<select id="assessmentAnswer${i}" data-index="${i}" required><option value="">Elige una respuesta</option>${q.options.map(o=>`<option value="${e(o)}" ${a.answers[i] === o ? 'selected' : ''}>${e(o)}</option>`).join('')}</select>` : `<input id="assessmentAnswer${i}" data-index="${i}" value="${e(a.answers[i])}" maxlength="500" autocomplete="off" spellcheck="false" required>`}${submitted ? answerFeedback(questionCorrect(q,a.answers[i]), questionCorrect(q,a.answers[i]) ? '¡Correcto!' : 'Para reforzar', `<p>Respuesta de referencia: <strong lang="en">${e(q.answer)}</strong></p><p>${e(q.explanation)}</p>`, false) : ''}</div>`).join('')}</fieldset>${!submitted ? '<button type="submit" class="primary">Corregir y guardar test</button>' : ''}</form>
   <div class="tile spaced"><h2>Ahora úsalo en una idea propia</h2><p>${difficulty === 'challenge' ? `${e(writing)} Escribe entre 140 y 190 palabras.` : difficulty === 'standard' ? `Escribe entre 60 y 90 palabras sobre ${e(title.toLowerCase())}. Conecta tus ideas con razones y un ejemplo.` : `Escribe dos frases sencillas sobre ${e(title.toLowerCase())}.`}</p><p class="hint">Sin nota automática. Revisa: ¿cumpliste el objetivo?, ¿las ideas se conectan?, ¿los tiempos verbales son coherentes?, ¿puedes expresar una idea de otra manera? Para valorar calidad y naturalidad, contrasta tu texto con un tutor o interlocutor.</p><label for="assessmentNotes">Mis frases y lo que debo revisar</label><textarea id="assessmentNotes" rows="5" maxlength="20000">${e(a.notes)}</textarea>${submitted ? button('saveSelfReview','Guardar mis notas','outline') : '<p class="hint">Tus notas se guardan junto con el borrador.</p>'}</div>
   <div class="lesson-btns">${link(`#/ai?week=${route.week}`,'Practicar conversación con IA')}${link('#/progress','Ver historial')}</div><p class="hint">Estos tests sirven para practicar. No certifican un nivel de inglés ni sustituyen una evaluación oficial.</p>`);
   bindDifficulty('testDifficulty',renderAssessments);
@@ -464,7 +592,11 @@ function renderAssessments(): void {
     ev.preventDefault(); if (a.submittedAt !== null) return; a.submittedAt = Date.now();
     recordEvidence(state,items,a.answers);
     state.history.push({id:`${prefix}${a.submittedAt}`,label:`Test · ${title} · ${difficultyLabels[difficulty]}`,kind:'assessment',at:a.submittedAt,score:assessmentScore(items,a.answers),total:4,selfScore:null,assessment:structuredClone(a)});
-    save(true); renderAssessments(); savedStatus('Test guardado. Revisa tus respuestas.');
+    save(true); renderAssessments();
+    const result = $('testResult');
+    animateFeedback(result.closest<HTMLElement>('.answer-result')!, true);
+    result.focus();
+    savedStatus('Test guardado. Revisa tus respuestas.');
   };
 }
 
@@ -527,10 +659,23 @@ async function prepareImport(file?: File): Promise<void> {
 }
 
 function render(write = true): void {
-  if (renderCommercial($('view'))) { if (timer) clearInterval(timer); return; }
   stopAudio();
-  suppressWrite = !write;
   if (timer) clearInterval(timer);
+  if (!commerce && (commercialPath() || requiresPremiumAccess())) {
+    if (!loadingCommerce) {
+      loadingCommerce = true;
+      $('view').innerHTML = panel('<p role="status">Cargando English90…</p>');
+      void import('./commerce').then(module => {
+        commerce = module;
+        if (commercialPath() || requiresPremiumAccess()) render(false);
+      }).catch(() => {
+        if (commercialPath() || requiresPremiumAccess()) $('view').innerHTML = panel('<p role="alert">No pudimos cargar esta página. Vuelve a intentarlo.</p>');
+      }).finally(() => { loadingCommerce = false; });
+    }
+    return;
+  }
+  if (commerce?.renderCommercial($('view'))) return;
+  suppressWrite = !write;
   route = parseRoute(location.hash, state.day);
   ads.setPlacement(route.section === 'home' ? 'home' : null);
   if (route.section === 'routes') state.lastRoute = location.hash;

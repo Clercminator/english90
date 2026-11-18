@@ -37,11 +37,13 @@ test('flashcards require reveal and keep separate reverse schedules', async ({ p
   const initial = await saved(page);
   expect(Object.keys(initial.cards)).toHaveLength(1);
   expect(Object.values(initial.cards)[0].rating).toBe('forgotten');
+  await page.locator('#cardSettings summary').click();
   await page.getByRole('combobox', { name: 'Dirección', exact: true }).selectOption('es-en');
   await expect(page.locator('.flash-word')).toHaveText('hola');
   await page.getByRole('button', { name: 'Mostrar respuesta' }).click();
   await page.getByRole('button', { name: 'La conozco · 3 días' }).click();
   await page.reload();
+  await page.locator('#cardSettings summary').click();
   await expect(page.getByRole('combobox', { name: 'Dirección', exact: true })).toHaveValue('es-en');
   expect(Object.keys((await saved(page)).cards)).toHaveLength(2);
 });
@@ -107,7 +109,9 @@ test('assessment drafts, objective score, later self-review and history are dist
   await page.locator('#assessmentAnswer2').fill('an');
   await page.locator('#assessmentAnswer3').fill('a');
   await page.getByRole('button', { name: 'Corregir y guardar test' }).click();
-  await expect(page.getByRole('heading', { name: '4 / 4' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '4 / 4' })).toBeFocused();
+  await expect(page.locator('.answer-result')).toHaveClass(/celebrate/);
+  await expect(page.locator('.answer-feedback.is-correct')).toHaveCount(4);
   expect((await saved(page)).history[0].selfScore).toBeNull();
   await page.locator('#assessmentNotes').fill('I am a learner. Review articles.');
   await page.getByRole('button', { name: 'Guardar mis notas' }).click();
