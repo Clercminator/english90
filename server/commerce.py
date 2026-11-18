@@ -17,7 +17,7 @@ import pikepdf
 import requests
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from svix.webhooks import Webhook, WebhookVerificationError
-from server.email_templates import purchase_email
+from server.email_templates import purchase_email, guide_update_email
 
 SKU = 'english90-premium'
 PRICE = 59990
@@ -131,12 +131,22 @@ def http(method, url, *, headers=None, data=None, raw=False):
         response = requests.request(method, url, headers=headers, json=None if isinstance(data, bytes) else data,
                                     data=data if isinstance(data, bytes) else None, timeout=(5, 35))
         if not response.ok:
+            if url == 'https://api.resend.com/emails' and response.status_code == 429:
+                code=response.json().get('name','')
+                if code in ('daily_quota_exceeded','monthly_quota_exceeded'):
+                    raise Problem('email_'+code,429)
             raise Problem('provider_unavailable', 502)
         if raw:
             if len(response.content) > MAX_PDF:
                 raise Problem('document_too_large', 503)
             return response.content
-        return response.json() if response.content else None
+        result=response.json() if response.content else None
+        if url == 'https://api.resend.com/emails' and isinstance(result,dict):
+            daily=response.headers.get('x-resend-daily-quota','')
+            monthly=response.headers.get('x-resend-monthly-quota','')
+            if str(daily).isdigit() and str(monthly).isdigit():
+                result['_quota']=(int(daily),int(monthly))
+        return result
     except (requests.RequestException, ValueError):
         raise Problem('provider_unavailable', 502) from None
 
@@ -409,15 +419,26 @@ def fulfillment(db, order_id):
         order=db.order(order_id)
         if order['status']!='paid':
             return
-        if not delivery.get('storage_path'):
-            master=db.file('english90-master',order['master_path'])
-            if hashlib.sha256(master).hexdigest()!=order['master_sha256']:
+        updating=delivery.get('is_update',False)
+        if updating and not db.rpc('commerce_update_allowed',p_order=order_id):
+            raise Problem('update_recipient_suppressed',409)
+        if not delivery.get('storage_path') or (updating and delivery['guide_version']!=delivery['target_version']):
+            master=db.file('english90-master',delivery['target_master_path'] if updating else order['master_path'])
+            expected=delivery['target_master_sha256'] if updating else order['master_sha256']
+            if hashlib.sha256(master).hexdigest()!=expected:
                 raise Problem('master_digest_mismatch',503)
-            password=secrets.token_urlsafe(24)
+            password=(unseal(delivery['password_ciphertext'],order_id) if delivery.get('password_ciphertext')
+                      else secrets.token_urlsafe(24))
             content=protect_pdf(master,password)
             path=order_id+'/'+str(uuid4())+'.pdf'
             db.upload(path,content)
-            delivery=db.patch_delivery(order_id,lease,storage_path=path,password_ciphertext=seal(password,order_id),status='ready')
+            delivery=db.patch_delivery(order_id,lease,storage_path=path,password_ciphertext=seal(password,order_id),status='ready',
+                                       guide_version=delivery['target_version'] if updating else order['guide_version'])
+        if delivery.get('email_started_at') and now()-datetime.fromisoformat(delivery['email_started_at'].replace('Z','+00:00'))>timedelta(hours=23):
+            raise Problem('email_outcome_requires_review',409)
+        send_key=f"english90-delivery/{order_id}/{delivery['email_attempt']}"
+        if not db.rpc('commerce_reserve_email',p_key=send_key,p_update=updating):
+            raise Problem('email_budget_deferred',429)
         if not delivery.get('email_payload'):
             # generate_link handles existing/new accounts; only opening the link verifies ownership.
             activation=http('POST',db.url+'/auth/v1/admin/generate_link?'+urlencode({'redirect_to':site()+'/cuenta/'}),headers=db.headers,
@@ -426,8 +447,10 @@ def fulfillment(db, order_id):
             url=db.sign(delivery['storage_path'],86400)
             account=site()+'/cuenta'
             test = order['environment'] == 'sandbox'
-            content=purchase_email(activation_url=action_link,download_url=url,account_url=account,
-                                   support_email=env('SUPPORT_EMAIL'),order_id=order_id,sandbox=test)
+            links={'activation_url':action_link,'download_url':url,'account_url':account,
+                   'support_email':env('SUPPORT_EMAIL'),'order_id':order_id,'sandbox':test}
+            content=(guide_update_email(**links,guide_version=delivery['guide_version']) if updating else
+                     purchase_email(**links,payment_method=order.get('payment_method','mercadopago'),amount_clp=order['amount_clp']))
             payload={'from':env('RESEND_FROM'),'to':[order['customer_email']],**content,'reply_to':env('SUPPORT_EMAIL'),
                      'tags':[{'name':'order_id','value':order_id}]}
             delivery=db.patch_delivery(order_id,lease,email_payload=payload,email_started_at=stamp(),status='queued')
@@ -437,14 +460,38 @@ def fulfillment(db, order_id):
             raise Problem('email_outcome_requires_review',409)
         if db.order(order_id)['status']!='paid':
             raise Problem('order_reversed',409)
+        if updating and not db.rpc('commerce_update_allowed',p_order=order_id):
+            raise Problem('update_recipient_suppressed',409)
         sent=http('POST','https://api.resend.com/emails',headers={'Authorization':'Bearer '+env('RESEND_API_KEY'),
-                  'Idempotency-Key':f"english90-delivery/{order_id}/{delivery['email_attempt']}"},data=delivery['email_payload'])
+                  'Idempotency-Key':send_key},data=delivery['email_payload'])
         db.patch_delivery(order_id,lease,email_id=sent['id'],status='sent',sent_at=stamp(),last_error_code=None,lease_id=None,lease_until=None)
-        db.rpc('commerce_email_events')
+        try:
+            if sent.get('_quota'):
+                db.rpc('commerce_observe_email',p_daily=sent['_quota'][0],p_monthly=sent['_quota'][1])
+            db.rpc('commerce_email_events')
+            db.rpc('commerce_archive_email_events')
+        except Problem:
+            # Delivery is already recorded; the scheduler will reconcile ancillary events later.
+            pass
     except Exception as error:
         code=error.code if isinstance(error,Problem) else 'fulfillment_step_failed'
-        db.patch_delivery(order_id,lease,status='failed',last_error_code=code,lease_id=None,lease_until=None,
-                          next_attempt_at=(now()+timedelta(minutes=min(360,2**min(delivery['attempts'],8)))).isoformat())
+        retry_at=now()+timedelta(minutes=min(360,2**min(delivery['attempts'],8)))
+        extra={}
+        if code in ('email_budget_deferred','email_daily_quota_exceeded','email_monthly_quota_exceeded'):
+            retry_at=(now()+timedelta(days=1)).replace(hour=0,minute=5,second=0,microsecond=0)
+            if code=='email_monthly_quota_exceeded':
+                retry_at=(now().replace(day=28)+timedelta(days=4)).replace(day=1,hour=0,minute=5,second=0,microsecond=0)
+            # A definite quota rejection cannot have delivered an email. Rebuild expired links on retry.
+            if code!='email_budget_deferred':
+                extra={'email_payload':None,'email_started_at':None,'email_attempt':delivery['email_attempt']+1}
+                try:
+                    db.rpc('commerce_observe_email',p_daily=100 if code=='email_daily_quota_exceeded' else 0,
+                           p_monthly=3000 if code=='email_monthly_quota_exceeded' else 0)
+                except Problem:
+                    pass
+        db.patch_delivery(order_id,lease,status='bounced' if code=='update_recipient_suppressed' else 'failed',
+                          last_error_code=code,lease_id=None,lease_until=None,
+                          next_attempt_at=retry_at.isoformat(),**extra)
 
 
 def customer(db, headers):
@@ -476,11 +523,13 @@ def email_webhook(db, headers, raw):
         event=Webhook(env('RESEND_WEBHOOK_SECRET')).verify(raw,headers)
     except (WebhookVerificationError,ValueError):
         raise Problem('invalid_signature',401) from None
-    if event.get('type') not in ('email.sent','email.delivered','email.bounced','email.failed','email.delivery_delayed'):
+    if event.get('type') not in ('email.sent','email.delivered','email.bounced','email.failed','email.delivery_delayed','email.complained'):
         return {'received':True}
     db.rest('email_events','POST',{'id':headers['svix-id'],'email_id':event['data']['email_id'],
-            'event_type':event['type'],'event_at':event['created_at']},on_conflict='id') if not db.rest('email_events',id='eq.'+headers['svix-id']) else None
+            'event_type':'email.bounced' if event['type']=='email.complained' else event['type'],
+            'event_at':event['created_at']},on_conflict='id') if not db.rest('email_events',id='eq.'+headers['svix-id']) else None
     db.rpc('commerce_email_events')
+    db.rpc('commerce_archive_email_events')
     return {'received':True}
 
 
@@ -518,14 +567,25 @@ def operate(db, headers, body):
             db.rest('orders','PATCH',{'updated_at':stamp()},id='eq.'+order['id'])
         except Problem:
             continue
+    queued=0
+    update_error=None
+    if os.environ.get('GUIDE_UPDATES_ENABLED')=='true':
+        try:
+            if os.environ.get('MASTER_PDF_APPROVED')!='true':
+                raise Problem('sales_not_ready',503)
+            queued=db.rpc('commerce_queue_edition',p_environment=env('COMMERCE_ENV'),p_version=env('GUIDE_VERSION'),
+                          p_path=env('MASTER_PDF_PATH'),p_sha256=env('MASTER_PDF_SHA256'))
+        except Problem as error:
+            update_error=error.code
     deliveries=db.rest('guide_deliveries',select='order_id,orders!inner(status)',status='in.(pending,processing,ready,queued,failed)',
                         email_id='is.null',next_attempt_at='lte.'+stamp(),
-                        order='next_attempt_at.asc',limit='1',**{'orders.status':'eq.paid','orders.environment':'eq.'+env('COMMERCE_ENV'),
+                        order='is_update.asc,next_attempt_at.asc',limit='1',**{'orders.status':'eq.paid','orders.environment':'eq.'+env('COMMERCE_ENV'),
                         'or':f'(lease_until.is.null,lease_until.lt.{stamp()})'})
     for delivery in deliveries:
         fulfillment(db,delivery['order_id'])
     db.rpc('commerce_email_events')
-    return {'processed':len(deliveries)}
+    db.rpc('commerce_archive_email_events')
+    return {'processed':len(deliveries),'updatesQueued':queued,**({'updateError':update_error} if update_error else {})}
 
 
 def dispatch(method, action, headers, query, raw, ip, db=None):

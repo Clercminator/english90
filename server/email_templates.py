@@ -39,7 +39,8 @@ def _frame(title, preview, body, account_url, support_email):
 </td></tr></table></body></html>'''
 
 
-def purchase_email(*, activation_url, download_url, account_url, support_email, order_id, sandbox=False):
+def purchase_email(*, activation_url, download_url, account_url, support_email, order_id, sandbox=False,
+                   payment_method='mercadopago', amount_clp=59990):
     """Return both MIME alternatives; never accept or include a PDF password."""
     subject = '[SANDBOX] English90 · PDF de prueba y acceso' if sandbox else 'Tu guía English90 está lista · Empecemos'
     preview = 'Activa tu cuenta, encuentra la contraseña y descarga tu guía protegida.'
@@ -47,6 +48,10 @@ def purchase_email(*, activation_url, download_url, account_url, support_email, 
     heading = 'Tu entrega de prueba está lista.' if sandbox else 'Tu camino con English90 empieza hoy.'
     intro = 'La prueba de entrega se ha preparado. Sigue estos pasos para comprobar el acceso.' if sandbox else '¡Gracias por elegir English90! Tu pago está confirmado y tu guía protegida ya está lista. Vamos paso a paso.'
     amount = 'Importe de prueba: $59.990 CLP · Sin cobro real' if sandbox else 'English90 Premium · $59.990 CLP · Pago único'
+    if payment_method != 'mercadopago':
+        intro = 'Tu acceso a English90 está confirmado y tu guía protegida ya está lista. Vamos paso a paso.'
+        amount = ('English90 Premium · Acceso de cortesía · Sin costo' if payment_method == 'free' else
+                  f"English90 Premium · ${amount_clp:,} CLP · {'Transferencia' if payment_method == 'transfer' else 'Efectivo'}".replace(',', '.'))
     body = f'''{notice}<p style="margin:0 0 12px;color:#6500ff;font-size:12px;line-height:18px;font-weight:bold;letter-spacing:1px;">{'ENTREGA DE PRUEBA' if sandbox else 'TU GUÍA ESTÁ LISTA'}</p>
 <h1 class="email-heading" style="margin:0 0 18px;color:#11152d;font-size:32px;line-height:40px;letter-spacing:-0.8px;">{heading}</h1>
 <p style="margin:0 0 24px;font-size:16px;line-height:26px;color:#353a54;">{intro}</p>
@@ -68,7 +73,7 @@ def purchase_email(*, activation_url, download_url, account_url, support_email, 
 <p style="margin:0;font-size:14px;line-height:23px;color:#353a54;">Revisaremos el pago y, una vez verificado, gestionaremos manualmente la entrega de tu guía. Sentimos las molestias que pueda causar un fallo técnico.</p></td></tr></table>
 <p style="margin:24px 0 0;font-size:12px;line-height:20px;color:#62627b;overflow-wrap:anywhere;word-break:break-all;">Referencia de compra: {escape(order_id)}</p>'''
     text = f'''English90 · {'ENTREGA DE PRUEBA' if sandbox else 'Tu guía está lista'}
-{'PRUEBA SANDBOX: sin cobro real. El PDF es una muestra técnica sin contenido comercial.' if sandbox else '¡Gracias por elegir English90! Tu pago está confirmado.'}
+{'PRUEBA SANDBOX: sin cobro real. El PDF es una muestra técnica sin contenido comercial.' if sandbox else intro}
 {amount}
 
 1. Entra a tu cuenta y encuentra la contraseña para abrir el PDF:
@@ -95,7 +100,37 @@ Sentimos las molestias que pueda causar un fallo técnico.
 Referencia de compra: {order_id}
 Soporte: {support_email}
 IMR Tech SpA'''
+    if payment_method != 'mercadopago':
+        body = body.replace('el comprobante de Mercado Pago con el identificador de la operación', 'la referencia de tu entrega')
+        text = text.replace('el comprobante de Mercado Pago con el identificador de la operación', 'la referencia de tu entrega')
     return {'subject': subject, 'html': _frame(subject, preview, body, account_url, support_email), 'text': text}
+
+
+def guide_update_email(*, activation_url, download_url, account_url, support_email, order_id, guide_version, sandbox=False):
+    subject=('[SANDBOX] ' if sandbox else '')+'Nueva edición de tu guía English90'
+    body=f'''<h1 style="font-size:28px;line-height:36px;">Tu guía English90 se actualizó.</h1>
+<p>Ya tienes disponible una nueva edición de English90 Premium, sin costo adicional.</p>
+<p><strong>La contraseña de tu PDF sigue siendo la misma.</strong> Puedes consultarla en tu cuenta.</p>
+{_button('Entrar a mi cuenta',activation_url)}
+<p><a href="{escape(download_url,quote=True)}" target="_blank" rel="noopener noreferrer">Descargar la nueva edición protegida</a></p>
+<p>El enlace de descarga dura 24 horas. Después puedes descargar la edición actualizada desde
+<a href="{escape(account_url,quote=True)}">Mi cuenta</a>, con el correo de tu compra o acceso de cortesía.</p>
+<p>No necesitas registrarte otra vez ni volver a pagar. El enlace de acceso es personal y de un solo uso.</p>
+<p>Edición: {escape(guide_version)}<br>Referencia: {escape(order_id)}</p>'''
+    text=f'''Tu guía English90 se actualizó, sin costo adicional.
+La contraseña del PDF sigue siendo la misma. Consúltala en tu cuenta:
+{activation_url}
+Descarga la nueva edición protegida (enlace válido por 24 horas):
+{download_url}
+Si un enlace vence, solicita otro con tu correo habitual en {account_url}.
+No necesitas registrarte otra vez ni volver a pagar.
+Edición: {guide_version}
+Referencia: {order_id}
+Soporte: {support_email}'''
+    if sandbox:
+        body='<p><strong>PRUEBA SANDBOX · Sin contenido comercial.</strong></p>'+body
+        text='PRUEBA SANDBOX · Sin contenido comercial.\n'+text
+    return {'subject':subject,'html':_frame(subject,'La nueva edición está disponible sin costo adicional.',body,account_url,support_email),'text':text}
 
 
 def sign_in_email(*, activation_url, account_url, support_email, confirmation=False):

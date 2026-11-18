@@ -24,6 +24,7 @@ from api.commerce import handler
 
 
 ENV={'SITE_URL':'https://english90.imrtech.xyz','COMMERCE_ENABLED':'true','COMMERCE_ENV':'sandbox',
+     'GUIDE_UPDATES_ENABLED':'false',
      'FULFILLMENT_SCHEDULER_READY':'true',
      'LEGAL_APPROVED':'true','MASTER_PDF_APPROVED':'true','MP_ACCESS_TOKEN':'TEST-fixture',
      'MP_MERCHANT_ID':'123','MP_APPLICATION_ID':'456','MP_WEBHOOK_SECRET':'fixture-only-secret',
@@ -53,11 +54,14 @@ def remote(o):
 class DB:
     def __init__(self,o=None):
         self.o=o or order(); self.url='https://fixture.supabase.co'; self.headers={}; self.calls=[]
-        self.d=None; self.payloads=[]; self.uploads=[]; self.allowed=True; self.queries=[]
+        self.d=None; self.payloads=[]; self.uploads=[]; self.allowed=True; self.queries=[]; self.budget=True
 
     def rpc(self,name,**params):
         self.calls.append((name,params))
         if name=='commerce_rate': return self.allowed
+        if name=='commerce_reserve_email': return self.budget
+        if name=='commerce_update_allowed': return True
+        if name=='commerce_queue_edition': return 0
         if name=='commerce_lease':
             if self.o['status']!='paid' or not self.d or self.d['status'] in ('sent','delivered','bounced'): return []
             self.d['attempts']+=1; return [copy.deepcopy(self.d)]
@@ -401,5 +405,112 @@ class Commerce(unittest.TestCase):
         self.assertEqual(request.call_args.kwargs['headers']['x-vercel-protection-bypass'],'fixture-private-bypass')
         self.assertNotIn('fixture-private-bypass',output.getvalue())
 
+
+    def test_manual_delivery_email_records_actual_payment_or_free_access(self):
+        from server.email_templates import purchase_email
+        for method,amount,label in [('transfer',45000,'Transferencia'),('cash',59990,'Efectivo'),('free',0,'Sin costo')]:
+            content=purchase_email(activation_url='https://example.com/access',download_url='https://example.com/pdf',
+                account_url='https://example.com/cuenta',support_email='support@example.com',order_id='manual-order',
+                payment_method=method,amount_clp=amount)
+            for format in ['html','text']:
+                self.assertIn(label,content[format])
+                self.assertNotIn('comprobante de Mercado Pago',content[format])
+                if method=='free':
+                    self.assertNotIn('59.990',content[format])
+                    self.assertNotIn('Tu pago está confirmado',content[format])
+
+    def test_manual_recipient_uses_existing_protected_pdf_fulfillment(self):
+        db=DB(); db.o.update(status='paid',payment_method='free',amount_clp=0,mp_order_id=None)
+        source=io.BytesIO()
+        with pikepdf.new() as pdf:
+            pdf.add_blank_page(); pdf.save(source)
+        db.master=source.getvalue(); db.o['master_sha256']=hashlib.sha256(db.master).hexdigest()
+        db.d={'order_id':db.o['id'],'status':'pending','attempts':0,'email_attempt':0}
+        def provider(_method,url,**kwargs):
+            if 'generate_link' in url:
+                return {'action_link':'https://fixture.supabase.co/auth/v1/verify?token=fixture&redirect_to=https%3A%2F%2Fenglish90.imrtech.xyz%2Fcuenta%2F'}
+            return {'id':'manual-email-fixture'}
+        with patch.object(c,'http',side_effect=provider), patch.object(c,'mp') as payment:
+            c.fulfillment(db,db.o['id'])
+            payment.assert_not_called()
+        self.assertEqual(db.d['status'],'sent')
+        self.assertIn('Sin costo',db.d['email_payload']['text'])
+        password=c.unseal(db.d['password_ciphertext'],db.o['id'])
+        with pikepdf.open(io.BytesIO(db.uploads[0][1]),password=password) as pdf:
+            self.assertEqual(len(pdf.pages),1)
+
+    def test_edition_update_keeps_password_and_retries_same_pdf_and_email(self):
+        db=DB(); db.o.update(status='paid',mp_order_id=None)
+        source=io.BytesIO()
+        with pikepdf.new() as pdf:
+            pdf.add_blank_page(); pdf.add_blank_page(); pdf.save(source)
+        db.master=source.getvalue()
+        db.d={'order_id':db.o['id'],'status':'pending','attempts':0,'email_attempt':1,'is_update':True,
+              'guide_version':'old-edition','target_version':'new-edition','target_master_path':'new.pdf',
+              'target_master_sha256':hashlib.sha256(db.master).hexdigest(),'storage_path':'old.pdf',
+              'password_ciphertext':c.seal('original-password',db.o['id'])}
+        sends=[]
+        def provider(_method,url,**kwargs):
+            if 'generate_link' in url:
+                return {'action_link':'https://fixture.supabase.co/auth/v1/verify?token=fixture&redirect_to=https%3A%2F%2Fenglish90.imrtech.xyz%2Fcuenta%2F'}
+            sends.append(copy.deepcopy(kwargs))
+            if len(sends)==1: raise c.Problem('provider_unavailable',502)
+            return {'id':'edition-email'}
+        with patch.object(c,'http',side_effect=provider):
+            c.fulfillment(db,db.o['id']); c.fulfillment(db,db.o['id'])
+        self.assertEqual(len(db.uploads),1)
+        self.assertEqual(sends[0],sends[1])
+        self.assertEqual(db.d['guide_version'],'new-edition')
+        self.assertEqual(c.unseal(db.d['password_ciphertext'],db.o['id']),'original-password')
+        with pikepdf.open(io.BytesIO(db.uploads[0][1]),password='original-password') as pdf:
+            self.assertEqual(len(pdf.pages),2)
+        self.assertIn('sigue siendo la misma',db.d['email_payload']['text'])
+        self.assertNotIn('Tu pago está confirmado',db.d['email_payload']['text'])
+        self.assertNotIn('original-password',json.dumps(db.d['email_payload']))
+
+    def test_email_budget_defers_before_building_or_sending_an_email(self):
+        db=DB(); db.o['status']='paid'; db.budget=False
+        db.d={'status':'ready','attempts':0,'email_attempt':0,'storage_path':'saved.pdf'}
+        with patch.object(c,'http') as provider:
+            c.fulfillment(db,db.o['id']); provider.assert_not_called()
+        self.assertEqual(db.d['last_error_code'],'email_budget_deferred')
+        self.assertEqual(db.d['storage_path'],'saved.pdf')
+        self.assertNotIn('email_payload',db.d)
+        self.assertIn('T00:05:00',db.d['next_attempt_at'])
+
+    def test_resend_quota_rejection_pauses_and_rebuilds_links_for_next_window(self):
+        for code in ['daily','monthly']:
+            db=DB(); db.o['status']='paid'
+            db.d={'status':'queued','attempts':0,'email_attempt':2,'storage_path':'saved.pdf',
+                  'email_payload':{'text':'frozen'},'email_started_at':c.stamp()}
+            with patch.object(c,'http',side_effect=c.Problem('email_'+code+'_quota_exceeded',429)):
+                c.fulfillment(db,db.o['id'])
+            self.assertEqual(db.d['email_attempt'],3)
+            self.assertIsNone(db.d['email_payload'])
+            self.assertEqual(db.d['last_error_code'],'email_'+code+'_quota_exceeded')
+            usage=next(params for name,params in db.calls if name=='commerce_observe_email')
+            self.assertEqual(usage['p_monthly'],3000 if code=='monthly' else 0)
+
+    def test_update_worker_registers_only_configured_environment_and_approved_master(self):
+        db=DB()
+        with patch.dict(os.environ,{'GUIDE_UPDATES_ENABLED':'true'}), patch.object(c,'reconcile'):
+            c.operate(db,{'authorization':'Bearer '+ENV['CRON_SECRET']},{})
+        published=next(params for name,params in db.calls if name=='commerce_queue_edition')
+        self.assertEqual(published['p_environment'],'sandbox')
+        self.assertEqual(published['p_sha256'],ENV['MASTER_PDF_SHA256'])
+        self.assertTrue(next(params for table,params in db.queries if table=='guide_deliveries')['order'].startswith('is_update.asc'))
+
+    def test_resend_http_distinguishes_quotas_and_reads_account_usage_headers(self):
+        with patch.object(c.requests,'request') as request:
+            response=request.return_value
+            response.ok=False; response.status_code=429
+            response.json.return_value={'name':'monthly_quota_exceeded'}
+            with self.assertRaises(c.Problem) as error:
+                c.http('POST','https://api.resend.com/emails',data={})
+            self.assertEqual(error.exception.code,'email_monthly_quota_exceeded')
+            response.ok=True; response.content=b'{}'
+            response.json.return_value={'id':'email'}
+            response.headers={'x-resend-daily-quota':'17','x-resend-monthly-quota':'321'}
+            self.assertEqual(c.http('POST','https://api.resend.com/emails',data={})['_quota'],(17,321))
 
 if __name__=='__main__': unittest.main()
